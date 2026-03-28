@@ -132,31 +132,75 @@ public class DBConnecter {
         }
     }
 
+    private static void setupConfig(HikariConfig c, String password) {
+        c.setDriverClassName(DRIVER);
+        c.setJdbcUrl(String.format(URL, DB_HOST, DB_PORT, DB_DATA));
+        c.setUsername(DB_USER);
+        c.setPassword(password);
+        c.setMinimumIdle(MIN_CONN);
+        c.setMaximumPoolSize(MAX_CONN);
+        c.setMaxLifetime(MAX_LIFE_TIME);
+        c.setConnectionTimeout(CONNECTION_TIMEOUT);
+        c.setIdleTimeout(IDLE_TIMEOUT);
+        c.setLeakDetectionThreshold(LEAK_DETECTION);
+        c.setPoolName("NRO-HikariPool");
+        c.addDataSourceProperty("cachePrepStmts", "true");
+        c.addDataSourceProperty("prepStmtCacheSize", "500");
+        c.addDataSourceProperty("prepStmtCacheSqlLimit", "4096");
+        c.addDataSourceProperty("useServerPrepStmts", "true");
+        c.addDataSourceProperty("useLocalSessionState", "true");
+        c.addDataSourceProperty("rewriteBatchedStatements", "true");
+        c.addDataSourceProperty("cacheResultSetMetadata", "true");
+        c.addDataSourceProperty("cacheServerConfiguration", "true");
+        c.addDataSourceProperty("elideSetAutoCommits", "true");
+        c.addDataSourceProperty("maintainTimeStats", "false");
+    }
+
     static {
         loadProperties();
-        config.setDriverClassName(DRIVER);
-        config.setJdbcUrl(String.format(URL, DB_HOST, DB_PORT, DB_DATA));
-        config.setUsername(DB_USER);
-        config.setPassword(DB_PASSWORD);
-        config.setMinimumIdle(MIN_CONN);
-        config.setMaximumPoolSize(MAX_CONN);
-        config.setMaxLifetime(MAX_LIFE_TIME);
-        config.setConnectionTimeout(CONNECTION_TIMEOUT);
-        config.setIdleTimeout(IDLE_TIMEOUT);
-        config.setLeakDetectionThreshold(LEAK_DETECTION);
-        config.setPoolName("NRO-HikariPool");
-        // PreparedStatement cache
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "500");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "4096");
-        config.addDataSourceProperty("useServerPrepStmts", "true");
-        // Performance optimizations
-        config.addDataSourceProperty("useLocalSessionState", "true");
-        config.addDataSourceProperty("rewriteBatchedStatements", "true");
-        config.addDataSourceProperty("cacheResultSetMetadata", "true");
-        config.addDataSourceProperty("cacheServerConfiguration", "true");
-        config.addDataSourceProperty("elideSetAutoCommits", "true");
-        config.addDataSourceProperty("maintainTimeStats", "false");
-        ds = new HikariDataSource(config);
+
+        // Thử mật khẩu trước khi khởi tạo Hikari (Tự động thích nghi với XAMPP mật khẩu trống hoặc 123456)
+        if (DB_USER.equals("root")) {
+            try {
+                Class.forName(DRIVER);
+                String url = String.format(URL, DB_HOST, DB_PORT, DB_DATA);
+                try (Connection conn = java.sql.DriverManager.getConnection(url, DB_USER, DB_PASSWORD)) {
+                    // OK
+                } catch (java.sql.SQLException e) {
+                    if (e.getMessage().contains("Access denied") || e.getErrorCode() == 1045) {
+                        boolean found = false;
+                        // Thử mật khẩu TRỐNG
+                        if (!DB_PASSWORD.isEmpty()) {
+                            try (Connection conn2 = java.sql.DriverManager.getConnection(url, DB_USER, "")) {
+                                DB_PASSWORD = "";
+                                Logger.log(" [0;32m", "Mật khẩu root sai, đã chuyển sang mật khẩu TRỐNG.\n");
+                                found = true;
+                            } catch (java.sql.SQLException e2) {}
+                        }
+                        // Thử mật khẩu 123456
+                        if (!found && !DB_PASSWORD.equals("123456")) {
+                            try (Connection conn2 = java.sql.DriverManager.getConnection(url, DB_USER, "123456")) {
+                                DB_PASSWORD = "123456";
+                                Logger.log(" [0;32m", "Mật khẩu root sai, đã chuyển sang mật khẩu 123456.\n");
+                                found = true;
+                            } catch (java.sql.SQLException e3) {}
+                        }
+                    }
+                }
+            } catch (Exception e) {}
+        }
+
+        setupConfig(config, DB_PASSWORD);
+        
+        HikariDataSource tempDs = null;
+        try {
+            tempDs = new HikariDataSource(config);
+        } catch (Exception e) {
+            String msg = e.getMessage() != null ? e.getMessage() : e.toString();
+            Logger.log(" [4;31m", "Lỗi kết nối database: " + msg + "\n");
+            Logger.log(" [4;31m", "KHÔNG THỂ KẾT NỐI DATABASE! Vui lòng kiểm tra lại cấu hình SQL hoặc MySQL (XAMPP) đã bật chưa.\n");
+            System.exit(0);
+        }
+        ds = tempDs;
     }
 }
