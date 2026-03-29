@@ -3,3 +3,7 @@
 !/.gitignore
 !/lib/
 !/sql/
+*.class
+build/
+dist/
+nbproject/private/

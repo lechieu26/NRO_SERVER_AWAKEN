@@ -39,6 +39,11 @@ public class ServerManagerUI extends JFrame {
     private JList<NavItem> sidebar;
 
     public static volatile boolean REQUEST_AUTO_RESTART = false;
+    private JScrollPane scrollSidebar;
+    private MiniDashboardPanel miniPanel;
+    private Dimension lastFullSize = new Dimension(1600, 850);
+    private JPanel sidebarWrapper;
+    private JCheckBox chkAlwaysOnTop;
 
     public ServerManagerUI() {
         super("Server Control Panel - Manager");
@@ -147,10 +152,39 @@ public class ServerManagerUI extends JFrame {
         });
 
         // Sidebar Container
-        JScrollPane scrollSidebar = new JScrollPane(sidebar);
+        scrollSidebar = new JScrollPane(sidebar);
         scrollSidebar.setPreferredSize(new Dimension(260, getHeight())); // Rộng hơn chút
         scrollSidebar.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(220, 220, 220))); // Viền phải nhẹ
-        add(scrollSidebar, BorderLayout.WEST);
+
+        // Thêm nút Mini Mode xuống cuối sidebar
+        sidebarWrapper = new JPanel(new BorderLayout());
+        sidebarWrapper.add(scrollSidebar, BorderLayout.CENTER);
+
+        JPanel sidebarFooter = new JPanel();
+        sidebarFooter.setLayout(new BoxLayout(sidebarFooter, BoxLayout.Y_AXIS));
+        sidebarFooter.setOpaque(true);
+        sidebarFooter.setBackground(Color.WHITE);
+        sidebarFooter.setBorder(new EmptyBorder(5, 10, 5, 10));
+
+        chkAlwaysOnTop = new JCheckBox("Always on Top (Ghim cửa sổ)", isAlwaysOnTop());
+        chkAlwaysOnTop.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        chkAlwaysOnTop.setForeground(new Color(100, 100, 100));
+        chkAlwaysOnTop.setOpaque(false);
+        chkAlwaysOnTop.setFocusPainted(false);
+        chkAlwaysOnTop.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        chkAlwaysOnTop.addActionListener(e -> setAlwaysOnTop(chkAlwaysOnTop.isSelected()));
+
+        JButton btnMini = ServerGuiUtils.createStyledButton("Switch to Mini Mode", new Color(0, 51, 102), Color.WHITE);
+        btnMini.addActionListener(e -> switchToMiniMode());
+        btnMini.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+
+        sidebarFooter.add(chkAlwaysOnTop);
+        sidebarFooter.add(Box.createVerticalStrut(5));
+        sidebarFooter.add(btnMini);
+
+        sidebarWrapper.add(sidebarFooter, BorderLayout.SOUTH);
+
+        add(sidebarWrapper, BorderLayout.WEST);
 
         // Content Panel (Chứa các màn hình chức năng)
         cardLayout = new CardLayout();
@@ -238,12 +272,10 @@ public class ServerManagerUI extends JFrame {
             }
         });
 
-        // Cấu hình cửa sổ chính
-        // Chỉnh sửa kích thước cửa sổ (Rộng, Cao) tại đây:
-        setSize(1600, 850);
-        setMinimumSize(new Dimension(1400, 750));
+        // Cấu hình cửa sổ chính ban đầu
+        setSize(lastFullSize);
+        setMinimumSize(new Dimension(400, 300));
         setLocationRelativeTo(null);
-        // setExtendedState(JFrame.MAXIMIZED_BOTH); // Mở full màn hình
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         // Sự kiện đóng cửa sổ an toàn
@@ -262,6 +294,9 @@ public class ServerManagerUI extends JFrame {
                 }
             }
         });
+
+        // Mặc định khởi tạo ở chế độ Mini Mode như yêu cầu
+        switchToMiniMode();
     }
 
     private void startServerProcesses() {
@@ -295,7 +330,56 @@ public class ServerManagerUI extends JFrame {
         }
 
         System.out.println(">> [ServerManagerUI] SHOWING UI...");
-        setVisible(true);
+        // setVisible(true) sẽ được gọi bởi switchToMiniMode hoặc thủ công
+        if (!isVisible()) {
+            setVisible(true);
+        }
+    }
+
+    public void switchToMiniMode() {
+        if (sidebarWrapper.isVisible()) {
+            lastFullSize = getSize();
+        }
+
+        // Hide sidebar
+        sidebarWrapper.setVisible(false);
+
+        // Setup mini panel
+        if (miniPanel == null) {
+            miniPanel = new MiniDashboardPanel(this);
+        } else {
+            miniPanel.updateAlwaysOnTopState();
+        }
+
+        // Remove contentPanel if it matches CENTER
+        remove(contentPanel);
+        add(miniPanel, BorderLayout.CENTER);
+
+        // Adjust window for compact grid view
+        setSize(360, 300); // Width enough for 2 columns, Height for 3 rows + button
+        setResizable(false);
+        revalidate();
+        repaint();
+    }
+
+    public void switchToFullMode() {
+        // Show sidebar
+        sidebarWrapper.setVisible(true);
+
+        // Restore content panel
+        if (miniPanel != null) {
+            remove(miniPanel);
+        }
+        add(contentPanel, BorderLayout.CENTER);
+
+        // Restore window
+        if (chkAlwaysOnTop != null) {
+            chkAlwaysOnTop.setSelected(isAlwaysOnTop());
+        }
+        setSize(lastFullSize);
+        setResizable(true);
+        revalidate();
+        repaint();
     }
 
     private void shutdownServer() {
