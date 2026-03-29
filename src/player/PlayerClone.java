@@ -56,6 +56,10 @@ public class PlayerClone extends Player {
         this.nPoint.calPoint();
         this.nPoint.setFullHpMp();
         this.lastSpawnTime = System.currentTimeMillis();
+        
+        if (master != null && master.isAutoMercenary) {
+            this.setAttackMode(true);
+        }
     }
 
     // Bật/tắt chế độ tấn công

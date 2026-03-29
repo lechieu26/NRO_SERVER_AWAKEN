@@ -37,6 +37,7 @@ import models.Card.Card;
 import models.Card.RadarService;
 import npc.NpcManager;
 import player.Player;
+import player.LinhDanhThue;
 import matches.PVPService;
 import models.Achievement.AchievementService;
 import shop.ShopService;
@@ -169,6 +170,31 @@ public class Controller implements IMessageHandler {
                                     Service.gI().point(player);
                                 }
                                 break;
+                        }
+                    }
+                    break;
+                case 123:
+                    if (player != null) {
+                        try {
+                            boolean isAutoAttack = _msg.reader().readBoolean();
+                            // Lưu trạng thái vào player
+                            player.isAutoMercenary = isAutoAttack;
+                            
+                            // Cập nhật cho Lính Đánh Thuê hiện tại
+                            if (player.linhDanhThueList != null && !player.linhDanhThueList.isEmpty()) {
+                                for (LinhDanhThue ldt : player.linhDanhThueList) {
+                                    if (ldt != null) {
+                                        ldt.setAttackMode(isAutoAttack);
+                                    }
+                                }
+                            }
+                            
+                            // Cập nhật cho Phân Thân hiện tại
+                            if (player.clone != null) {
+                                player.clone.setAttackMode(isAutoAttack);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                     break;

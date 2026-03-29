@@ -24,7 +24,7 @@ public class ServerPool {
     // Pool cho update các Map (thay thế mỗi map một thread).
     // Map.run() là vòng while(true) với adaptive sleep → dùng FixedThreadPool.
     // 16 thread: map trống sleep 5s, map có người sleep 1s → đủ cho hàng trăm map.
-    public static final ExecutorService MAP_UPDATE_POOL = Executors.newFixedThreadPool(16, r -> {
+    public static final ExecutorService MAP_UPDATE_POOL = Executors.newCachedThreadPool(r -> {
         Thread t = new Thread(r);
         t.setName("MapUpdate-" + t.getId());
         t.setDaemon(true);

@@ -280,6 +280,7 @@ public class Player implements Runnable {
 
     public PlayerClone clone;
     public boolean isClone;
+    public boolean isAutoMercenary;
     public SkillSpecial skillSpecial;
 
     public List<LinhDanhThue> linhDanhThueList = new ArrayList<>();

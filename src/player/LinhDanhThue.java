@@ -95,6 +95,10 @@ public class LinhDanhThue extends Player {
 
         // Send icon time to player
         sendMercenaryIcon();
+        
+        if (master != null && master.isAutoMercenary) {
+            this.setAttackMode(true);
+        }
     }
 
     /**
@@ -157,6 +161,10 @@ public class LinhDanhThue extends Player {
         this.lastSpawnTime = System.currentTimeMillis();
 
         sendMercenaryIcon();
+        
+        if (master != null && master.isAutoMercenary) {
+            this.setAttackMode(true);
+        }
     }
 
     // Constructor for restoring from database
@@ -234,6 +242,10 @@ public class LinhDanhThue extends Player {
 
         // Send icon time to player (for restored mercenary)
         sendMercenaryIcon();
+        
+        if (master != null && master.isAutoMercenary) {
+            this.setAttackMode(true);
+        }
     }
 
     // Base icon ID for mercenary time display

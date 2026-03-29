@@ -157,7 +157,7 @@ public class Mob {
             // if (damage > 2_000_000_000) {
             // damage = 2_000_000_000;
             // }
-            this.point.hp -= damage;
+            this.point.sethp(this.point.hp - damage);
             addTemporaryEnemies(plAtt);
             if (this.isDie()) {
                 this.status = 0;
@@ -443,7 +443,7 @@ public class Mob {
 
     public void hoiSinh() {
         this.status = 5;
-        this.point.hp = this.point.maxHp;
+        this.point.sethp(this.point.maxHp);
         this.setTiemNang();
     }
 
@@ -454,8 +454,8 @@ public class Mob {
             }
         }
         this.lvMob = this.tempId > 18 && !isBigBoss() ? Util.isTrue(10, 100) ? 1 : 0 : 0;
-        this.point.hp = this.lvMob > 0 ? this.point.maxHp <= 20000000 ? this.point.maxHp * 10 : 2000000000
-                : this.point.maxHp;
+        this.point.sethp(this.lvMob > 0 ? this.point.maxHp <= 20000000 ? this.point.maxHp * 10 : 2000000000
+                : this.point.maxHp);
         return this.lvMob;
     }
 
@@ -821,7 +821,7 @@ public class Mob {
     }
 
     public void hoiSinhMobPhoBan() {
-        this.point.hp = this.point.maxHp;
+        this.point.sethp(this.point.maxHp);
         this.setTiemNang();
         Message msg;
         try {
@@ -837,7 +837,7 @@ public class Mob {
     }
 
     public void hoiSinhMobTayKarin() {
-        this.point.hp = this.point.maxHp;
+        this.point.sethp(this.point.maxHp);
         this.maxTiemNang = 1;
         Message msg;
         try {

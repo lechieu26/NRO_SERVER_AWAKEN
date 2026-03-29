@@ -175,9 +175,10 @@ public class Map implements Runnable {
                         Logger.logException(Map.class, e, "Lỗi update zone");
                     }
                 }
-                // Tối ưu: Map trống sleep 5s thay vì 1s, giảm 80% CPU
-                // Map đặc biệt (phó bản, event) luôn giữ 1s
-                int sleepTime = (hasAnyActivity || this.type != ConstMap.MAP_NORMAL) ? 1000 : 5000;
+                // Tối ưu cực hạn: Map trống hoàn toàn (ko người, ko boss, ko item rơi) sleep 10s
+                // Map có hoạt động (isZoneActive) hoặc map đặc biệt giữ 1s.
+                // Cơ chế hasAnyActivity từ Zone.isZoneActive đã bao gồm grace period 60s.
+                int sleepTime = (hasAnyActivity || this.type != ConstMap.MAP_NORMAL) ? 1000 : 10000;
                 Functions.sleep(Math.max(sleepTime - (System.currentTimeMillis() - st), 10));
             } catch (Exception e) {
                 Logger.logException(Map.class, e, "Lỗi update map " + this.mapName);
