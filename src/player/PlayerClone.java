@@ -418,27 +418,27 @@ public class PlayerClone extends Player {
 
     @Override
     public short getHead() {
-        return master.getHead();
+        return master != null ? master.getHead() : this.head;
     }
 
     @Override
     public short getBody() {
-        return master.getBody();
+        return master != null ? master.getBody() : super.getBody();
     }
 
     @Override
     public short getLeg() {
-        return master.getLeg();
+        return master != null ? master.getLeg() : super.getLeg();
     }
 
     @Override
     public byte getAura() {
-        return master.getAura();
+        return master != null ? master.getAura() : -1;
     }
 
     @Override
     public short getMount() {
-        return master.getMount();
+        return master != null ? master.getMount() : -1;
     }
 
     @Override

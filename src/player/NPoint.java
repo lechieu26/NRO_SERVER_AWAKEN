@@ -302,13 +302,16 @@ public class NPoint {
      */
 
     public void calPoint() {
-        if (this.player.pet != null) {
+        if (this.player != null && this.player.pet != null && this.player.pet.nPoint != null) {
             this.player.pet.nPoint.setPointWhenWearClothes();
         }
         this.setPointWhenWearClothes();
     }
 
     private void setPointWhenWearClothes() {
+        if (this.player == null || this.player.inventory == null || this.player.inventory.itemsBody == null) {
+            return;
+        }
         resetPoint();
         if (this.player.rewardBlackBall.timeOutOfDateReward[2] > System.currentTimeMillis()) {
             tlHutHp += RewardBlackBall.R3S_1;

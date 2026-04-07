@@ -146,7 +146,10 @@ public class Zone {
     private void udMob() {
         for (int i = this.mobs.size() - 1; i >= 0; i--) {
             try {
-                mobs.get(i).update();
+                Mob mob = mobs.get(i);
+                if (mob != null) {
+                    mob.update();
+                }
             } catch (Exception e) {
                 Logger.logException(Zone.class, e, "Lỗi update mobs");
             }
@@ -161,7 +164,7 @@ public class Zone {
             for (int i = this.getNonInteractiveNPCs().size() - 1; i >= 0; i--) {
                 if (i < this.getNonInteractiveNPCs().size()) {
                     Player pl = this.getNonInteractiveNPCs().get(i);
-                    if (pl != null && pl.zone != null) {
+                    if (pl != null && pl.zone != null && pl.inventory != null) {
                         pl.update();
                     }
                 }
@@ -180,11 +183,11 @@ public class Zone {
                 try {
                     if (i < this.items.size()) {
                         ItemMap item = this.items.get(i);
-                        if (item != null && item.itemTemplate != null) {
+                        if (item != null && item.itemTemplate != null && item.zone != null) {
                             item.update();
-                        } else {
+                        } else if (item != null) {
                             items.remove(i);
-                            System.err.println("Remove item " + i);
+                            System.err.println("Remove invalid item at index " + i);
                         }
                     }
                 } catch (Exception e) {
@@ -200,8 +203,8 @@ public class Zone {
     private void updatePlayer() {
         for (int i = this.notBosses.size() - 1; i >= 0; i--) {
             Player pl = this.notBosses.get(i);
-            if (!pl.isPet && !pl.isClone) {
-                this.notBosses.get(i).update();
+            if (pl != null && !pl.isPet && !pl.isClone) {
+                pl.update();
             }
         }
     }

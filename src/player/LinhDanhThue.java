@@ -59,8 +59,8 @@ public class LinhDanhThue extends Player {
         // Initialize inventory FIRST before any access to itemsBody
         this.inventory = new Inventory();
         // Initialize itemsBody with empty items to avoid IndexOutOfBoundsException
-        // SetClothes.setup() needs at least 6 items in itemsBody
-        for (int i = 0; i < 6; i++) {
+        // SetClothes.setup() needs at least 6 items in itemsBody, but typical players have up to 13 slots
+        for (int i = 0; i < 13; i++) {
             this.inventory.itemsBody.add(new Item());
         }
 

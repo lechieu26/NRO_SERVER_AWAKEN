@@ -796,8 +796,13 @@ public class Player implements Runnable {
             return ConstPlayer.AURABIENHINH[this.gender][this.effectSkill.levelBienHinh - 1];
         }
         if (this.effectSkill != null && this.effectSkill.isSuper) {
-            return idAuraSuper[gender][(playerSkill.getSkillbyId(Skill.BIEN_HINH_SUPER).point - 1)
-                    - numUseSkill];
+            Skill skill = playerSkill.getSkillbyId(Skill.BIEN_HINH_SUPER);
+            if (skill != null) {
+                int skillLevel = (skill.point - 1) - numUseSkill;
+                if (skillLevel >= 0 && skillLevel < idAuraSuper[gender].length) {
+                    return idAuraSuper[gender][skillLevel];
+                }
+            }
         }
         if (isPl() && this.inventory != null && this.inventory.itemsBody.size() > 5) {
             Item item = this.inventory.itemsBody.get(5); // aura cho cải trang
@@ -1093,47 +1098,64 @@ public class Player implements Runnable {
     }
 
     public short getHeadSuper() {
-        int skillLevel = (playerSkill.getSkillbyId(Skill.BIEN_HINH_SUPER).point - 1) - numUseSkill;
-        switch (gender) {
-            case 0:
-                return idOutFitSuperEarth[skillLevel][0];
-            case 1:
-                return idOutFitSuperNamec[skillLevel][0];
-            case 2:
-                return idOutFitSuperSaiyan[skillLevel][0];
+        Skill skill = playerSkill.getSkillbyId(Skill.BIEN_HINH_SUPER);
+        if (skill != null) {
+            int skillLevel = (skill.point - 1) - numUseSkill;
+            if (skillLevel >= 0 && skillLevel < idOutFitSuperEarth.length) {
+                switch (gender) {
+                    case 0:
+                        return idOutFitSuperEarth[skillLevel][0];
+                    case 1:
+                        return idOutFitSuperNamec[skillLevel][0];
+                    case 2:
+                        return idOutFitSuperSaiyan[skillLevel][0];
+                }
+            }
         }
         return -1;
     }
 
     public short getBodySuper() {
-        int skillLevel = (playerSkill.getSkillbyId(Skill.BIEN_HINH_SUPER).point - 1) - numUseSkill;
-        switch (gender) {
-            case 0:
-                return idOutFitSuperEarth[skillLevel][1];
-            case 1:
-                return idOutFitSuperNamec[skillLevel][1];
-            case 2:
-                return idOutFitSuperSaiyan[skillLevel][1];
+        Skill skill = playerSkill.getSkillbyId(Skill.BIEN_HINH_SUPER);
+        if (skill != null) {
+            int skillLevel = (skill.point - 1) - numUseSkill;
+            if (skillLevel >= 0 && skillLevel < idOutFitSuperEarth.length) {
+                switch (gender) {
+                    case 0:
+                        return idOutFitSuperEarth[skillLevel][1];
+                    case 1:
+                        return idOutFitSuperNamec[skillLevel][1];
+                    case 2:
+                        return idOutFitSuperSaiyan[skillLevel][1];
+                }
+            }
         }
         return -1;
     }
 
     public short getLegSuper() {
-        int skillLevel = (playerSkill.getSkillbyId(Skill.BIEN_HINH_SUPER).point - 1) - numUseSkill;
-        switch (gender) {
-            case 0:
-                return idOutFitSuperEarth[skillLevel][2];
-            case 1:
-                return idOutFitSuperNamec[skillLevel][2];
-            case 2:
-                return idOutFitSuperSaiyan[skillLevel][2];
+        Skill skill = playerSkill.getSkillbyId(Skill.BIEN_HINH_SUPER);
+        if (skill != null) {
+            int skillLevel = (skill.point - 1) - numUseSkill;
+            if (skillLevel >= 0 && skillLevel < idOutFitSuperEarth.length) {
+                switch (gender) {
+                    case 0:
+                        return idOutFitSuperEarth[skillLevel][2];
+                    case 1:
+                        return idOutFitSuperNamec[skillLevel][2];
+                    case 2:
+                        return idOutFitSuperSaiyan[skillLevel][2];
+                }
+            }
         }
         return -1;
     }
 
     public short getHead() {
-        if (this.isPl() && this.pet != null && this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA
-                || this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2) {
+        if (this.fusion != null && this.pet != null && this.inventory != null && this.pet.inventory != null
+                && this.inventory.itemsBody.size() > 5 && this.pet.inventory.itemsBody.size() > 5
+                && ((this.isPl() && this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA)
+                        || this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2)) {
             Item item = inventory.itemsBody.get(5);
             Item petItem = pet.inventory.itemsBody.get(5);
 
@@ -1197,7 +1219,7 @@ public class Player implements Runnable {
             } else if (fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2) {
                 return idOutfitFusion[6 + this.gender][0];
             }
-        } else if (inventory != null && inventory.itemsBody.get(5).isNotNullItem()) {
+        } else if (inventory != null && inventory.itemsBody.size() > 5 && inventory.itemsBody.get(5).isNotNullItem()) {
             int headId = inventory.itemsBody.get(5).template.head;
             if (headId != -1) {
                 return (short) headId;
@@ -1207,8 +1229,10 @@ public class Player implements Runnable {
     }
 
     public short getBody() {
-        if (this.isPl() && this.pet != null && this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA
-                || this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2) {
+        if (this.fusion != null && this.pet != null && this.inventory != null && this.pet.inventory != null
+                && this.inventory.itemsBody.size() > 5 && this.pet.inventory.itemsBody.size() > 5
+                && ((this.isPl() && this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA)
+                        || this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2)) {
             Item item = inventory.itemsBody.get(5);
             Item petItem = pet.inventory.itemsBody.get(5);
 
@@ -1265,21 +1289,23 @@ public class Player implements Runnable {
             } else if (fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2) {
                 return idOutfitFusion[6 + this.gender][1];
             }
-        } else if (inventory != null && inventory.itemsBody.get(5).isNotNullItem()) {
+        } else if (inventory != null && inventory.itemsBody.size() > 5 && inventory.itemsBody.get(5).isNotNullItem()) {
             int body = inventory.itemsBody.get(5).template.body;
             if (body != -1) {
                 return (short) body;
             }
         }
-        if (inventory != null && inventory.itemsBody.get(0).isNotNullItem()) {
+        if (inventory != null && inventory.itemsBody.size() > 0 && inventory.itemsBody.get(0).isNotNullItem()) {
             return inventory.itemsBody.get(0).template.part;
         }
         return (short) (gender == ConstPlayer.NAMEC ? 59 : 57);
     }
 
     public short getLeg() {
-        if (this.isPl() && this.pet != null && this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA
-                || this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2) {
+        if (this.fusion != null && this.pet != null && this.inventory != null && this.pet.inventory != null
+                && this.inventory.itemsBody.size() > 5 && this.pet.inventory.itemsBody.size() > 5
+                && ((this.isPl() && this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA)
+                        || this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2)) {
             Item item = inventory.itemsBody.get(5);
             Item petItem = pet.inventory.itemsBody.get(5);
 
@@ -1337,13 +1363,13 @@ public class Player implements Runnable {
             } else if (fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2) {
                 return idOutfitFusion[6 + this.gender][2];
             }
-        } else if (inventory != null && inventory.itemsBody.get(5).isNotNullItem()) {
+        } else if (inventory != null && inventory.itemsBody.size() > 5 && inventory.itemsBody.get(5).isNotNullItem()) {
             int leg = inventory.itemsBody.get(5).template.leg;
             if (leg != -1) {
                 return (short) leg;
             }
         }
-        if (inventory != null && inventory.itemsBody.get(1).isNotNullItem()) {
+        if (inventory != null && inventory.itemsBody.size() > 1 && inventory.itemsBody.get(1).isNotNullItem()) {
             return inventory.itemsBody.get(1).template.part;
         }
         return (short) (gender == 1 ? 60 : 58);
