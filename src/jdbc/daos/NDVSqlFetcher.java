@@ -873,7 +873,8 @@ public class NDVSqlFetcher {
 
             // data skill shortcut
             dataArray = (JSONArray) JSONValue.parse(rs.getString("skills_shortcut"));
-            for (int i = 0; i < dataArray.size(); i++) {
+            int minSize = Math.min(dataArray.size(), player.playerSkill.skillShortCut.length);
+            for (int i = 0; i < minSize; i++) {
                 player.playerSkill.skillShortCut[i] = Byte.parseByte(String.valueOf(dataArray.get(i)));
             }
 

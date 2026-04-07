@@ -21,6 +21,9 @@ public class PlayerSkill {
     public PlayerSkill(Player player) {
         this.player = player;
         skills = new ArrayList<>();
+        for (int i = 0; i < skillShortCut.length; i++) {
+            skillShortCut[i] = -1;
+        }
     }
 
     public Skill getSkillbyId(int id) {
