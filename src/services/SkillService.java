@@ -988,11 +988,10 @@ public class SkillService {
                 }
                 break;
             case Skill.TANG_HINH:
-                Logger.warning("Server executing Tàng Hình logic for " + player.name + "\n");
+                Logger.warning("[TANG_HINH_DEBUG] Server executing Tàng Hình logic for " + player.name + "\n");
                 int timeTanHinh = utils.SkillUtil.getTimeTanHinh(player.playerSkill.skillSelect);
                 EffectSkillService.gI().setIsTanHinh(player, timeTanHinh);
                 affterUseSkill(player, player.playerSkill.skillSelect.template.id);
-                Service.gI().sendTimeSkill(player, player.playerSkill.skillSelect);
                 break;
 
         }
@@ -1485,9 +1484,17 @@ public class SkillService {
             case Skill.BIEN_HINH_SUPER -> {
                 subTimeParam = 1;
             }
+            case Skill.TANG_HINH -> {
+                subTimeParam = 1;
+            }
+        }
+        
+        if (player.playerSkill.skillSelect.coolDown == 0 && skillId == Skill.TANG_HINH) {
+            player.playerSkill.skillSelect.coolDown = 30000;
         }
 
         int coolDown = player.playerSkill.skillSelect.coolDown;
+        System.out.println("[TANG_HINH_DEBUG] setLastTimeUseSkill - skillId: " + skillId + ", coolDown: " + coolDown + ", subTimeParam: " + subTimeParam);
         player.playerSkill.skillSelect.lastTimeUseThisSkill = System.currentTimeMillis()
                 - (coolDown * subTimeParam / 100);
 
