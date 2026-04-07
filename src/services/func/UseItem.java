@@ -1658,6 +1658,8 @@ public class UseItem {
                 learnSkillNew2(pl, item);
             } else if (item.template.id >= 1905 && item.template.id <= 1922) {
                 learnSkillNew2(pl, item);
+            } else if (item.template.id >= 1991 && item.template.id <= 1997) {
+                learnSkillNew2(pl, item);
             } else {
                 if (item.template.gender == pl.gender || item.template.gender == 3) {
                     String[] subName = item.template.name.split("");

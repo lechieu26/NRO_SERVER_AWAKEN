@@ -299,7 +299,8 @@ public class Boss extends Player implements IBoss, IBossOutfit {
         if (this.zone == null) {
             return null;
         }
-        if (this.playerTarger != null && (this.playerTarger.isDie() || !this.zone.equals(this.playerTarger.zone))) {
+        if (this.playerTarger != null && (this.playerTarger.isDie() || !this.zone.equals(this.playerTarger.zone)
+                || (this.playerTarger.effectSkill != null && this.playerTarger.effectSkill.isTanHinh))) {
             this.playerTarger = null;
         }
         if (this.playerTarger == null || Util.canDoWithTime(this.lastTimeTargetPlayer, this.timeTargetPlayer)) {

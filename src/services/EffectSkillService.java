@@ -10,6 +10,7 @@ import mob.Mob;
 import player.Player;
 import skill.Skill;
 import network.Message;
+import utils.Logger;
 import consts.ConstPlayer;
 import utils.SkillUtil;
 import java.util.List;
@@ -30,6 +31,7 @@ public class EffectSkillService {
     public static final byte BLIND_EFFECT = 40;
     public static final byte SLEEP_EFFECT = 41;
     public static final byte STONE_EFFECT = 42;
+    public static final byte TANG_HINH_EFFECT = 43;
 
     private static EffectSkillService instance;
 
@@ -61,6 +63,7 @@ public class EffectSkillService {
     }
 
     public void sendEffectPlayer(Player plUseSkill, Player plTarget, byte toggle, byte effect) {
+        Logger.warning("[TANG_HINH_DEBUG] sendEffectPlayer: toggle=" + toggle + " effect=" + effect + " plUseSkill=" + plUseSkill.name + " plTarget=" + plTarget.name + "\n");
         Message msg;
         try {
             msg = new Message(-124);
@@ -377,6 +380,10 @@ public class EffectSkillService {
             for (Player playerMap : player.newSkill.playersTaget) {
                 try {
                     if (player.location != null && playerMap.location != null) {
+                        if (playerMap.isDie() || playerMap.isBoss || (playerMap.effectSkin != null && playerMap.effectSkin.isVoHinh)
+                                || (playerMap.effectSkill != null && playerMap.effectSkill.isTanHinh)) {
+                            continue;
+                        }
                         EffectSkillService.gI().setIsBinh(player, playerMap,
                                 11000 * (player.newSkill.typeItem == 0 ? 1 : 2));
                         int x = player.location.x + ((player.newSkill.dir == -1) ? (-50) : 50);
@@ -435,16 +442,47 @@ public class EffectSkillService {
     }
 
     public void setIsTanHinh(Player player, int time) {
-        Service.gI().setPos2(player, player.location.x, 10000);
+        Logger.warning("[TANG_HINH_DEBUG] setIsTanHinh called for " + player.name + " time=" + time + "\n");
+        if (player.zone != null) {
+            for (Player pl : player.zone.getPlayers()) {
+                if (pl != null && !pl.equals(player)) {
+                    try {
+                        Message msg = new Message(-6);
+                        msg.writer().writeInt((int) player.id);
+                        pl.sendMessage(msg);
+                        msg.cleanup();
+                    } catch (Exception e) {
+                        Logger.logException(EffectSkillService.class, e);
+                    }
+                }
+            }
+        }
+        // Thông báo cho chính player biết đang tàng hình (hiệu ứng mờ)
+        sendEffectPlayer(player, player, TURN_ON_EFFECT, TANG_HINH_EFFECT);
         player.effectSkill.isTanHinh = true;
         player.effectSkill.timeTanHinh = time;
         player.effectSkill.lastTimeTanHinh = System.currentTimeMillis();
+        Skill skill = SkillUtil.getSkillbyId(player, Skill.TANG_HINH);
+        if (skill != null) {
+            ItemTimeService.gI().sendItemTime(player, skill.template.iconId, time / 1000);
+        }
     }
 
     public void removeTanHinh(Player player) {
-        Service.gI().setPos2(player, player.location.x, player.location.y);
+        Logger.warning("[TANG_HINH_DEBUG] removeTanHinh called for " + player.name + "\n");
         player.effectSkill.isTanHinh = false;
+        // Thông báo cho chính player biết hết tàng hình
+        sendEffectPlayer(player, player, TURN_OFF_EFFECT, TANG_HINH_EFFECT);
+        if (player.zone != null) {
+            player.zone.load_Me_To_Another(player);
+        }
+        Skill skill = SkillUtil.getSkillbyId(player, Skill.TANG_HINH);
+        if (skill != null) {
+            ItemTimeService.gI().removeItemTime(player, skill.template.iconId);
+        }
     }
+
+
 
     public void setDameBuff(Player player, int time, int tiLe) {
         player.effectSkill.isDameBuff = true;

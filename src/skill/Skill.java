@@ -45,7 +45,8 @@ public class Skill {
 
     public static final byte PHAN_THAN = 27;
     public static final byte BIEN_HINH_SUPER = 28;
-    public static final byte GONG = 29;
+    public static final byte GONG = 30;
+    public static final byte TANG_HINH = 29;
 
     public SkillTemplate template;
 
@@ -75,6 +76,10 @@ public class Skill {
 
     public short price;
 
+    public int timeTangHinh;
+    public int timeChoang;
+    public int tiLeChoang;
+
     public Skill() {
 
     }
@@ -93,6 +98,9 @@ public class Skill {
         this.moreInfo = skill.moreInfo;
         this.price = skill.price;
         this.template = skill.template;
+        this.timeTangHinh = skill.timeTangHinh;
+        this.timeChoang = skill.timeChoang;
+        this.tiLeChoang = skill.tiLeChoang;
     }
 
     public void dispose() {

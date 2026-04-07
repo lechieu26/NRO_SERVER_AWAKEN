@@ -68,6 +68,14 @@ public class ItemTimeService {
                     - System.currentTimeMillis()) / 1000;
             sendItemTime(player, iconLvFirst + player.effectSkill.levelBienHinh - 1, remainTime);
         }
+        if (player.effectSkill.isTanHinh) {
+            int remainTime = (int) ((player.effectSkill.lastTimeTanHinh + player.effectSkill.timeTanHinh)
+                    - System.currentTimeMillis()) / 1000;
+            Skill skill = player.playerSkill.getSkillbyId(Skill.TANG_HINH);
+            if (skill != null) {
+                sendItemTime(player, skill.template.iconId, remainTime);
+            }
+        }
         if (player.fusion.typeFusion == ConstPlayer.LUONG_LONG_NHAT_THE) {
             sendItemTime(player, player.gender == ConstPlayer.NAMEC ? 3901 : 3790,
                     (int) ((Fusion.TIME_FUSION - (System.currentTimeMillis() - player.fusion.lastTimeFusion)) / 1000));

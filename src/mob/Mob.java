@@ -1,48 +1,45 @@
 package mob;
 
-import services.InventoryService;
-import services.Service;
-import services.TaskService;
-import services.ItemMapService;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import network.Message;
+import utils.Logger;
+import utils.Util;
+import utils.TimeUtil;
+
 import consts.ConstMap;
 import consts.ConstMob;
+import consts.ConstPlayer;
 import consts.ConstTask;
 import consts.ConstTaskBadges;
 import consts.cn;
+
 import event.EventManager;
-import static event.EventManager.LUNNAR_NEW_YEAR;
 import intrinsic.Intrinsic;
 import item.Item;
 import map.ItemMap;
-
-import java.util.List;
-
 import map.Zone;
 import player.Location;
 import player.Pet;
 import player.Player;
 import player.PlayerClone;
 import player.LinhDanhThue;
-import network.Message;
-
-import java.io.IOException;
-
 import server.Maintenance;
 import server.Manager;
-import utils.Util;
-
-import java.util.ArrayList;
-
-import models.Achievement.AchievementService;
-import models.Training.TrainingService;
-
 import server.ServerNotify;
+import services.InventoryService;
 import services.ItemService;
 import services.MapService;
+import services.Service;
+import services.TaskService;
+import services.ItemMapService;
 import services.func.ChangeMapService;
 import skill.Skill;
 import task.Badges.BadgesTaskService;
-import utils.TimeUtil;
+import models.Achievement.AchievementService;
+import models.Training.TrainingService;
 
 public class Mob {
 
@@ -344,6 +341,7 @@ public class Mob {
             for (Player pl : players) {
                 if (!pl.isDie() && !pl.isBoss && !pl.isNewPet && (pl.satellite == null || !pl.satellite.isDefend)
                         && (pl.effectSkin == null || !pl.effectSkin.isVoHinh)
+                        && (pl.effectSkill == null || !pl.effectSkill.isTanHinh)
                         && (this.tempId > 18 || (this.tempId > 9 && this.type == 4)) || isBigBoss()) {
                     int dis = Util.getDistance(pl, this);
                     if (dis <= distance || isBigBoss()) {
@@ -368,6 +366,7 @@ public class Mob {
                 for (Player plAttt : playersMap) {
                     if (plAttt.isDie() || plAttt.isBoss || (plAttt.satellite != null && plAttt.satellite.isDefend)
                             || (plAttt.effectSkin != null && plAttt.effectSkin.isVoHinh)
+                            || (plAttt.effectSkill != null && plAttt.effectSkill.isTanHinh)
                             || !this.temporaryEnemies.contains(plAttt)) {
                         continue;
                     }

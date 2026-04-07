@@ -21,6 +21,7 @@ import services.FriendAndEnemyService;
 import jdbc.DBConnecter;
 import jdbc.NDVResultSet;
 import utils.Util;
+import utils.Logger;
 import data.DataGame;
 import server.io.MySession;
 
@@ -678,7 +679,8 @@ public class Controller implements IMessageHandler {
                         int selectSkill = _msg.reader().readShort();
                         SkillService.gI().selectSkill(player, selectSkill);
                         if (selectSkill == Skill.BIEN_KHI || selectSkill == Skill.HUYT_SAO
-                                || selectSkill == Skill.BIEN_HINH_SUPER) {
+                                || selectSkill == Skill.BIEN_HINH_SUPER || selectSkill == Skill.TANG_HINH) {
+                            Logger.warning("[TANG_HINH_DEBUG] Server received selectSkill 29 (CMD 34) for player: " + player.name + "\n");
                             SkillService.gI().useSkill(player, null, null, -1, null);
                         }
                     }

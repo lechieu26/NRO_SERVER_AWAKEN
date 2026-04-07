@@ -80,7 +80,7 @@ public class Goku extends Boss {
     public Player getPlayerAttack() {
         List<Player> plNotVoHinh = new ArrayList();
         for (Player pl : this.zone.getNotBosses()) {
-            if (pl != null && (pl.effectSkin == null || !pl.effectSkin.isVoHinh) && pl.cFlag != this.cFlag) {
+            if (pl != null && (pl.effectSkin == null || !pl.effectSkin.isVoHinh) && (pl.effectSkill == null || !pl.effectSkill.isTanHinh) && pl.cFlag != this.cFlag) {
                 plNotVoHinh.add(pl);
             }
         }

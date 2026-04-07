@@ -101,6 +101,24 @@ public class SkillUtil {
         return (level + 2) * 5000;
     }
 
+    public static int getTimeTanHinh(Skill skill) {
+        if (skill == null)
+            return 2000;
+        return skill.timeTangHinh > 0 ? skill.timeTangHinh : 2000 + skill.point * 1000;
+    }
+
+    public static int getTimeChoangTanHinh(Skill skill) {
+        if (skill == null)
+            return 2000;
+        return skill.timeChoang > 0 ? skill.timeChoang : 1000 + skill.point * 1000;
+    }
+
+    public static int getTiLeChoangTanHinh(Skill skill) {
+        if (skill == null)
+            return 50;
+        return skill.tiLeChoang > 0 ? skill.tiLeChoang : 45 + skill.point * 5;
+    }
+
     public static int getTimeTroi(int level) { // thời gian trói v
         return level * 5000;
     }
@@ -254,18 +272,12 @@ public class SkillUtil {
             return Skill.TROI;
         } else if (id >= 509 && id <= 515) {
             return Skill.HUYT_SAO;
-        } /*
-           * else if (id >= 1872 && id <= 1877) {
-           * return Skill.SUPER_TRAI_DAT;
-           * } else if (id >= 1878 && id <= 1883) {
-           * return Skill.SUPER_NAMEC;
-           * } else if (id >= 1884 && id <= 1889) {
-           * return Skill.SUPER_SAIYAN;
-           * }
-           */else if (id >= 1865 && id <= 1871) {
+        } else if (id >= 1865 && id <= 1871) {
             return Skill.PHAN_THAN;
         } else if (id >= 1905 && id <= 1922) {
             return Skill.BIEN_HINH_SUPER;
+        } else if (id >= 1991 && id <= 1997) {
+            return Skill.TANG_HINH;
         } else {
             return -1;
         }
@@ -338,7 +350,21 @@ public class SkillUtil {
             case 1369:
             case 1376:
                 return 7;
-
+            // Sách Tàng Hình
+            case 1991:
+                return 1;
+            case 1992:
+                return 2;
+            case 1993:
+                return 3;
+            case 1994:
+                return 4;
+            case 1995:
+                return 5;
+            case 1996:
+                return 6;
+            case 1997:
+                return 7;
         }
         return -1;
     }
@@ -410,6 +436,12 @@ public class SkillUtil {
                 return skill;
             }
             return createSkillLevel0(Skill.BIEN_HINH_SUPER);
+        } else if (tempId >= 1991 && tempId <= 1997) {
+            Skill skill = getSkillbyId(pl, Skill.TANG_HINH);
+            if (skill != null) {
+                return skill;
+            }
+            return createSkillLevel0(Skill.TANG_HINH);
         } else {
             return null;
         }

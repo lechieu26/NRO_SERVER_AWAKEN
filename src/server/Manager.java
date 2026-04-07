@@ -40,6 +40,9 @@ import task.TaskMain;
 import services.ItemService;
 import services.MapService;
 import utils.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -546,22 +549,27 @@ public final class Manager {
                                 .replaceAll("\"\\]", "]")
                                 .replaceAll("\\]\"", "]")
                                 .replaceAll("\\}\",\"\\{", "},{"));
-                for (int j = 0; j < dataArray.size(); j++) {
-                    JSONObject dts = (JSONObject) JSONValue.parse(String.valueOf(dataArray.get(j)));
-                    Skill skill = new Skill();
-                    skill.template = skillTemplate;
-                    skill.skillId = Short.parseShort(String.valueOf(dts.get("id")));
-                    skill.point = Byte.parseByte(String.valueOf(dts.get("point")));
-                    skill.powRequire = Long.parseLong(String.valueOf(dts.get("power_require")));
-                    skill.manaUse = Integer.parseInt(String.valueOf(dts.get("mana_use")));
-                    skill.coolDown = Integer.parseInt(String.valueOf(dts.get("cool_down")));
-                    skill.dx = Integer.parseInt(String.valueOf(dts.get("dx")));
-                    skill.dy = Integer.parseInt(String.valueOf(dts.get("dy")));
-                    skill.maxFight = Integer.parseInt(String.valueOf(dts.get("max_fight")));
-                    skill.damage = Short.parseShort(String.valueOf(dts.get("damage")));
-                    skill.price = Short.parseShort(String.valueOf(dts.get("price")));
-                    skill.moreInfo = String.valueOf(dts.get("info"));
-                    skillTemplate.skillss.add(skill);
+                if (dataArray != null) {
+                    for (int j = 0; j < dataArray.size(); j++) {
+                        JSONObject dts = (JSONObject) JSONValue.parse(String.valueOf(dataArray.get(j)));
+                        Skill skill = new Skill();
+                        skill.template = skillTemplate;
+                        skill.skillId = Short.parseShort(String.valueOf(dts.get("id")));
+                        skill.point = Byte.parseByte(String.valueOf(dts.get("point")));
+                        skill.powRequire = Long.parseLong(String.valueOf(dts.get("power_require")));
+                        skill.manaUse = Integer.parseInt(String.valueOf(dts.get("mana_use")));
+                        skill.coolDown = Integer.parseInt(String.valueOf(dts.get("cool_down")));
+                        skill.dx = Integer.parseInt(String.valueOf(dts.get("dx")));
+                        skill.dy = Integer.parseInt(String.valueOf(dts.get("dy")));
+                        skill.maxFight = Integer.parseInt(String.valueOf(dts.get("max_fight")));
+                        skill.damage = Short.parseShort(String.valueOf(dts.get("damage")));
+                        skill.price = Short.parseShort(String.valueOf(dts.get("price")));
+                        skill.moreInfo = String.valueOf(dts.get("info"));
+                        if (dts.get("time_tanghinh") != null) skill.timeTangHinh = Integer.parseInt(String.valueOf(dts.get("time_tanghinh")));
+                        if (dts.get("time_choang") != null) skill.timeChoang = Integer.parseInt(String.valueOf(dts.get("time_choang")));
+                        if (dts.get("ti_le_choang") != null) skill.tiLeChoang = Integer.parseInt(String.valueOf(dts.get("ti_le_choang")));
+                        skillTemplate.skillss.add(skill);
+                    }
                 }
             }
             Logger.success("Successfully loaded skill (" + NCLASS.size() + ")\n");

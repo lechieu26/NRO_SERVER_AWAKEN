@@ -610,7 +610,8 @@ public class Zone {
 
         // Lỗi
         for (Player pl : this.notBosses) {
-            if (pl != null && (pl.effectSkin == null || !pl.effectSkin.isVoHinh) && pl.maBuHold == null
+            if (pl != null && (pl.effectSkin == null || !pl.effectSkin.isVoHinh)
+                    && (pl.effectSkill == null || !pl.effectSkill.isTanHinh) && pl.maBuHold == null
                     && !pl.isMabuHold) {
                 plNotVoHinh.add(pl);
             }
