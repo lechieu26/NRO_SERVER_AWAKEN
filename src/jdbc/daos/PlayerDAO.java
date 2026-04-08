@@ -283,10 +283,10 @@ public class PlayerDAO {
             String charms = dataArray.toJSONString();
             dataArray.clear();
 
-            // chieu.lq create new player #skills #clone #PHAN_THAN #BIEN_HINH_SUPER
-            int[] skillsArr = gender == 0 ? new int[] { 0, 1, 6, 9, 10, 20, 22, 24, 19, 27, 28 }
-                    : gender == 1 ? new int[] { 2, 3, 7, 11, 12, 17, 18, 26, 19, 27, 28 }
-                            : new int[] { 4, 5, 8, 13, 14, 21, 23, 25, 19, 27, 28 };
+            //  create new player #skills #clone #PHAN_THAN #BIEN_HINH_SUPER
+            int[] skillsArr = gender == 0 ? new int[] { 0, 1, 6, 9, 10, 20, 22, 24, 19, 27, 28, 29 }
+                    : gender == 1 ? new int[] { 2, 3, 7, 11, 12, 17, 18, 26, 19, 27, 28, 29 }
+                            : new int[] { 4, 5, 8, 13, 14, 21, 23, 25, 19, 27, 28, 29 };
 
             /*
              * int[] skillsArr = gender == 0 ? new int[] { 0, 1, 6, 9, 10, 20, 22, 19 }

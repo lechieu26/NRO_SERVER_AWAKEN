@@ -158,7 +158,8 @@ public class Command {
                 }
                 return true;
             } else if (text.equals("tanghinh")) {
-                System.out.println("[TANG_HINH_DEBUG] Learning skill Tang Hinh for " + player.name);
+                // System.out.println("[TANG_HINH_DEBUG] Learning skill Tang Hinh for " +
+                // player.name);
                 SkillService.gI().learSkillSpecial(player, Skill.TANG_HINH, 7);
                 Service.gI().sendThongBao(player, "Đã học skill Tàng Hình!");
                 return true;

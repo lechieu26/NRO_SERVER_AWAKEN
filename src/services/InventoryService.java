@@ -320,29 +320,29 @@ public class InventoryService {
             case 2:
             case 3:
             case 4:
-            case 5: // chieu.lq type: áo, quần, găng, giày, rada
+            case 5: //  type: áo, quần, găng, giày, rada
                 index = item.template.type;
                 break;
-            case 32: // chieu.lq type: giáp luyện tập
+            case 32: //  type: giáp luyện tập
                 index = 6;
                 break;
-            case 21: // chieu.lq type: pet
+            case 21: //  type: pet
                 index = 7;
                 break;
-            case 11: // chieu.lq type: cánh, đeo lưng
+            case 11: //  type: cánh, đeo lưng
                 index = 8;
                 break;
-            case 23: // chieu.lq type: thú cưỡi
-            case 24: // chieu.lq type: thú cưỡi VIP
+            case 23: //  type: thú cưỡi
+            case 24: //  type: thú cưỡi VIP
                 index = 9;
                 break;
-            case 68: // chieu.lq type: chân mệnh
+            case 68: //  type: chân mệnh
                 index = 10;
                 break;
-            case 72: // chieu.lq vị trí ô 11: type: Linh thú
+            case 72: //  vị trí ô 11: type: Linh thú
                 index = 11;
                 break;
-            case 75: // chieu.lq vị trí ô 12: type: Huy hiệu
+            case 75: //  vị trí ô 12: type: Huy hiệu
                 index = 12;
                 break;
             default:
@@ -408,7 +408,7 @@ public class InventoryService {
                     if (item.template.type == 75) {
                         player.partDanhHieu = -1;
                     }
-                    // chieu.lq tháo linh thú
+                    //  tháo linh thú
                     if (item.template.type == 72) {
                         Service.gI().sendchienlinh(player, (short) 0);
                     }

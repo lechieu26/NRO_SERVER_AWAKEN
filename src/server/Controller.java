@@ -180,7 +180,7 @@ public class Controller implements IMessageHandler {
                             boolean isAutoAttack = _msg.reader().readBoolean();
                             // Lưu trạng thái vào player
                             player.isAutoMercenary = isAutoAttack;
-                            
+
                             // Cập nhật cho Lính Đánh Thuê hiện tại
                             if (player.linhDanhThueList != null && !player.linhDanhThueList.isEmpty()) {
                                 for (LinhDanhThue ldt : player.linhDanhThueList) {
@@ -189,7 +189,7 @@ public class Controller implements IMessageHandler {
                                     }
                                 }
                             }
-                            
+
                             // Cập nhật cho Phân Thân hiện tại
                             if (player.clone != null) {
                                 player.clone.setAttackMode(isAutoAttack);
@@ -680,7 +680,8 @@ public class Controller implements IMessageHandler {
                         SkillService.gI().selectSkill(player, selectSkill);
                         if (selectSkill == Skill.BIEN_KHI || selectSkill == Skill.HUYT_SAO
                                 || selectSkill == Skill.BIEN_HINH_SUPER || selectSkill == Skill.TANG_HINH) {
-                            Logger.warning("[TANG_HINH_DEBUG] Server received selectSkill 29 (CMD 34) for player: " + player.name + "\n");
+                            // Logger.warning("[TANG_HINH_DEBUG] Server received selectSkill 29 (CMD 34) for
+                            // player: " + player.name + "\n");
                             SkillService.gI().useSkill(player, null, null, -1, null);
                         }
                     }

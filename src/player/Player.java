@@ -431,24 +431,7 @@ public class Player implements Runnable {
                     if (this.setClothes != null) {
                         if (this.isPl() && this.setClothes != null) {
                             int nextTitle = -1;
-                            /*
-                             * // Danh sách các title hợp lệ
-                             * Set<Integer> validTitles = Set.of(
-                             * 316, 315, 314, 311, 313, 310, 320,
-                             * 1020, 319, 312, 317, 318, 321,
-                             * 87, 88, 89);
-                             * // chieu.lq danh hiệu
-                             * if (this.partDanhHieu != nextTitle && nextTitle != -1) {
-                             * if (this.partDanhHieu == -1) {
-                             * Service.gI().sendTitle(this, nextTitle);
-                             * this.partDanhHieu = nextTitle;
-                             * } else if (validTitles.contains(this.partDanhHieu)) {
-                             * Service.gI().removeTitle(this, this.partDanhHieu);
-                             * Service.gI().sendTitle(this, nextTitle);
-                             * this.partDanhHieu = nextTitle;
-                             * }
-                             * }
-                             */
+
                             // Flags and other effects (Keep separate as they are not Titles)
                             if (this.nPoint.isBuma) {
                                 Service.gI().sendFlagBagPet(this, 159);

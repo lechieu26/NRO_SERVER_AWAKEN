@@ -967,7 +967,7 @@ public class Service {
         Captions.add("Giới Vương Thần cấp 3");
         Captions.add("Thần hủy diệt cấp 1");
         Captions.add("Thần hủy diệt cấp 2");
-        Captions.add("Chieu Pro");
+        Captions.add("NRO Pro");
         return Captions;
     }
 

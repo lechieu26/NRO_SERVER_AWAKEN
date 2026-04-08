@@ -63,7 +63,9 @@ public class EffectSkillService {
     }
 
     public void sendEffectPlayer(Player plUseSkill, Player plTarget, byte toggle, byte effect) {
-        Logger.warning("[TANG_HINH_DEBUG] sendEffectPlayer: toggle=" + toggle + " effect=" + effect + " plUseSkill=" + plUseSkill.name + " plTarget=" + plTarget.name + "\n");
+        // Logger.warning("[TANG_HINH_DEBUG] sendEffectPlayer: toggle=" + toggle + "
+        // effect=" + effect + " plUseSkill=" + plUseSkill.name + " plTarget=" +
+        // plTarget.name + "\n");
         Message msg;
         try {
             msg = new Message(-124);
@@ -380,7 +382,8 @@ public class EffectSkillService {
             for (Player playerMap : player.newSkill.playersTaget) {
                 try {
                     if (player.location != null && playerMap.location != null) {
-                        if (playerMap.isDie() || playerMap.isBoss || (playerMap.effectSkin != null && playerMap.effectSkin.isVoHinh)
+                        if (playerMap.isDie() || playerMap.isBoss
+                                || (playerMap.effectSkin != null && playerMap.effectSkin.isVoHinh)
                                 || (playerMap.effectSkill != null && playerMap.effectSkill.isTanHinh)) {
                             continue;
                         }
@@ -442,7 +445,8 @@ public class EffectSkillService {
     }
 
     public void setIsTanHinh(Player player, int time) {
-        Logger.warning("[TANG_HINH_DEBUG] setIsTanHinh called for " + player.name + " time=" + time + "\n");
+        // Logger.warning("[TANG_HINH_DEBUG] setIsTanHinh called for " + player.name + "
+        // time=" + time + "\n");
         if (player.zone != null) {
             for (Player pl : player.zone.getPlayers()) {
                 if (pl != null && !pl.equals(player)) {
@@ -469,7 +473,8 @@ public class EffectSkillService {
     }
 
     public void removeTanHinh(Player player) {
-        Logger.warning("[TANG_HINH_DEBUG] removeTanHinh called for " + player.name + "\n");
+        // Logger.warning("[TANG_HINH_DEBUG] removeTanHinh called for " + player.name +
+        // "\n");
         player.effectSkill.isTanHinh = false;
         // Thông báo cho chính player biết hết tàng hình
         sendEffectPlayer(player, player, TURN_OFF_EFFECT, TANG_HINH_EFFECT);
@@ -481,8 +486,6 @@ public class EffectSkillService {
             ItemTimeService.gI().removeItemTime(player, skill.template.iconId);
         }
     }
-
-
 
     public void setDameBuff(Player player, int time, int tiLe) {
         player.effectSkill.isDameBuff = true;
@@ -795,7 +798,7 @@ public class EffectSkillService {
     }
 
     public void sendEffectPhanThan(Player player) {
-        Logger.warning("chieu.lq sendEffectPhanThan skill phan than! \n");
+        Logger.warning(" sendEffectPhanThan skill phan than! \n");
         Skill skill = SkillUtil.getSkillbyId(player, Skill.PHAN_THAN);
         if (skill == null) {
             Service.getInstance().sendThongBao(player, "Errorrr");

@@ -175,7 +175,7 @@ public class BossManager implements Runnable {
         this.createBoss(BossID.AN_TROM);
         this.createBoss(BossID.O_DO1);
         this.createBoss(BossID.SOI_HEC_QUEN);
-        this.createBoss(BossID.AN_TROM_TV);
+        this.createBoss(BossID.AN_TROM_TV, 10);
         this.createBoss(BossID.XINBATO1);
         this.createBoss(BossID.BROLY, 6);
         this.createBoss(BossID.SUPER_BROLY, 3);
@@ -183,8 +183,8 @@ public class BossManager implements Runnable {
         this.createBoss(BossID.BROLYHACHOA, 3);
         this.createBoss(BossID.THAYMA, 5);
         this.createBoss(BossID.CUMBER);
-        this.createBoss(BossID.TESTER_001, 4);
-        this.createBoss(BossID.POC_BUNNY, 3);
+        // this.createBoss(BossID.TESTER_001, 4);
+        // this.createBoss(BossID.POC_BUNNY, 3);
         try {
             new DeTuBoss();
             new Bossgido();

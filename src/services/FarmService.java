@@ -74,7 +74,7 @@ public class FarmService {
                     if (plot.update()) {
                         sendPlotUpdate(player, plot);
                         anyChanged = true;
-                        System.out.println("chieu.lq: [Server] Plot " + plot.getPlotId() + " auto-updated to stage "
+                        System.out.println("[Server] Plot " + plot.getPlotId() + " auto-updated to stage "
                                 + plot.getCurrentStage());
                     }
                 }
@@ -102,7 +102,7 @@ public class FarmService {
             return;
         }
 
-        System.out.println("chieu.lq: [Server] Received openPlotMenu for plot " + plotId);
+        System.out.println("[Server] Received openPlotMenu for plot " + plotId);
 
         player.iDMark.setIndexMenu(ConstFarm.MENU_FARM_PLOT_ACTION);
         player.iDMark.setIdItemUpTop(plotId); // Sử dụng idItemUpTop để lưu plotId
@@ -260,7 +260,7 @@ public class FarmService {
             String info = "Bạn có chắc chắn muốn phá bỏ \n" + cropName + " không?\n\n" +
                     "Hành động này sẽ xóa cây trồng\nvà không thể hoàn tác!";
 
-            System.out.println("chieu.lq: [Server] sendConfirmDestroyMenu for plot " + plot.getPlotId());
+            System.out.println("[Server] sendConfirmDestroyMenu for plot " + plot.getPlotId());
 
             Message msg = new Message(32);
             msg.writer().writeShort(-1);
@@ -273,7 +273,7 @@ public class FarmService {
 
             player.iDMark.setIndexMenu(ConstFarm.MENU_FARM_CONFIRM_DESTROY);
             System.out.println(
-                    "chieu.lq: [Server] Sent confirm destroy menu, indexMenu=" + ConstFarm.MENU_FARM_CONFIRM_DESTROY);
+                    "[Server] Sent confirm destroy menu, indexMenu=" + ConstFarm.MENU_FARM_CONFIRM_DESTROY);
         } catch (Exception e) {
             Logger.logException(FarmService.class, e);
         }
@@ -305,7 +305,7 @@ public class FarmService {
         // Reset ô đất
         plot.reset();
 
-        System.out.println("chieu.lq: [Server] destroyPlot plotId=" + plotId +
+        System.out.println("[Server] destroyPlot plotId=" + plotId +
                 " stage=" + plot.getCurrentStage() + " cropType=" + plot.getCropType());
 
         // Gửi cập nhật UI trước (quan trọng)
@@ -421,7 +421,7 @@ public class FarmService {
 
         // Gieo hạt
         if (plot.plant(crop.id)) {
-            System.out.println("chieu.lq: [Server] Plant seed success for plot " + plotId);
+            System.out.println("[Server] Plant seed success for plot " + plotId);
             // Trừ hạt giống
             seedItem.quantity--;
             if (seedItem.quantity <= 0) {
@@ -464,7 +464,7 @@ public class FarmService {
         boolean wasWithered = plot.isWithered();
         int quantity = plot.harvest();
         if (quantity > 0) {
-            System.out.println("chieu.lq: [Server] Harvest success for plot " + plotId + " quantity=" + quantity);
+            System.out.println("[Server] Harvest success for plot " + plotId + " quantity=" + quantity);
             // Tạo item sản phẩm thu hoạch
             Item harvestItem = ItemService.gI().createNewItem(crop.harvestItemId, quantity);
             if (harvestItem != null) {
@@ -952,7 +952,7 @@ public class FarmService {
             msg.writer().writeByte(10); // Sub-type cho Farm
             msg.writer().writeByte(0); // Update single plot
             msg.writer().writeInt(plot.getPlotId());
-            System.out.println("chieu.lq: [Server] Sending plot update for plot " + plot.getPlotId() + " stage="
+            System.out.println("[Server] Sending plot update for plot " + plot.getPlotId() + " stage="
                     + plot.getCurrentStage());
             msg.writer().writeByte(plot.getCurrentStage());
             msg.writer().writeByte(plot.getCropType());
@@ -1014,7 +1014,7 @@ public class FarmService {
      */
     public void handleMenuSelection(Player player, int menuIndex, int selection) {
         int plotId = player.iDMark.getIdItemUpTop();
-        System.out.println("chieu.lq: [Server] logic menu selection: menu=" + menuIndex + " plot=" + plotId
+        System.out.println("[Server] logic menu selection: menu=" + menuIndex + " plot=" + plotId
                 + " selection=" + selection);
 
         switch (menuIndex) {

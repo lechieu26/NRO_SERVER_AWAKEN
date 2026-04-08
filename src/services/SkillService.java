@@ -114,10 +114,14 @@ public class SkillService {
             selectSkill(player, skillId);
             return false;
         } else {
-            Logger.warning("[TANG_HINH_DEBUG] Player " + player.name + " useSkill - template.id=" + player.playerSkill.skillSelect.template.id 
-                + " template.type=" + player.playerSkill.skillSelect.template.type 
-                + " manaUse=" + player.playerSkill.skillSelect.manaUse 
-                + " manaUseType=" + player.playerSkill.skillSelect.template.manaUseType + "\n");
+            /*
+             * Logger.warning("[TANG_HINH_DEBUG] Player " + player.name +
+             * " useSkill - template.id=" + player.playerSkill.skillSelect.template.id
+             * + " template.type=" + player.playerSkill.skillSelect.template.type
+             * + " manaUse=" + player.playerSkill.skillSelect.manaUse
+             * + " manaUseType=" + player.playerSkill.skillSelect.template.manaUseType +
+             * "\n");
+             */
             switch (player.playerSkill.skillSelect.template.type) {
                 case 1 -> {
                     useSkillAttack(player, plTarget, mobTarget);
@@ -195,7 +199,7 @@ public class SkillService {
                 }
 
                 case Skill.PHAN_THAN -> {
-                    Logger.warning("chieu.lq useNewSkillNotFocus sd skill phan than! \n");
+                    Logger.warning(" useNewSkillNotFocus sd skill phan than! \n");
                     EffectSkillService.gI().sendEffectPhanThan(player);
                     if (player.clone != null) {
                         player.clone.dispose();
@@ -751,7 +755,8 @@ public class SkillService {
     private void useSkillAlone(Player player) {
         List<Mob> mobs;
         List<Player> players;
-        Logger.warning("[TANG_HINH_DEBUG] useSkillAlone - Player " + player.name + " skillId=" + player.playerSkill.skillSelect.template.id + "\n");
+        // Logger.warning("[TANG_HINH_DEBUG] useSkillAlone - Player " + player.name + "
+        // skillId=" + player.playerSkill.skillSelect.template.id + "\n");
         switch (player.playerSkill.skillSelect.template.id) {
             case Skill.THAI_DUONG_HA_SAN:
                 int timeStun = SkillUtil.getTimeStun(player.playerSkill.skillSelect.point);
@@ -882,7 +887,7 @@ public class SkillService {
                 affterUseSkill(player, player.playerSkill.skillSelect.template.id);
                 break;
             case Skill.PHAN_THAN:
-                Logger.warning("chieu.lq sd skill phan than! \n");
+                Logger.warning(" sd skill phan than! \n");
                 EffectSkillService.gI().sendEffectPhanThan(player);
                 if (player.clone != null) {
                     player.clone.dispose();
@@ -988,7 +993,8 @@ public class SkillService {
                 }
                 break;
             case Skill.TANG_HINH:
-                Logger.warning("[TANG_HINH_DEBUG] Server executing Tàng Hình logic for " + player.name + "\n");
+                // Logger.warning("[TANG_HINH_DEBUG] Server executing Tàng Hình logic for " +
+                // player.name + "\n");
                 int timeTanHinh = utils.SkillUtil.getTimeTanHinh(player.playerSkill.skillSelect);
                 EffectSkillService.gI().setIsTanHinh(player, timeTanHinh);
                 affterUseSkill(player, player.playerSkill.skillSelect.template.id);
@@ -1007,10 +1013,10 @@ public class SkillService {
                 int tiLeChoang = utils.SkillUtil.getTiLeChoangTanHinh(skill);
                 if (Util.isTrue(tiLeChoang, 100)) {
                     if (plInjure != null) {
-                        Logger.warning("Stealth Stun applied to Player: " + plInjure.name + "\n");
+                        // Logger.warning("Stealth Stun applied to Player: " + plInjure.name + "\n");
                         EffectSkillService.gI().startStun(plInjure, System.currentTimeMillis(), timeChoang);
                     } else if (mobInjure != null) {
-                        Logger.warning("Stealth Stun applied to Mob\n");
+                        // Logger.warning("Stealth Stun applied to Mob\n");
                         mobInjure.effectSkill.startStun(System.currentTimeMillis(), timeChoang);
                         EffectSkillService.gI().sendEffectMob(plAtt, mobInjure, EffectSkillService.TURN_ON_EFFECT,
                                 EffectSkillService.BLIND_EFFECT);
@@ -1049,8 +1055,8 @@ public class SkillService {
                 }
                 for (Player pl : players) {
                     boolean isDie = pl.isDie();
-                    long hpHoi = Util.maxIntValue((long)pl.nPoint.hpMax * percentTriThuong / 100);
-                    long mpHoi = Util.maxIntValue((long)pl.nPoint.mpMax * percentTriThuong / 100);
+                    long hpHoi = Util.maxIntValue((long) pl.nPoint.hpMax * percentTriThuong / 100);
+                    long mpHoi = Util.maxIntValue((long) pl.nPoint.mpMax * percentTriThuong / 100);
                     pl.nPoint.addHp(hpHoi);
                     pl.nPoint.addMp(mpHoi);
                     if (isDie) {
@@ -1069,7 +1075,6 @@ public class SkillService {
             }
         }
     }
-
 
     private void phanSatThuong(Player plAtt, Player plTarget, long dame) {
         if (plAtt != null) {
@@ -1488,13 +1493,14 @@ public class SkillService {
                 subTimeParam = 1;
             }
         }
-        
+
         if (player.playerSkill.skillSelect.coolDown == 0 && skillId == Skill.TANG_HINH) {
             player.playerSkill.skillSelect.coolDown = 30000;
         }
 
         int coolDown = player.playerSkill.skillSelect.coolDown;
-        System.out.println("[TANG_HINH_DEBUG] setLastTimeUseSkill - skillId: " + skillId + ", coolDown: " + coolDown + ", subTimeParam: " + subTimeParam);
+        // System.out.println("[TANG_HINH_DEBUG] setLastTimeUseSkill - skillId: " +
+        // skillId + ", coolDown: " + coolDown + ", subTimeParam: " + subTimeParam);
         player.playerSkill.skillSelect.lastTimeUseThisSkill = System.currentTimeMillis()
                 - (coolDown * subTimeParam / 100);
 
@@ -1592,10 +1598,10 @@ public class SkillService {
 
     public void userSkillSpecial(Player player, byte st, byte skillId, Short dx, Short dy, byte dir, Short x, Short y) {
         try {
-            Logger.warning("chieu.lq userSkillSpecial ! skillId: " + skillId + "\n");
+            Logger.warning(" userSkillSpecial ! skillId: " + skillId + "\n");
             switch (skillId) {
                 case Skill.PHAN_THAN:
-                    Logger.warning("chieu.lq Skill.PHAN_THAN \n");
+                    Logger.warning(" Skill.PHAN_THAN \n");
                     useSkillAlone(player);
                     return;
                 default:
