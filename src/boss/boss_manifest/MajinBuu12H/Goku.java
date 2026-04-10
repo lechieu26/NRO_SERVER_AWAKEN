@@ -79,13 +79,17 @@ public class Goku extends Boss {
     @Override
     public Player getPlayerAttack() {
         List<Player> plNotVoHinh = new ArrayList();
-        for (Player pl : this.zone.getNotBosses()) {
+        List<Player> players = this.zone.getNotBosses();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
             if (pl != null && (pl.effectSkin == null || !pl.effectSkin.isVoHinh) && (pl.effectSkill == null || !pl.effectSkill.isTanHinh) && pl.cFlag != this.cFlag) {
                 plNotVoHinh.add(pl);
             }
         }
-        for (Player pl : this.zone.getBosses()) {
-            if (!pl.equals(this) && pl.cFlag == 10) {
+        List<Player> bosses = this.zone.getBosses();
+        for (int i = bosses.size() - 1; i >= 0; i--) {
+            Player pl = bosses.get(i);
+            if (pl != null && !pl.equals(this) && pl.cFlag == 10) {
                 plNotVoHinh.add(pl);
             }
         }
@@ -97,8 +101,10 @@ public class Goku extends Boss {
     }
 
     private void petrifyPlayersInTheMap() {
-        for (Player pl : this.zone.getNotBosses()) {
-            if (Util.isTrue(1, 10)) {
+        List<Player> players = this.zone.getNotBosses();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
+            if (pl != null && Util.isTrue(1, 10)) {
                 this.chat("phẹt");
                 EffectSkillService.gI().setIsStone(pl, 16000);
             }

@@ -65,8 +65,10 @@ public class Drabura extends Boss {
     @Override
     public Player getPlayerAttack() {
         List<Player> plNotVoHinh = new ArrayList();
-        for (Player pl : this.zone.getNotBosses()) {
-            if ((pl.effectSkin == null || !pl.effectSkin.isVoHinh) && (pl.effectSkill == null || !pl.effectSkill.isTanHinh) && pl.cFlag != this.cFlag) {
+        List<Player> players = this.zone.getNotBosses();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
+            if (pl != null && (pl.effectSkin == null || !pl.effectSkin.isVoHinh) && (pl.effectSkill == null || !pl.effectSkill.isTanHinh) && pl.cFlag != this.cFlag) {
                 plNotVoHinh.add(pl);
             }
         }
@@ -78,8 +80,10 @@ public class Drabura extends Boss {
     }
 
     private void petrifyPlayersInTheMap() {
-        for (Player pl : this.zone.getNotBosses()) {
-            if (Util.isTrue(1, 10)) {
+        List<Player> players = this.zone.getNotBosses();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
+            if (pl != null && Util.isTrue(1, 10)) {
                 this.chat("phẹt");
                 EffectSkillService.gI().setIsStone(pl, 22000);
             }

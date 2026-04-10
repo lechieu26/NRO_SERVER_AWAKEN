@@ -100,8 +100,11 @@ public class GoldenFrieza extends Boss {
             this.name = this.data[this.currentLevel].getName() + " " + Util.nextInt(1, 100);
             super.joinMap();
             if (this.zone != null) {
-                for (Mob mob : this.zone.mobs) {
-                    mob.injured(this, 99999999, true);
+                for (int i = this.zone.mobs.size() - 1; i >= 0; i--) {
+                    Mob mob = this.zone.mobs.get(i);
+                    if (mob != null) {
+                        mob.injured(this, 99999999, true);
+                    }
                 }
                 this.zone.isGoldenFriezaAlive = true;
             }
@@ -207,10 +210,10 @@ public class GoldenFrieza extends Boss {
                     this.playerSkill.prepareTuSat = false;
                     List<Player> playersMap = this.zone.getNotBosses();
                     if (!MapService.gI().isMapOffline(this.zone.map.mapId)) {
-                        for (Player pl : playersMap) {
-                            if (!this.equals(pl)) {
+                        for (int i = playersMap.size() - 1; i >= 0; i--) {
+                            Player pl = playersMap.get(i);
+                            if (pl != null && !this.equals(pl)) {
                                 pl.injured(this, 2_100_000_000, true, false);
-//                            pl.setDie();
                                 PlayerService.gI().sendInfoHpMpMoney(pl);
                                 Service.gI().Send_Info_NV(pl);
                             }

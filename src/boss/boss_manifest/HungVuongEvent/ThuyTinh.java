@@ -129,13 +129,17 @@ public class ThuyTinh extends Boss {
     @Override
     public Player getPlayerAttack() {
         List<Player> plNotVoHinh = new ArrayList();
-        for (Player pl : this.zone.getNotBosses()) {
-            if ((pl.effectSkin == null || !pl.effectSkin.isVoHinh) && (pl.effectSkill == null || !pl.effectSkill.isTanHinh) && pl.cFlag != this.cFlag) {
+        List<Player> players = this.zone.getNotBosses();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
+            if (pl != null && (pl.effectSkin == null || !pl.effectSkin.isVoHinh) && (pl.effectSkill == null || !pl.effectSkill.isTanHinh) && pl.cFlag != this.cFlag) {
                 plNotVoHinh.add(pl);
             }
         }
-        for (Player pl : this.zone.getBosses()) {
-            if (!pl.equals(this) && pl.cFlag == 2) {
+        List<Player> bosses = this.zone.getBosses();
+        for (int i = bosses.size() - 1; i >= 0; i--) {
+            Player pl = bosses.get(i);
+            if (pl != null && !pl.equals(this) && pl.cFlag == 2) {
                 plNotVoHinh.add(pl);
             }
         }

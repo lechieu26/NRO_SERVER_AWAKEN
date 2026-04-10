@@ -14,6 +14,8 @@ import services.PlayerService;
 import services.func.ChangeMapService;
 import skill.Skill;
 import utils.Util;
+import java.util.List;
+
 
 public class XINBATO1 extends Boss {
     private static final String[] textOdo = {
@@ -90,11 +92,15 @@ public class XINBATO1 extends Boss {
         Player nearestPlayer = null;
         double minDistance = Double.MAX_VALUE;
 
-        for (Player pl : this.zone.getPlayers()) {
-            double distance = Util.getDistance(this, pl);
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestPlayer = pl;
+        List<Player> players = this.zone.getPlayers();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
+            if (pl != null) {
+                double distance = Util.getDistance(this, pl);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestPlayer = pl;
+                }
             }
         }
         return nearestPlayer;
@@ -138,8 +144,10 @@ public class XINBATO1 extends Boss {
             attack();
         }
 
-        for (Player pl : this.zone.getPlayers()) {
-            if (pl.nPoint.diexinbato) {
+        List<Player> playerList = this.zone.getPlayers();
+        for (int i = playerList.size() - 1; i >= 0; i--) {
+            Player pl = playerList.get(i);
+            if (pl != null && pl.nPoint != null && pl.nPoint.diexinbato) {
                 this.die(pl);
                 pl.nPoint.diexinbato = false;
                 return;

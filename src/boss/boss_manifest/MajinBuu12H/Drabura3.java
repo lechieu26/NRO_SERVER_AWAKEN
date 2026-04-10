@@ -16,12 +16,12 @@ import map.ItemMap;
 import player.Player;
 import server.Manager;
 import services.EffectSkillService;
-import services.Service;
 import utils.Util;
-
+import java.util.List;
 import java.util.Random;
 import server.ServerNotify;
 import services.PlayerService;
+import services.Service;
 import services.SkillService;
 import services.TaskService;
 import services.func.ChangeMapService;
@@ -53,8 +53,10 @@ public class Drabura3 extends Boss {
     }
 
     private void petrifyPlayersInTheMap() {
-        for (Player pl : this.zone.getNotBosses()) {
-            if (Util.isTrue(1, 10)) {
+        List<Player> players = this.zone.getNotBosses();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
+            if (pl != null && Util.isTrue(1, 10)) {
                 this.chat("phẹt");
                 EffectSkillService.gI().setIsStone(pl, 22000);
             }

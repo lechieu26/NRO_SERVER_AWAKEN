@@ -12,6 +12,8 @@ import boss.BossStatus;
 import boss.BossesData;
 import map.ItemMap;
 import player.Player;
+import java.util.List;
+
 import services.EffectSkillService;
 import services.Service;
 import utils.Util;
@@ -28,8 +30,10 @@ public class TDT extends Boss {
 
     private void bodyChangePlayerInMap() {
         if (this.zone != null) {
-            for (Player pl : this.zone.getPlayers()) {
-                if (pl.isPl() && Util.isTrue(5, 10) && pl.effectSkill != null
+            List<Player> players = this.zone.getPlayers();
+            for (int i = players.size() - 1; i >= 0; i--) {
+                Player pl = players.get(i);
+                if (pl != null && pl.isPl() && Util.isTrue(5, 10) && pl.effectSkill != null
                         && !pl.effectSkill.isBodyChangeTechnique) {
                     EffectSkillService.gI().setIsBodyChangeTechnique(pl);
                 }

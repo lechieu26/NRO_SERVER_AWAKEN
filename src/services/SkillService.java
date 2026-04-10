@@ -200,11 +200,23 @@ public class SkillService {
 
                 case Skill.PHAN_THAN -> {
                     Logger.warning(" useNewSkillNotFocus sd skill phan than! \n");
-                    EffectSkillService.gI().sendEffectPhanThan(player);
+                    // Gửi hiệu ứng khói giống hệt BIEN_HINH_SUPER (skillId 97)
+                    try {
+                        Message msgPT2 = new Message(-45);
+                        msgPT2.writer().writeByte(6);
+                        msgPT2.writer().writeInt((int) player.id);
+                        msgPT2.writer().writeShort(97);
+                        Service.gI().sendMessAllPlayerInMap(player, msgPT2);
+                        msgPT2.cleanup();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     if (player.clone != null) {
                         player.clone.dispose();
                     }
                     player.clone = new PlayerClone(player);
+                    player.clone.location.x = player.location.x + 50;
+                    player.clone.location.y = player.location.y;
                     affterUseSkill(player, player.playerSkill.skillSelect.template.id);
                     break;
                 }
@@ -888,11 +900,24 @@ public class SkillService {
                 break;
             case Skill.PHAN_THAN:
                 Logger.warning(" sd skill phan than! \n");
-                EffectSkillService.gI().sendEffectPhanThan(player);
                 if (player.clone != null) {
                     player.clone.dispose();
                 }
+                // Gửi hiệu ứng khói giống hệt BIEN_HINH_SUPER (skillId 97)
+                try {
+                    Message msgPT = new Message(-45);
+                    msgPT.writer().writeByte(6);
+                    msgPT.writer().writeInt((int) player.id);
+                    msgPT.writer().writeShort(97);
+                    Service.gI().sendMessAllPlayerInMap(player, msgPT);
+                    msgPT.cleanup();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                // Tạo clone cách player 1 khoảng nhỏ (50px)
                 player.clone = new PlayerClone(player);
+                player.clone.location.x = player.location.x + 50;
+                player.clone.location.y = player.location.y;
                 affterUseSkill(player, player.playerSkill.skillSelect.template.id);
                 break;
             case Skill.BIEN_HINH_SUPER:
@@ -993,8 +1018,17 @@ public class SkillService {
                 }
                 break;
             case Skill.TANG_HINH:
-                // Logger.warning("[TANG_HINH_DEBUG] Server executing Tàng Hình logic for " +
-                // player.name + "\n");
+                // Gửi hiệu ứng khói khi tàng hình
+                try {
+                    Message msgTH = new Message(-45);
+                    msgTH.writer().writeByte(6);
+                    msgTH.writer().writeInt((int) player.id);
+                    msgTH.writer().writeShort(97);
+                    Service.gI().sendMessAllPlayerInMap(player, msgTH);
+                    msgTH.cleanup();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 int timeTanHinh = utils.SkillUtil.getTimeTanHinh(player.playerSkill.skillSelect);
                 EffectSkillService.gI().setIsTanHinh(player, timeTanHinh);
                 affterUseSkill(player, player.playerSkill.skillSelect.template.id);

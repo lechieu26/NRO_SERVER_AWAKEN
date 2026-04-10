@@ -20,6 +20,7 @@ import server.Manager;
 import services.Service;
 import utils.Util;
 
+import java.util.List;
 import java.util.Random;
 import models.MajinBuu.MajinBuuService;
 import services.EffectSkillService;
@@ -68,10 +69,12 @@ public class Mabu extends Boss {
     }
 
     private void petrifyPlayersInTheMap() {
-        for (Player pl : this.zone.getNotBosses()) {
-            if (Util.isTrue(1, 10)) {
+        List<Player> players = this.zone.getNotBosses();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
+            if (pl != null && Util.isTrue(1, 10)) {
                 EffectSkillService.gI().setIsStone(pl, 22000);
-            } else if (Util.isTrue(1, 5)) {
+            } else if (pl != null && Util.isTrue(1, 5)) {
                 this.chat("Úm ba la xì bùa");
                 EffectSkillService.gI().setSocola(pl, System.currentTimeMillis(), 30000);
                 Service.gI().Send_Caitrang(pl);

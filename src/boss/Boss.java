@@ -876,8 +876,11 @@ public class Boss extends Player implements IBoss, IBossOutfit {
                         setDie(this);
                         die(plAtt);
                         long dame = Util.maxIntValue(Boss.this.nPoint.hpMax);
-                        for (Mob mob : Boss.this.zone.mobs) {
-                            mob.injured(Boss.this, dame, true);
+                        for (int i = Boss.this.zone.mobs.size() - 1; i >= 0; i--) {
+                            Mob mob = Boss.this.zone.mobs.get(i);
+                            if (mob != null) {
+                                mob.injured(Boss.this, dame, true);
+                            }
                         }
                         List<Player> playersMap = Boss.this.zone.getNotBosses();
                         if (!MapService.gI().isMapOffline(Boss.this.zone.map.mapId)) {

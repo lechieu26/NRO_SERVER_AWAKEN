@@ -137,11 +137,12 @@ public class SuperBu extends Boss {
             Boss boss = FinalBossManager.gI().getBossById(BossID.MABU, 127, this.zone.zoneId);
             if (boss != null) {
                 List<Player> players = ((Mabu2H) boss).maBuEat;
-                for (Player pl : players) {
-                    pls.add(pl);
+                for (int i = players.size() - 1; i >= 0; i--) {
+                    pls.add(players.get(i));
                 }
-                for (Player pl : pls) {
-                    if (pl.zone != null && pl.zone.map.mapId == 128) {
+                for (int i = pls.size() - 1; i >= 0; i--) {
+                    Player pl = pls.get(i);
+                    if (pl != null && pl.zone != null && pl.zone.map.mapId == 128) {
                         ChangeMapService.gI().changeMap(pl, 127, this.zone.zoneId, -1, 312);
                     }
                 }

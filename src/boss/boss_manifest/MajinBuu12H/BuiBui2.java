@@ -17,7 +17,7 @@ import player.Player;
 import server.Manager;
 import services.Service;
 import utils.Util;
-
+import java.util.List;
 import java.util.Random;
 import server.ServerNotify;
 import services.EffectSkillService;
@@ -49,8 +49,10 @@ public class BuiBui2 extends Boss {
     }
 
     private void slowPlayerInMap() {
-        for (Player pl : this.zone.getNotBosses()) {
-            if (Util.isTrue(5, 10)) {
+        List<Player> players = this.zone.getNotBosses();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
+            if (pl != null && Util.isTrue(5, 10)) {
                 EffectSkillService.gI().setIsLamCham(pl, 5000);
             }
         }

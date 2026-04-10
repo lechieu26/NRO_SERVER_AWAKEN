@@ -49,13 +49,19 @@ public class EffectSkillService {
     // hiệu ứng player dùng skill
     public void sendEffectUseSkill(Player player, byte skillId) {
         Skill skill = SkillUtil.getSkillbyId(player, skillId);
+        if (skill == null) {
+            skill = SkillUtil.createSkill(skillId, 1);
+        }
+        if (skill == null) {
+            return;
+        }
         Message msg;
         try {
             msg = new Message(-45);
             msg.writer().writeByte(8);
             msg.writer().writeInt((int) player.id);
             msg.writer().writeShort(skill.skillId);
-            Service.gI().sendMessAnotherNotMeInMap(player, msg);
+            Service.gI().sendMessAllPlayerInMap(player, msg);
             msg.cleanup();
         } catch (Exception e) {
             utils.Logger.logException(EffectSkillService.class, e);
@@ -801,7 +807,7 @@ public class EffectSkillService {
         Logger.warning(" sendEffectPhanThan skill phan than! \n");
         Skill skill = SkillUtil.getSkillbyId(player, Skill.PHAN_THAN);
         if (skill == null) {
-            Service.getInstance().sendThongBao(player, "Errorrr");
+            Service.gI().sendThongBao(player, "Errorrr");
             return;
         }
         Message msg;
@@ -810,7 +816,7 @@ public class EffectSkillService {
             msg.writer().writeByte(6);
             msg.writer().writeInt((int) player.id);
             msg.writer().writeShort(skill.skillId);
-            Service.getInstance().sendMessAllPlayerInMap(player, msg);
+            Service.gI().sendMessAllPlayerInMap(player, msg);
             msg.cleanup();
         } catch (Exception e) {
             e.printStackTrace();

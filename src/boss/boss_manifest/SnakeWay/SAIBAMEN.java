@@ -130,8 +130,12 @@ public class SAIBAMEN extends Boss {
     @Override
     public void setBom(Player plAtt) {
         if (!this.playerSkill.prepareTuSat) {
-            for (Player pl : this.zone.getPlayers()) {
-                Service.gI().sendThongBao(pl, pl.name + " coi chừng đấy!");
+            List<Player> players = this.zone.getPlayers();
+            for (int i = players.size() - 1; i >= 0; i--) {
+                Player pl = players.get(i);
+                if (pl != null) {
+                    Service.gI().sendThongBao(pl, pl.name + " coi chừng đấy!");
+                }
             }
             Service.gI().chat(plAtt, "Trời ơi muộn mất rồi");
             EffectSkillService.gI().startStun(plAtt, System.currentTimeMillis(), 3500);
@@ -159,11 +163,11 @@ public class SAIBAMEN extends Boss {
                 setDie(this);
                 die(plAtt);
                 long dame = (long) this.nPoint.hpMax * 100L;
-                List<Player> playersMap = null;
-                playersMap = this.zone.getNotBosses();
+                List<Player> playersMap = this.zone.getNotBosses();
                 if (!MapService.gI().isMapOffline(this.zone.map.mapId)) {
-                    for (Player pl : playersMap) {
-                        if (!this.equals(pl)) {
+                    for (int i = playersMap.size() - 1; i >= 0; i--) {
+                        Player pl = playersMap.get(i);
+                        if (pl != null && !this.equals(pl)) {
                             pl.injured(this, dame, false, false);
                             PlayerService.gI().sendInfoHpMpMoney(pl);
                             Service.gI().Send_Info_NV(pl);

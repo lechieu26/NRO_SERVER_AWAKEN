@@ -15,6 +15,8 @@ import services.SkillService;
 import services.func.ChangeMapService;
 import skill.Skill;
 import utils.Util;
+import java.util.List;
+
 
 public class SOI_HEC_QUEN extends Boss {
 
@@ -113,8 +115,10 @@ public class SOI_HEC_QUEN extends Boss {
         }
         this.attack();
 
-        for (Player pl : this.zone.getPlayers()) {
-            if (pl.nPoint != null) {
+        List<Player> players = this.zone.getPlayers();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
+            if (pl != null && pl.nPoint != null) {
                 if (pl.nPoint.diexoihecquen) {
                     this.chat("GO GO, ăn 1 cục xương trả 1 phần quà...");
                     this.changeStatus(BossStatus.DIE);

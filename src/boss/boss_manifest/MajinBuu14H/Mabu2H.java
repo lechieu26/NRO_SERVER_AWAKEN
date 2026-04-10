@@ -49,8 +49,10 @@ public class Mabu2H extends Boss {
 
     private void eatPlayersInTheMap() {
         int numPlayers = 0;
-        for (Player pl : this.zone.getPlayers()) {
-            if (Util.isTrue(1, 5)) {
+        List<Player> players = this.zone.getPlayers();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
+            if (pl != null && Util.isTrue(1, 5)) {
                 pl.isMabuHold = true;
                 Service.gI().sendMabuEat(this, pl);
                 this.maBuEat.add(pl);
@@ -63,8 +65,10 @@ public class Mabu2H extends Boss {
     }
 
     private void petrifyPlayersInTheMap() {
-        for (Player pl : this.zone.getNotBosses()) {
-            if (Util.isTrue(1, 5)) {
+        List<Player> players = this.zone.getNotBosses();
+        for (int i = players.size() - 1; i >= 0; i--) {
+            Player pl = players.get(i);
+            if (pl != null && Util.isTrue(1, 5)) {
                 this.chat("Úm ba la xì bùa");
                 EffectSkillService.gI().setSocola(pl, System.currentTimeMillis(), 30000);
                 Service.gI().Send_Caitrang(pl);
@@ -183,11 +187,12 @@ public class Mabu2H extends Boss {
         if (plKill != null) {
             List<Player> pls = new ArrayList<>();
             List<Player> players = this.maBuEat;
-            for (Player pl : players) {
-                pls.add(pl);
+            for (int i = players.size() - 1; i >= 0; i--) {
+                pls.add(players.get(i));
             }
-            for (Player pl : pls) {
-                if (pl.zone != null && pl.zone.map.mapId == 128) {
+            for (int i = pls.size() - 1; i >= 0; i--) {
+                Player pl = pls.get(i);
+                if (pl != null && pl.zone != null && pl.zone.map.mapId == 128) {
                     ChangeMapService.gI().changeMap(pl, 127, this.zone.zoneId, -1, 312);
                 }
             }

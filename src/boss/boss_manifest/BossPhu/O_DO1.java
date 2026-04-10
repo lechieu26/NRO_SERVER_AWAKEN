@@ -186,10 +186,11 @@ public class O_DO1 extends Boss {
         }
 
         // Người chơi phản ứng khi boss đến gần
-        List<Player> playersInZone = this.zone.getPlayers();
-        for (Player player : playersInZone) {
-            if (!player.isDie() && Util.getDistance(this, player) <= 20) {
-                Service.gI().chat(player, "Hôi quá, tránh ra đi");
+        List<Player> playerReact = this.zone.getPlayers();
+        for (int i = playerReact.size() - 1; i >= 0; i--) {
+            Player pl = playerReact.get(i);
+            if (pl != null && !pl.isDie() && Util.getDistance(this, pl) <= 20) {
+                Service.gI().chat(pl, "Hôi quá, tránh ra đi");
             }
         }
     }
