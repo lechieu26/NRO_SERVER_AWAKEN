@@ -1,8 +1,9 @@
 package player;
+import boss.BossManager;
+import boss.BossID;
+
 
 import EMTI.Functions;
-import boss.BossID;
-import boss.BossManager;
 import boss.boss_manifest.Commeson.PhanThan;
 import consts.ConstDailyGift;
 import minigame.cost.LuckyNumberCost;
@@ -78,6 +79,7 @@ public class Player implements Runnable {
 
     public long lastTimeEatPea;
 
+    public Player playerAtt;
     public PhanThan pt;
 
     @Setter
@@ -1590,6 +1592,9 @@ public class Player implements Runnable {
     }
 
     public void setTemporaryEnemies(Player pl) {
+        if (pl.playerAtt != null) {
+            pl = pl.playerAtt;
+        }
         if (!temporaryEnemies.contains(pl)) {
             temporaryEnemies.add(pl);
         }

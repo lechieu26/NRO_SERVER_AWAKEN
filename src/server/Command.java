@@ -1,17 +1,16 @@
 package server;
+import boss.BossManager;
+
 
 /**
  * @author EMTI
  */
 import EMTI.SystemMetrics;
-import boss.AnTromManager;
-import boss.BossManager;
-import boss.BrolyManager;
-import boss.GasDestroyManager;
 import boss.OtherBossManager;
 import boss.RedRibbonHQManager;
-import boss.SnakeWayManager;
 import boss.TreasureUnderSeaManager;
+import boss.SnakeWayManager;
+import boss.GasDestroyManager;
 import boss.TrungThuEventManager;
 import consts.ConstNpc;
 import item.Item;
@@ -63,21 +62,27 @@ public class Command {
                 GiftCodeManager.gI().checkInfomationGiftCode(player);
                 return true;
             } else if (text.equals("next nv")) {
-                // Tăng id nhiệm vụ lên 1: [1,0,0,xxx] => [2,0,0,xxx]
-                int currentTaskId = player.playerTask.taskMain.id;
-                player.playerTask.taskMain.id = currentTaskId; // giữ nguyên id hiện tại
-                player.playerTask.taskMain.index = 0; // reset index
-                TaskService.gI().sendNextTaskMain(player); // sẽ tự động tăng id lên 1 và gửi task mới
-                Service.gI().sendThongBao(player, "Đã chuyển sang nhiệm vụ tiếp theo: " + (currentTaskId + 1));
+                TaskService.gI().sendNextTaskMain(player);
+                return true;
+            } else if (text.startsWith("next ") && text.endsWith(" nv")) {
+                try {
+                    int n = Integer.parseInt(text.replace("next ", "").replace(" nv", ""));
+                    for (int i = 0; i < n; i++) {
+                        TaskService.gI().sendNextTaskMain(player);
+                    }
+                    Service.gI().sendThongBao(player, "Đã bỏ qua " + n + " nhiệm vụ");
+                    return true;
+                } catch (Exception e) {
+                }
                 return true;
             } else if (text.equals("mapboss")) {
                 BossManager.gI().showListBoss(player);
                 return true;
             } else if (text.equals("mapbroly")) {
-                BrolyManager.gI().showListBoss(player);
+                BossManager.gI().showListBoss(player);
                 return true;
             } else if (text.equals("mapantrom")) {
-                AnTromManager.gI().showListBoss(player);
+                BossManager.gI().showListBoss(player);
                 return true;
             } else if (text.equals("mapboss2")) {
                 OtherBossManager.gI().showListBoss(player);

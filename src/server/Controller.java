@@ -1,7 +1,8 @@
 package server;
+import boss.BossManager;
+
 
 import boss.Boss;
-import boss.BossManager;
 import consts.*;
 import models.Consign.ConsignShopService;
 import player.dailyGift.DailyGiftService;

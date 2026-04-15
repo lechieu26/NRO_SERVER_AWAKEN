@@ -1,10 +1,11 @@
 package npc.npc_manifest;
+import boss.BossID;
+
 
 /**
  *
  * @author EMTI
  */
-import boss.BossID;
 import consts.ConstNpc;
 import models.SnakeWay.SnakeWayService;
 import models.Training.TrainingService;

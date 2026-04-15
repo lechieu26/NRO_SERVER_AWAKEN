@@ -1,4 +1,8 @@
 package boss.boss_manifest.DeathOrAliveArena;
+import boss.BossID;
+import boss.BossData;
+import boss.BossConfig;
+
 
 /*
  *
@@ -7,20 +11,20 @@ package boss.boss_manifest.DeathOrAliveArena;
  * 
  */
 
-import boss.BossID;
-import boss.BossesData;
 import static boss.BossType.PHOBAN;
 import player.Player;
 import utils.Util;
 
 public class VuaQuySaTang extends DeathOrAliveArena {
 
+    public VuaQuySaTang(BossConfig config, BossData[] data) throws Exception {
+        super(config, data);
+    }
+
+
     private long lastTimeBay;
 
-    public VuaQuySaTang(Player player) throws Exception {
-        super(PHOBAN, BossID.VUA_QUY_SA_TANG, BossesData.VUA_QUY_SA_TANG);
-        this.playerAtt = player;
-    }
+    
 
     @Override
     public void bayLungTung() {

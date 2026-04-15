@@ -1,4 +1,7 @@
 package models.DestronGas;
+import boss.BossManager;
+import boss.BossID;
+
 
 /*
  *
@@ -95,13 +98,16 @@ public class DestronGas implements Runnable {
 
                     bossDamage = Util.maxIntValue((bossDamage * 1.5));
                     bossMaxHealth = Util.maxIntValue((bossMaxHealth * 1.5));
-                    bosses.add(new DrLychee(
-                            getMapById(148),
-                            clan,
-                            level,
-                             bossDamage,
-                             bossMaxHealth
-                    ));
+                    Boss drLychee = BossManager.gI().createBoss(BossID.DR_LYCHEE);
+                    if (drLychee != null) {
+                        drLychee.zone = getMapById(148);
+                        drLychee.nPoint.dameg = (long) (bossDamage * 1.5);
+                        drLychee.nPoint.hpg = (long) (bossMaxHealth * 1.5);
+                        drLychee.nPoint.hp = drLychee.nPoint.hpg;
+                        drLychee.nPoint.calPoint();
+                        bosses.add(drLychee);
+                    }
+
                     callBoss = true;
                 } catch (Exception exception) {
                 }

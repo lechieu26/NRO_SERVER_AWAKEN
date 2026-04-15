@@ -1,4 +1,7 @@
 package boss.boss_manifest.Commeson;
+import boss.BossManager;
+import boss.BossData;
+
 
 /*
  *
@@ -7,8 +10,6 @@ package boss.boss_manifest.Commeson;
  */
 
 import boss.Boss;
-import boss.BossData;
-import boss.BossManager;
 import boss.BossStatus;
 import consts.ConstPlayer;
 import consts.ConstRatio;
@@ -26,7 +27,7 @@ import utils.Util;
 
 public class NhanBan extends Boss {
 
-    private Player playerAtt;
+
     private long timeJoinMap;
 
     public NhanBan(Player player, BossData bossData) throws Exception {

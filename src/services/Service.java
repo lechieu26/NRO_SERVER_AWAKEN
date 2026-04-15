@@ -1,4 +1,6 @@
 package services;
+import boss.BossData;
+
 
 import EMTI.Functions;
 import jdbc.DBConnecter;
@@ -6,9 +8,7 @@ import consts.ConstNpc;
 import consts.ConstPlayer;
 import utils.FileIO;
 import data.DataGame;
-import boss.BossData;
 import boss.boss_manifest.Commeson.NhanBan;
-import boss.boss_manifest.Training.TrainingBoss;
 import consts.ConstAchievement;
 import consts.cn;
 
@@ -292,7 +292,7 @@ public class Service {
             return;
         }
         if (MapService.gI().isMapOffline(player.zone.map.mapId)) {
-            if (player instanceof TrainingBoss || player instanceof NonInteractiveNPC) {
+            if (player.playerAtt != null || player instanceof NonInteractiveNPC) {
                 List<Player> players = player.zone.getPlayers();
                 if (players.isEmpty()) {
                     msg.dispose();
@@ -301,7 +301,7 @@ public class Service {
                 for (int i = 0; i < players.size(); i++) {
                     Player pl = players.get(i);
                     if (pl != null && (player instanceof NonInteractiveNPC
-                            || (player instanceof TrainingBoss && ((TrainingBoss) player).playerAtt.equals(pl)))) {
+                            || (player.playerAtt != null && player.playerAtt.equals(pl)))) {
                         pl.sendMessage(msg);
                     }
                 }
@@ -330,7 +330,7 @@ public class Service {
             return;
         }
         if (MapService.gI().isMapOffline(player.zone.map.mapId)) {
-            if (player instanceof TrainingBoss || player instanceof NonInteractiveNPC) {
+            if (player.playerAtt != null || player instanceof NonInteractiveNPC) {
                 List<Player> players = player.zone.getPlayers();
                 if (players.isEmpty()) {
                     msg.dispose();
@@ -339,7 +339,7 @@ public class Service {
                 for (int i = 0; i < players.size(); i++) {
                     Player pl = players.get(i);
                     if (pl != null && !pl.equals(player) && (player instanceof NonInteractiveNPC
-                            || (player instanceof TrainingBoss && ((TrainingBoss) player).playerAtt.equals(pl)))) {
+                            || (player.playerAtt != null && player.playerAtt.equals(pl)))) {
                         pl.sendMessage(msg);
                     }
                 }

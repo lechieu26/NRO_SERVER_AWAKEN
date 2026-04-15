@@ -1,20 +1,10 @@
 package boss.boss_manifest.The23rdMartialArtCongress;
 
-/*
- *
- *
- * @author EMTI
- */
+import boss.BossData;
+import boss.BossConfig;
 
-import boss.BossID;
-import boss.BossesData;
-import static boss.BossType.PHOBAN;
-import player.Player;
-
-public class Yamcha extends The23rdMartialArtCongress {
-
-    public Yamcha(Player player) throws Exception {
-        super(PHOBAN, BossID.YAMCHA, BossesData.YAMCHA);
-        this.playerAtt = player;
+public class Yamcha extends DHVT23Boss {
+    public Yamcha(BossConfig config, BossData[] data) throws Exception {
+        super(config, data);
     }
 }

@@ -1,4 +1,7 @@
 package models.SnakeWay;
+import boss.BossManager;
+import boss.BossID;
+
 
 /*
  *
@@ -158,32 +161,39 @@ public class SnakeWay implements Runnable {
                     long bossDamage = (200000 * level);
                     long bossMaxHealth = (2000000 * level);
                     for (int i = 6; i > 0; i--) {
-                        bossDamage = Util.maxIntValue((bossDamage));
-                        bossMaxHealth = Util.maxIntValue((bossMaxHealth));
-                        bosses.add(new SAIBAMEN(
-                                zone,
-                                clan,
-                                i,
-                                bossDamage,
-                                bossMaxHealth
-                        ));
+                        Boss boss = BossManager.gI().createBoss(BossID.SAIBAMEN); // Use base ID, we will set index
+                        if (boss != null) {
+                            if (boss instanceof boss.boss_manifest.SnakeWay.SAIBAMEN) {
+                                // We might need to adjust the ID manually if the manager doesn't
+                                boss.id = BossID.SAIBAMEN - i;
+                            }
+                            boss.zone = zone;
+                            boss.nPoint.dameg = (10000 + bossDamage);
+                            boss.nPoint.hpg = (500000 + bossMaxHealth);
+                            boss.nPoint.hp = boss.nPoint.hpg;
+                            boss.nPoint.calPoint();
+                            bosses.add(boss);
+                        }
                     }
-                    bossDamage = Util.maxIntValue((bossDamage * 5));
-                    bossMaxHealth = Util.maxIntValue((bossMaxHealth * 5));
-                    bosses.add(new NADIC(
-                            zone,
-                            clan,
-                            bossDamage,
-                            bossMaxHealth
-                    ));
-                    bossDamage = Util.maxIntValue((bossDamage * 10));
-                    bossMaxHealth = Util.maxIntValue((bossMaxHealth * 10));
-                    bosses.add(new CADICH(
-                            zone,
-                            clan,
-                            bossDamage,
-                            bossMaxHealth
-                    ));
+                    Boss nadic = BossManager.gI().createBoss(BossID.NADIC);
+                    if (nadic != null) {
+                        nadic.zone = zone;
+                        nadic.nPoint.dameg = (10000 + (bossDamage * 5));
+                        nadic.nPoint.hpg = (500000 + (bossMaxHealth * 5));
+                        nadic.nPoint.hp = nadic.nPoint.hpg;
+                        nadic.nPoint.calPoint();
+                        bosses.add(nadic);
+                    }
+                    Boss cadich = BossManager.gI().createBoss(BossID.CADICH);
+                    if (cadich != null) {
+                        cadich.zone = zone;
+                        cadich.nPoint.dameg = (10000 + (bossDamage * 50)); // Adjusted multiplier to match logic
+                        cadich.nPoint.hpg = (500000 + (bossMaxHealth * 50));
+                        cadich.nPoint.hp = cadich.nPoint.hpg;
+                        cadich.nPoint.calPoint();
+                        bosses.add(cadich);
+                    }
+
                 } catch (Exception exception) {
                 }
             }

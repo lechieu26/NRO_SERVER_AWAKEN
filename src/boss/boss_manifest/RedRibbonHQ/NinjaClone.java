@@ -1,4 +1,5 @@
 package boss.boss_manifest.RedRibbonHQ;
+import boss.BossData;
 
 /*
  *

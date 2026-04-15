@@ -1,4 +1,6 @@
 package boss.boss_manifest.SuperRank;
+import boss.BossData;
+
 
 /*
  *
@@ -6,7 +8,6 @@ package boss.boss_manifest.SuperRank;
  * @author EMTI
  */
 
-import boss.BossData;
 import static boss.BossType.PHOBAN;
 import java.util.ArrayList;
 import java.util.List;

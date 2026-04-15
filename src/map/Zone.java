@@ -1,4 +1,6 @@
 package map;
+import boss.BossID;
+
 
 /*
  *
@@ -9,14 +11,12 @@ import consts.ConstMap;
 import consts.ConstTask;
 import bot.Bot;
 import boss.Boss;
-import boss.BossID;
 import item.Item;
 import mob.Mob;
 import npc.Npc;
 import npc.NpcManager;
 import player.Player;
 import network.Message;
-import boss.boss_manifest.Training.TrainingBoss;
 import consts.ConstItem;
 import consts.ConstMob;
 import consts.ConstNpc;
@@ -398,7 +398,7 @@ public class Zone {
 
     public Player getPlayerInMapOffline(Player player, long idPlayer) {
         for (Player pl : bosses) {
-            if (pl.id == idPlayer && pl instanceof TrainingBoss && ((TrainingBoss) pl).playerAtt.equals(player)) {
+            if (pl.id == idPlayer && pl.playerAtt != null && pl.playerAtt.equals(player)) {
                 return pl;
             }
         }
@@ -629,12 +629,12 @@ public class Zone {
             if (player.zone != null) {
                 if (MapService.gI().isMapOffline(this.map.mapId)) {
                     // Load boss
-                    if (player instanceof TrainingBoss || player instanceof NonInteractiveNPC) {
+                    if (player.playerAtt != null || player instanceof NonInteractiveNPC) {
                         for (int i = players.size() - 1; i >= 0; i--) {
                             Player pl = players.get(i);
                             if (!player.equals(pl) && (player instanceof NonInteractiveNPC
-                                    || player instanceof TrainingBoss
-                                            && ((TrainingBoss) player).playerAtt.equals(pl))) {
+                                    || player.playerAtt != null
+                                            && player.playerAtt.equals(pl))) {
                                 infoPlayer(pl, player);
                             }
                         }
@@ -660,7 +660,7 @@ public class Zone {
                 for (int i = this.humanoids.size() - 1; i >= 0; i--) {
                     Player pl = this.humanoids.get(i);
                     if (pl != null && (pl instanceof NonInteractiveNPC
-                            || pl instanceof TrainingBoss && ((TrainingBoss) pl).playerAtt.equals(player))) {
+                            || pl.playerAtt != null && pl.playerAtt.equals(player))) {
                         infoPlayer(player, pl);
                     }
                 }

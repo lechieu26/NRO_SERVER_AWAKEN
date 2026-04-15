@@ -5,124 +5,25 @@ package boss;
  *
  * 
  */
+import jdbc.daos.BossDAO;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 import EMTI.Functions;
-import boss.boss_manifest.BossPhu.AnTrom;
-import boss.boss_manifest.BossPhu.AnTromTV;
-import boss.boss_manifest.BossPhu.O_DO1;
-import boss.boss_manifest.BossPhu.SOI_HEC_QUEN;
-import boss.boss_manifest.BossPhu.XINBATO1;
-import boss.boss_manifest.Black.BlackGoku;
 
-import boss.boss_manifest.Nappa.Rambo;
-import boss.boss_manifest.Nappa.MapDauDinh;
-import boss.boss_manifest.Nappa.Kuku;
-import boss.boss_manifest.Android.Android19;
-import boss.boss_manifest.Android.Pic;
-import boss.boss_manifest.Android.Android14;
-import boss.boss_manifest.Android.Poc;
-import boss.boss_manifest.PocBunny;
-import boss.boss_manifest.Tester001;
-import boss.boss_manifest.Android.Android13;
-import boss.boss_manifest.Android.KingKong;
-import boss.boss_manifest.Android.DrKore;
-import boss.boss_manifest.Android.Android15;
-import boss.boss_manifest.GoldenFrieza.DeathBeam1;
-import boss.boss_manifest.GoldenFrieza.DeathBeam2;
-import boss.boss_manifest.GoldenFrieza.DeathBeam3;
-import boss.boss_manifest.GoldenFrieza.DeathBeam4;
-import boss.boss_manifest.GoldenFrieza.DeathBeam5;
-import boss.boss_manifest.GoldenFrieza.GoldenFrieza;
-import boss.boss_manifest.Cooler.Cooler;
-import boss.boss_manifest.Cell.SieuBoHung;
-import boss.boss_manifest.Cell.XenBoHung;
-//import boss.boss_manifest.BrolyFix.Broly;
-//import boss.boss_manifest.BrolyFix.BrolySuper;
-import boss.boss_manifest.Broly.Broly;
-import boss.boss_manifest.Broly.BrolyAnrgy;
-import boss.boss_manifest.Broly.BrolyHacHoa;
-import boss.boss_manifest.Broly.SuperBroly;
-import boss.boss_manifest.ChristmasEvent.OngGiaNoel;
-import boss.boss_manifest.TaoPaiPai.TaoPaiPai;
-import boss.boss_manifest.Frieza.Fide;
-import boss.boss_manifest.HungVuongEvent.SonTinh;
-import boss.boss_manifest.HungVuongEvent.ThuyTinh;
-import boss.boss_manifest.HalloweenEvent.BiMa;
-import boss.boss_manifest.HalloweenEvent.Doi;
-import boss.boss_manifest.HalloweenEvent.MaTroi;
-import boss.boss_manifest.HalloweenEvent.ThayMa;
-import boss.boss_manifest.TrungThuEvent.KhiDot;
-import boss.boss_manifest.TrungThuEvent.NguyetThan;
-import boss.boss_manifest.TrungThuEvent.NhatThan;
-import boss.boss_manifest.MajinBuu12H.Mabu;
-import boss.boss_manifest.MajinBuu12H.BuiBui;
-import boss.boss_manifest.MajinBuu12H.BuiBui2;
-import boss.boss_manifest.MajinBuu12H.Cadic;
-import boss.boss_manifest.MajinBuu12H.Drabura;
-import boss.boss_manifest.MajinBuu12H.Drabura2;
-import boss.boss_manifest.MajinBuu12H.Drabura3;
-import boss.boss_manifest.MajinBuu12H.Goku;
-import boss.boss_manifest.MajinBuu12H.Yacon;
-import boss.boss_manifest.MajinBuu14H.Mabu2H;
-import boss.boss_manifest.MajinBuu14H.SuperBu;
-import boss.boss_manifest.GinyuForce.SO1;
-import boss.boss_manifest.GinyuForce.SO2;
-import boss.boss_manifest.GinyuForce.SO3;
-import boss.boss_manifest.GinyuForce.SO4;
-import boss.boss_manifest.GinyuForce.TDT;
-import boss.boss_manifest.NamekGinyuForce.SO1_NM;
-import boss.boss_manifest.NamekGinyuForce.SO2_NM;
-import boss.boss_manifest.NamekGinyuForce.SO3_NM;
-import boss.boss_manifest.NamekGinyuForce.SO4_NM;
-import boss.boss_manifest.NamekGinyuForce.TDT_NM;
-import boss.boss_manifest.DoraemonForce.Doremon;
-import boss.boss_manifest.DoraemonForce.Nobita;
-import boss.boss_manifest.DoraemonForce.Xuka;
-import boss.boss_manifest.DoraemonForce.Chaien;
-import boss.boss_manifest.DoraemonForce.Xeko;
-import boss.boss_manifest.Earth.BIDO;
-import boss.boss_manifest.Earth.BOJACK;
-import boss.boss_manifest.Earth.BUJIN;
-import boss.boss_manifest.Earth.KOGU;
-import boss.boss_manifest.Earth.SUPER_BOJACK;
-import boss.boss_manifest.Earth.ZANGYA;
-import boss.boss_manifest.Yardart.CHIENBINH0;
-import boss.boss_manifest.Yardart.CHIENBINH1;
-import boss.boss_manifest.Yardart.CHIENBINH2;
-import boss.boss_manifest.Yardart.CHIENBINH3;
-import boss.boss_manifest.Yardart.CHIENBINH4;
-import boss.boss_manifest.Yardart.CHIENBINH5;
-import boss.boss_manifest.Yardart.DOITRUONG5;
-import boss.boss_manifest.Yardart.TANBINH0;
-import boss.boss_manifest.Yardart.TANBINH1;
-import boss.boss_manifest.Yardart.TANBINH2;
-import boss.boss_manifest.Yardart.TANBINH3;
-import boss.boss_manifest.Yardart.TANBINH4;
-import boss.boss_manifest.Yardart.TANBINH5;
-import boss.boss_manifest.Yardart.TAPSU0;
-import boss.boss_manifest.Yardart.TAPSU1;
-import boss.boss_manifest.Yardart.TAPSU2;
-import boss.boss_manifest.Yardart.TAPSU3;
-import boss.boss_manifest.Yardart.TAPSU4;
-import boss.boss_manifest.Cell.XENCON1;
-import boss.boss_manifest.Cell.XENCON2;
-import boss.boss_manifest.Cell.XENCON3;
-import boss.boss_manifest.Cell.XENCON4;
-import boss.boss_manifest.Cell.XENCON5;
-import boss.boss_manifest.Cell.XENCON6;
-import boss.boss_manifest.Cell.XENCON7;
-import boss.boss_manifest.Cumber.Cumber;
-import boss.boss_manifest.LunarNewYearEvent.LanCon;
 import player.Player;
 import network.Message;
 import services.MapService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
+import boss.boss_manifest.The23rdMartialArtCongress.DHVT23Boss;
 import map.Zone;
 import server.Maintenance;
 import utils.Logger;
+import utils.Util;
 
 public class BossManager implements Runnable {
 
@@ -141,6 +42,7 @@ public class BossManager implements Runnable {
     }
 
     protected final List<Boss> bosses;
+    private final Map<Integer, List<BossConfig>> bossConfigMap = new HashMap<>();
 
     public List<Boss> getBosses() {
         return this.bosses;
@@ -155,268 +57,244 @@ public class BossManager implements Runnable {
     }
 
     public void loadBoss() {
-        this.createBoss(BossID.TIEU_DOI_TRUONG);
-        this.createBoss(BossID.TIEU_DOI_TRUONG_NM);
-        this.createBoss(BossID.DOREMON);
-        this.createBoss(BossID.BOJACK);
-        this.createBoss(BossID.SUPER_BOJACK);
-        this.createBoss(BossID.KING_KONG);
-        this.createBoss(BossID.XEN_BO_HUNG);
-        this.createBoss(BossID.SIEU_BO_HUNG);
-        this.createBoss(BossID.KUKU, 3);
-        this.createBoss(BossID.MAP_DAU_DINH, 2);
-        this.createBoss(BossID.RAMBO, 1);
-        this.createBoss(BossID.FIDE);
-        this.createBoss(BossID.ANDROID_14);
-        this.createBoss(BossID.DR_KORE);
-        this.createBoss(BossID.COOLER);
-        this.createBoss(BossID.BLACK_GOKU, 5);
-        this.createBoss(BossID.GOLDEN_FRIEZA, 2);
-        this.createBoss(BossID.AN_TROM);
-        this.createBoss(BossID.O_DO1);
-        this.createBoss(BossID.SOI_HEC_QUEN);
-        this.createBoss(BossID.AN_TROM_TV, 10);
-        this.createBoss(BossID.XINBATO1);
-        this.createBoss(BossID.BROLY, 6);
-        this.createBoss(BossID.SUPER_BROLY, 3);
-        this.createBoss(BossID.BROLYANRGY, 3);
-        this.createBoss(BossID.BROLYHACHOA, 3);
-        this.createBoss(BossID.THAYMA, 5);
-        this.createBoss(BossID.CUMBER);
-        // this.createBoss(BossID.TESTER_001, 4);
-        // this.createBoss(BossID.POC_BUNNY, 3);
-        try {
-            new DeTuBoss();
-            new Bossgido();
-            // new Kongdanang() ;
-            // new TaiLocQuaLon();
-            new ALong();
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(BossManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Tất cả boss được load từ database (bao gồm DeTuBoss, Bossgido, ALong,
+        // TaiLocQuaLon, Kongdanang)
+        loadBossFromDB();
     }
 
-    public void createBoss(int bossID, int total) {
-        for (int i = 0; i < total; i++) {
-            createBoss(bossID);
-        }
-    }
-
-    public Boss createBoss(int bossID) {
+    /**
+     * Load boss từ database.
+     */
+    private void loadBossFromDB() {
         try {
-            return switch (bossID) {
-                case BossID.TAP_SU_0 ->
-                    new TAPSU0();
-                case BossID.TAP_SU_1 ->
-                    new TAPSU1();
-                case BossID.TAP_SU_2 ->
-                    new TAPSU2();
-                case BossID.TAP_SU_3 ->
-                    new TAPSU3();
-                case BossID.TAP_SU_4 ->
-                    new TAPSU4();
-                case BossID.TAN_BINH_5 ->
-                    new TANBINH5();
-                case BossID.TAN_BINH_0 ->
-                    new TANBINH0();
-                case BossID.TAN_BINH_1 ->
-                    new TANBINH1();
-                case BossID.TAN_BINH_2 ->
-                    new TANBINH2();
-                case BossID.TAN_BINH_3 ->
-                    new TANBINH3();
-                case BossID.TAN_BINH_4 ->
-                    new TANBINH4();
-                case BossID.CHIEN_BINH_5 ->
-                    new CHIENBINH5();
-                case BossID.CHIEN_BINH_0 ->
-                    new CHIENBINH0();
-                case BossID.CHIEN_BINH_1 ->
-                    new CHIENBINH1();
-                case BossID.CHIEN_BINH_2 ->
-                    new CHIENBINH2();
-                case BossID.CHIEN_BINH_3 ->
-                    new CHIENBINH3();
-                case BossID.CHIEN_BINH_4 ->
-                    new CHIENBINH4();
-                case BossID.DOI_TRUONG_5 ->
-                    new DOITRUONG5();
-                case BossID.SO_4 ->
-                    new SO4();
-                case BossID.SO_3 ->
-                    new SO3();
-                case BossID.SO_2 ->
-                    new SO2();
-                case BossID.SO_1 ->
-                    new SO1();
-                case BossID.TIEU_DOI_TRUONG ->
-                    new TDT();
-                case BossID.SO_4_NM ->
-                    new SO4_NM();
-                case BossID.SO_3_NM ->
-                    new SO3_NM();
-                case BossID.SO_2_NM ->
-                    new SO2_NM();
-                case BossID.SO_1_NM ->
-                    new SO1_NM();
-                case BossID.TIEU_DOI_TRUONG_NM ->
-                    new TDT_NM();
-                case BossID.DOREMON ->
-                    new Doremon();
-                case BossID.NOBITA_DRM ->
-                    new Nobita();
-                case BossID.XUKA_DRM ->
-                    new Xuka();
-                case BossID.CHAIEN_DRM ->
-                    new Chaien();
-                case BossID.XEKO_DRM ->
-                    new Xeko();
-                case BossID.BUJIN ->
-                    new BUJIN();
-                case BossID.KOGU ->
-                    new KOGU();
-                case BossID.ZANGYA ->
-                    new ZANGYA();
-                case BossID.BIDO ->
-                    new BIDO();
-                case BossID.BOJACK ->
-                    new BOJACK();
-                case BossID.SUPER_BOJACK ->
-                    new SUPER_BOJACK();
-                case BossID.KUKU ->
-                    new Kuku();
-                case BossID.MAP_DAU_DINH ->
-                    new MapDauDinh();
-                case BossID.RAMBO ->
-                    new Rambo();
-                case BossID.TAU_PAY_PAY_DONG_NAM_KARIN ->
-                    new TaoPaiPai();
-                case BossID.DRABURA ->
-                    new Drabura();
-                case BossID.BUI_BUI ->
-                    new BuiBui();
-                case BossID.BUI_BUI_2 ->
-                    new BuiBui2();
-                case BossID.YA_CON ->
-                    new Yacon();
-                case BossID.DRABURA_2 ->
-                    new Drabura2();
-                case BossID.GOKU ->
-                    new Goku();
-                case BossID.CADIC ->
-                    new Cadic();
-                case BossID.MABU_12H ->
-                    new Mabu();
-                case BossID.DRABURA_3 ->
-                    new Drabura3();
-                case BossID.MABU ->
-                    new Mabu2H();
-                case BossID.SUPERBU ->
-                    new SuperBu();
-                case BossID.FIDE ->
-                    new Fide();
-                case BossID.DR_KORE ->
-                    new DrKore();
-                case BossID.ANDROID_19 ->
-                    new Android19();
-                case BossID.ANDROID_13 ->
-                    new Android13();
-                case BossID.ANDROID_14 ->
-                    new Android14();
-                case BossID.ANDROID_15 ->
-                    new Android15();
-                case BossID.PIC ->
-                    new Pic();
-                case BossID.POC ->
-                    new Poc();
-                case BossID.KING_KONG ->
-                    new KingKong();
-                case BossID.XEN_BO_HUNG ->
-                    new XenBoHung();
-                case BossID.SIEU_BO_HUNG ->
-                    new SieuBoHung();
-                case BossID.XEN_CON_1 ->
-                    new XENCON1();
-                case BossID.XEN_CON_2 ->
-                    new XENCON2();
-                case BossID.XEN_CON_3 ->
-                    new XENCON3();
-                case BossID.XEN_CON_4 ->
-                    new XENCON4();
-                case BossID.XEN_CON_5 ->
-                    new XENCON5();
-                case BossID.XEN_CON_6 ->
-                    new XENCON6();
-                case BossID.XEN_CON_7 ->
-                    new XENCON7();
-                case BossID.COOLER ->
-                    new Cooler();
-                case BossID.BROLY ->
-                    new Broly();
-                case BossID.SUPER_BROLY ->
-                    new SuperBroly();
-                case BossID.BROLYANRGY ->
-                    new BrolyAnrgy();
-                case BossID.BROLYHACHOA ->
-                    new BrolyHacHoa();
-                case BossID.THAYMA ->
-                    new ThayMa();
-                case BossID.AN_TROM ->
-                    new AnTrom();
-                case BossID.SOI_HEC_QUEN ->
-                    new SOI_HEC_QUEN();
-                case BossID.XINBATO1 ->
-                    new XINBATO1();
-                case BossID.O_DO1 ->
-                    new O_DO1();
-                case BossID.AN_TROM_TV ->
-                    new AnTromTV();
-                case BossID.KHIDOT ->
-                    new KhiDot();
-                case BossID.NGUYETTHAN ->
-                    new NguyetThan();
-                case BossID.NHATTHAN ->
-                    new NhatThan();
-                case BossID.GOLDEN_FRIEZA ->
-                    new GoldenFrieza();
-                case BossID.DEATH_BEAM_1 ->
-                    new DeathBeam1();
-                case BossID.DEATH_BEAM_2 ->
-                    new DeathBeam2();
-                case BossID.DEATH_BEAM_3 ->
-                    new DeathBeam3();
-                case BossID.DEATH_BEAM_4 ->
-                    new DeathBeam4();
-                case BossID.DEATH_BEAM_5 ->
-                    new DeathBeam5();
-                case BossID.BIMA ->
-                    new BiMa();
-                case BossID.MATROI ->
-                    new MaTroi();
-                case BossID.DOI ->
-                    new Doi();
-                case BossID.ONG_GIA_NOEL ->
-                    new OngGiaNoel();
-                case BossID.SON_TINH ->
-                    new SonTinh();
-                case BossID.THUY_TINH ->
-                    new ThuyTinh();
-                case BossID.LAN_CON ->
-                    new LanCon();
-                case BossID.BLACK_GOKU ->
-                    new BlackGoku();
+            List<BossConfig> allConfigs = BossDAO.loadAllBossConfigs();
+            if (allConfigs == null || allConfigs.isEmpty()) {
+                Logger.warning("Boss configuration table is empty in Database!\n");
+                return;
+            }
 
-                case BossID.CUMBER ->
-                    new Cumber();
-                case BossID.TESTER_001 -> new Tester001();
-                case BossID.POC_BUNNY -> new PocBunny();
-                default ->
-                    null;
-            };
+            bossConfigMap.clear();
+            // Nhóm theo bossId
+            for (BossConfig config : allConfigs) {
+                bossConfigMap.computeIfAbsent(config.getBossId(), k -> new ArrayList<>()).add(config);
+            }
+
+            // Sắp xếp mỗi group theo levelIndex và tạo boss instance ban đầu
+            int bossCount = 0;
+            for (Map.Entry<Integer, List<BossConfig>> entry : bossConfigMap.entrySet()) {
+                int bossId = entry.getKey();
+                List<BossConfig> levels = entry.getValue();
+                levels.sort(Comparator.comparingInt(BossConfig::getLevelIndex));
+
+                BossConfig primary = levels.get(0);
+                int spawnCount = primary.getSpawnCount();
+
+                // Build BossData[] from all levels
+                BossData[] dataArray = new BossData[levels.size()];
+                for (int i = 0; i < levels.size(); i++) {
+                    dataArray[i] = levels.get(i).toBossData();
+                }
+
+                // Diagnostic log cho mỗi boss
+                int[][] skills = primary.parseSkills();
+                String rewardCfg = primary.getRewardConfig();
+                BossType bt = primary.parseBossType();
+                /***
+                 * Logger.log("\u001b[0;36m", String.format(
+                 * " Boss[%d] %-25s | skills=%d | reward=%s | type=%s | levels=%d | spawn=%d\n",
+                 * bossId,
+                 * primary.getName(),
+                 * skills != null ? skills.length : 0,
+                 * (rewardCfg != null && !rewardCfg.isEmpty() && !rewardCfg.equals("{}")) ? "CÓ"
+                 * : "THIẾU",
+                 * bt != null ? bt.name() : "DEFAULT",
+                 * levels.size(),
+                 * spawnCount
+                 * ));
+                 */
+
+                for (int i = 0; i < spawnCount; i++) {
+                    try {
+                        Boss boss = createBossFromConfig(primary, dataArray);
+                        if (boss != null) {
+                            bossCount++;
+                        }
+                    } catch (Exception e) {
+                        Logger.error("Lỗi tạo boss từ DB, bossId=" + bossId + ": " + e.getMessage() + "\n");
+                    }
+                }
+            }
+
+            Logger.success(
+                    "Loaded " + allConfigs.size() + " configs and spawned " + bossCount + " bosses from Database.\n");
+
+            // Kết nối các nhóm boss (Group Linking)
+            linkGroupBosses();
+
         } catch (Exception e) {
-            Logger.error(e + "\n");
+            Logger.error("Lỗi loadBossFromDB: " + e.getMessage() + "\n");
+            e.printStackTrace();
+        }
+    }
+
+    private void linkGroupBosses() {
+        // Gom nhóm các boss theo cùng một bộ ID xuất hiện cùng nhau
+        // Các đệ tử đã được khởi tạo trong constructor của Leader và gán vào
+        // bossAppearTogether
+        for (Boss boss : this.bosses) {
+            if (!(boss instanceof GenericBoss))
+                continue;
+            BossConfig cfg = ((GenericBoss) boss).config;
+            int[] togetherIds = cfg.parseBossesAppearTogether();
+
+            // Chỉ xử lý những boss đóng vai trò Leader (có config bossesAppearTogether)
+            if (togetherIds != null && togetherIds.length > 0) {
+                int lvl = Math.max(0, boss.currentLevel);
+                if (boss.bossAppearTogether == null || boss.bossAppearTogether.length <= lvl
+                        || boss.bossAppearTogether[lvl] == null) {
+                    continue;
+                }
+
+                List<Boss> sharedGroup = new ArrayList<>();
+                sharedGroup.add(boss);
+                for (Boss follower : boss.bossAppearTogether[lvl]) {
+                    if (follower != null) {
+                        sharedGroup.add(follower);
+                    }
+                }
+
+                // Tất cả chuỗi đánh (Ginyu, Doraemon, Android) đều hoàn hảo khớp với thứ tự ID
+                // giảm dần (từ cao xuống thấp)
+                sharedGroup.sort(Comparator.comparingInt(b -> -(int) b.id));
+
+                // Gán danh sách thống nhất này cho TOÀN BỘ các thành viên trong group để
+                // auto-AFK hoạt động
+                Boss[] groupArr = sharedGroup.toArray(new Boss[0]);
+                for (Boss member : sharedGroup) {
+                    member.bossAppearTogether = new Boss[member.data.length][];
+                    for (int i = 0; i < member.data.length; i++) {
+                        member.bossAppearTogether[i] = groupArr;
+                    }
+
+                    if (member != boss) {
+                        member.parentBoss = boss;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Create a boss from its ID by looking up database config.
+     */
+    public Boss createBoss(int bossId) {
+        List<BossConfig> levels = bossConfigMap.get(bossId);
+        if (levels == null || levels.isEmpty()) {
             return null;
         }
+
+        // Sắp xếp lại để chắc chắn level 0 là đầu tiên
+        levels.sort(Comparator.comparingInt(BossConfig::getLevelIndex));
+        BossConfig primary = levels.get(0);
+
+        BossData[] dataArray = new BossData[levels.size()];
+        for (int i = 0; i < levels.size(); i++) {
+            dataArray[i] = levels.get(i).toBossData();
+        }
+
+        return createBossFromConfig(primary, dataArray);
+    }
+
+    public void createBoss(int bossId, int total) {
+        for (int i = 0; i < total; i++) {
+            createBoss(bossId);
+        }
+    }
+
+    /**
+     * Create a boss instance from configuration and data array.
+     */
+    private Boss createBossFromConfig(BossConfig config, BossData[] data) {
+        try {
+            String customClass = config.getCustomClass();
+            if (customClass != null && !customClass.isEmpty() && !"null".equals(customClass)) {
+                // Reflection instantiation
+                Class<?> clazz = null;
+                try {
+                    clazz = Class.forName(customClass);
+                } catch (ClassNotFoundException e) {
+                    // Sửa lỗi mapping class cho ĐHVT 23 nếu database bị sai (do refactoring trước
+                    // đó)
+                    if (customClass.contains("The23rdMartialArtCongress")) {
+                        clazz = resolveDHVT23Class(config);
+                    }
+                    if (clazz == null) {
+                        throw e; // Rethrow if still not found
+                    }
+                }
+                return (Boss) clazz.getConstructor(BossConfig.class, BossData[].class)
+                        .newInstance(config, data);
+            } else {
+                // Default instantiation - kiểm tra BossType để thêm vào manager chuyên biệt
+                BossType bt = config.parseBossType();
+                if (bt != null) {
+                    return new GenericBoss(bt, config, data);
+                } else {
+                    return new GenericBoss(config, data);
+                }
+            }
+        } catch (Exception e) {
+            Logger.error("Failed to create boss instance: " + config.getName() + " - " + e.getMessage() + "\n");
+            return null;
+        }
+    }
+
+    /**
+     * Tìm class chính xác cho boss ĐHVT 23 nếu customClass trong DB bị sai.
+     */
+    private Class<?> resolveDHVT23Class(BossConfig config) {
+        String basePkg = "boss.boss_manifest.The23rdMartialArtCongress.";
+        String name = Util.removeAccent(config.getName()).replaceAll("\\s+", "");
+        // Map một số tên đặc biệt sang CamelCase
+        if (name.equalsIgnoreCase("Chapa"))
+            name = "ChaPa";
+        if (name.equalsIgnoreCase("Ponput"))
+            name = "PonPut";
+        if (name.equalsIgnoreCase("Chanxu"))
+            name = "ChanXu";
+        if (name.equalsIgnoreCase("Taupaypay") || name.equalsIgnoreCase("Taupypy"))
+            name = "TauPayPay";
+        if (name.equalsIgnoreCase("Jackychun"))
+            name = "JackyChun";
+        if (name.equalsIgnoreCase("Thienxinhang"))
+            name = "ThienXinHang";
+        if (name.equalsIgnoreCase("Liuliu"))
+            name = "LiuLiu";
+        if (name.equalsIgnoreCase("Soihecquyn"))
+            name = "SoiHecQuyn";
+        if (name.equalsIgnoreCase("Xinbato"))
+            name = "Xinbato";
+        if (name.equalsIgnoreCase("Pocolo"))
+            name = "Pocolo";
+        if (name.equalsIgnoreCase("Odo"))
+            name = "ODo";
+
+        try {
+            return Class.forName(basePkg + name);
+        } catch (ClassNotFoundException e) {
+            // Fallback cuối cùng là DHVT23Boss (vừa được gỡ abstract)
+            return DHVT23Boss.class;
+        }
+    }
+
+    /**
+     * Lấy tất cả BossConfig đã load từ DB (dùng cho UI).
+     */
+    public List<BossConfig> getAllBossConfigs() {
+        return bossConfigMap.values().stream()
+                .flatMap(List::stream)
+                .filter(c -> c.getLevelIndex() == 0) // Chỉ lấy level 0 để đại diện cho boss
+                .collect(Collectors.toList());
     }
 
     public Boss getBoss(int id) {
@@ -430,6 +308,28 @@ public class BossManager implements Runnable {
         return null;
     }
 
+    public Boss getBossById(int bossId) {
+        return this.bosses.stream().filter(boss -> (int) boss.id == bossId && !boss.isDie()).findFirst().orElse(null);
+    }
+
+    public Boss getBossById(int bossId, int mapId, int zoneId) {
+        return this.bosses.stream().filter(boss -> (int) boss.id == bossId && boss.zone != null
+                && boss.zone.map.mapId == mapId && boss.zone.zoneId == zoneId && !boss.isDie()).findFirst()
+                .orElse(null);
+    }
+
+    public boolean checkBosses(Zone zone, int targetBossId) {
+        return this.bosses.stream()
+                .filter(boss -> (int) boss.id == targetBossId && boss.zone != null && boss.zone.equals(zone)
+                        && !boss.isDie())
+                .findFirst().orElse(null) != null;
+    }
+
+    public Player findBossClone(Player player) {
+        return player.zone.getBosses().stream().filter(boss -> boss.id < -100_000_000 && !boss.isDie()).findFirst()
+                .orElse(null);
+    }
+
     public void showListBoss(Player player) {
         player.iDMark.setMenuType(3);
         Message msg;
@@ -437,22 +337,19 @@ public class BossManager implements Runnable {
             msg = new Message(-96);
             msg.writer().writeByte(0);
             msg.writer().writeUTF("Boss");
-            msg.writer()
-                    .writeByte((int) bosses.stream()
-                            .filter(boss -> !MapService.gI().isMapBossFinal(boss.data[0].getMapJoin()[0])
-                                    && !MapService.gI().isMapHuyDiet(boss.data[0].getMapJoin()[0])
-                                    && !MapService.gI().isMapYardart(boss.data[0].getMapJoin()[0])
-                                    && !MapService.gI().isMapMaBu(boss.data[0].getMapJoin()[0])
-                                    && !MapService.gI().isMapBlackBallWar(boss.data[0].getMapJoin()[0]))
-                            .count());
-            for (int i = 0; i < bosses.size(); i++) {
-                Boss boss = this.bosses.get(i);
-                if (/* MapService.gI().isMapBossFinal(boss.data[0].getMapJoin()[0]) || */ MapService.gI().isMapYardart(
-                        boss.data[0].getMapJoin()[0]) || MapService.gI().isMapHuyDiet(boss.data[0].getMapJoin()[0])
-                        || MapService.gI().isMapMaBu(boss.data[0].getMapJoin()[0])
-                        || MapService.gI().isMapBlackBallWar(boss.data[0].getMapJoin()[0])) {
-                    continue;
-                }
+
+            List<Boss> filteredBosses = bosses.stream()
+                    .filter(boss -> boss.data != null && boss.data.length > 0 &&
+                            !MapService.gI().isMapBossFinal(boss.data[0].getMapJoin()[0])
+                            && !MapService.gI().isMapHuyDiet(boss.data[0].getMapJoin()[0])
+                            && !MapService.gI().isMapYardart(boss.data[0].getMapJoin()[0])
+                            && !MapService.gI().isMapMaBu(boss.data[0].getMapJoin()[0])
+                            && !MapService.gI().isMapBlackBallWar(boss.data[0].getMapJoin()[0]))
+                    .collect(Collectors.toList());
+
+            msg.writer().writeByte(filteredBosses.size());
+            for (int i = 0; i < filteredBosses.size(); i++) {
+                Boss boss = filteredBosses.get(i);
                 msg.writer().writeInt(i);
                 msg.writer().writeInt(i);
                 msg.writer().writeShort(boss.data[0].getOutfit()[0]);
@@ -474,34 +371,12 @@ public class BossManager implements Runnable {
             player.sendMessage(msg);
             msg.cleanup();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public Boss getBossById(int bossId) {
-        return this.bosses.stream().filter(boss -> boss.id == bossId && !boss.isDie()).findFirst().orElse(null);
-    }
-
-    public boolean checkBosses(Zone zone, int BossID) {
-        return this.bosses.stream()
-                .filter(boss -> boss.id == BossID && boss.zone != null && boss.zone.equals(zone) && !boss.isDie())
-                .findFirst().orElse(null) != null;
-    }
-
-    public Player findBossClone(Player player) {
-        return player.zone.getBosses().stream().filter(boss -> boss.id < -100_000_000 && !boss.isDie()).findFirst()
-                .orElse(null);
-    }
-
-    public Boss getBossById(int bossId, int mapId, int zoneId) {
-        return this.bosses.stream().filter(boss -> boss.id == bossId && boss.zone != null
-                && boss.zone.map.mapId == mapId && boss.zone.zoneId == zoneId && !boss.isDie()).findFirst()
-                .orElse(null);
-    }
-
     /**
-     * Update tất cả boss và trả về true nếu có boss nào đang hoạt động (không phải
-     * REST).
-     * Dùng cho base BossManager.
+     * Update tất cả boss và trả về true nếu có boss nào đang hoạt động.
      */
     protected boolean updateBosses() {
         boolean hasActiveBoss = false;
@@ -513,33 +388,32 @@ public class BossManager implements Runnable {
                     hasActiveBoss = true;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         }
         return hasActiveBoss;
     }
 
     /**
-     * Update boss với xử lý remove khi lỗi (dành cho phó bản manager).
-     * Trả về true nếu có boss nào đang hoạt động.
+     * Update tất cả boss và XÓA boss khỏi danh sách nếu gặp lỗi hoặc boss đã chết
+     * (dùng cho phó bản).
      */
-    protected boolean updateBossesWithRemove() {
+    public boolean updateBossesWithRemove() {
         boolean hasActiveBoss = false;
         for (int i = this.bosses.size() - 1; i >= 0; i--) {
-            if (i < this.bosses.size()) {
+            try {
                 Boss boss = this.bosses.get(i);
-                try {
-                    boss.update();
-                    if (boss.bossStatus != BossStatus.REST) {
-                        hasActiveBoss = true;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    try {
-                        removeBoss(boss);
-                    } catch (Exception ex) {
-                    }
+                boss.update();
+                if (boss.bossStatus != BossStatus.REST) {
+                    hasActiveBoss = true;
                 }
+                // Nếu boss phó bản đã rời map thì remove khỏi manager
+                if (boss.bossStatus == BossStatus.LEAVE_MAP) {
+                    this.bosses.remove(i);
+                }
+            } catch (Exception e) {
+                this.bosses.remove(i);
+                // e.printStackTrace();
             }
         }
         return hasActiveBoss;
@@ -552,13 +426,11 @@ public class BossManager implements Runnable {
                 long st = System.currentTimeMillis();
                 boolean hasActiveBoss = updateBosses();
                 // Tối ưu: Tất cả boss đang REST → sleep 1s thay vì 150ms
-                // Giảm ~85% CPU cho BossManager khi boss chờ respawn
                 int delay = hasActiveBoss ? 150 : 1000;
                 Functions.sleep(Math.max(delay - (System.currentTimeMillis() - st), 10));
             } catch (Exception e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         }
     }
-
 }

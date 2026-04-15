@@ -1,5 +1,9 @@
 package boss;
 
+import boss.BossID;
+import boss.BossManager;
+import boss.BossData;
+
 /*
  *
  *
@@ -35,6 +39,7 @@ public class Boss extends Player implements IBoss, IBossOutfit {
 
     public int currentLevel = -1;
     protected final BossData[] data;
+    protected BossConfig config;
 
     public BossStatus bossStatus;
 
@@ -81,7 +86,7 @@ public class Boss extends Player implements IBoss, IBossOutfit {
     private long lastTimeCheck;
 
     public Boss(int id, boolean isNotifyDisabled, boolean isZone01SpawnDisabled, BossData... data) throws Exception {
-        this(id, data);
+        this(null, id, data);
         this.isNotifyDisabled = isNotifyDisabled;
         this.isZone01SpawnDisabled = isZone01SpawnDisabled;
     }
@@ -93,31 +98,15 @@ public class Boss extends Player implements IBoss, IBossOutfit {
         this.isZone01SpawnDisabled = isZone01SpawnDisabled;
     }
 
-    public Boss(int id, BossData... data) throws Exception {
-        this.id = id;
-        this.isBoss = true;
-        if (data == null || data.length == 0) {
-            throw new Exception("Dữ liệu boss không hợp lệ");
-        }
-        this.data = data;
-        this.secondsRest = this.data[0].getSecondsRest();
-        this.bossStatus = BossStatus.REST;
-        BossManager.gI().addBoss(this);
+    public Boss(BossConfig config, BossData[] data) throws Exception {
+        this(null, config.getBossId(), data);
+        this.config = config;
+        this.isNotifyDisabled = config.isNotifyDisabled();
+        this.isZone01SpawnDisabled = config.isZone01SpawnDisabled();
+    }
 
-        this.bossAppearTogether = new Boss[this.data.length][];
-        for (int i = 0; i < this.bossAppearTogether.length; i++) {
-            if (this.data[i].getBossesAppearTogether() != null) {
-                this.bossAppearTogether[i] = new Boss[this.data[i].getBossesAppearTogether().length];
-                for (int j = 0; j < this.data[i].getBossesAppearTogether().length; j++) {
-                    Boss boss = BossManager.gI().createBoss(this.data[i].getBossesAppearTogether()[j]);
-                    if (boss != null) {
-                        boss.parentBoss = this;
-                        boss.lv = j;
-                        this.bossAppearTogether[i][j] = boss;
-                    }
-                }
-            }
-        }
+    public Boss(int id, BossData... data) throws Exception {
+        this(null, id, data);
     }
 
     public Boss(BossType bossType, int id, BossData... data) throws Exception {
@@ -129,37 +118,24 @@ public class Boss extends Player implements IBoss, IBossOutfit {
         this.data = data;
         this.secondsRest = this.data[0].getSecondsRest();
         this.bossStatus = BossStatus.REST;
-        switch (bossType) {
-            case YARDART ->
-                YardartManager.gI().addBoss(this);
-            case FINAL ->
-                FinalBossManager.gI().addBoss(this);
-            case SKILLSUMMONED ->
-                SkillSummonedManager.gI().addBoss(this);
-            case BROLY ->
-                BrolyManager.gI().addBoss(this);
-            case ANTROM ->
-                AnTromManager.gI().addBoss(this);
-            case PHOBAN ->
-                OtherBossManager.gI().addBoss(this);
-            case PHOBANDT ->
-                RedRibbonHQManager.gI().addBoss(this);
-            case PHOBANBDKB ->
-                TreasureUnderSeaManager.gI().addBoss(this);
-            case PHOBANCDRD ->
-                SnakeWayManager.gI().addBoss(this);
-            case PHOBANKGHD ->
-                GasDestroyManager.gI().addBoss(this);
-            case TRUNGTHU_EVENT ->
-                TrungThuEventManager.gI().addBoss(this);
-            case HALLOWEEN_EVENT ->
-                HalloweenEventManager.gI().addBoss(this);
-            case CHRISTMAS_EVENT ->
-                ChristmasEventManager.gI().addBoss(this);
-            case HUNGVUONG_EVENT ->
-                HungVuongEventManager.gI().addBoss(this);
-            case TET_EVENT ->
-                LunarNewYearEventManager.gI().addBoss(this);
+
+        if (bossType == null) {
+            BossManager.gI().addBoss(this);
+        } else {
+            switch (bossType) {
+                case YARDART, FINAL, BROLY, ANTROM -> BossManager.gI().addBoss(this);
+                case SKILLSUMMONED -> SkillSummonedManager.gI().addBoss(this);
+                case PHOBAN -> OtherBossManager.gI().addBoss(this);
+                case PHOBANDT -> RedRibbonHQManager.gI().addBoss(this);
+                case PHOBANBDKB -> TreasureUnderSeaManager.gI().addBoss(this);
+                case PHOBANCDRD -> SnakeWayManager.gI().addBoss(this);
+                case PHOBANKGHD -> GasDestroyManager.gI().addBoss(this);
+                case TRUNGTHU_EVENT -> TrungThuEventManager.gI().addBoss(this);
+                case HALLOWEEN_EVENT -> HalloweenEventManager.gI().addBoss(this);
+                case CHRISTMAS_EVENT -> ChristmasEventManager.gI().addBoss(this);
+                case HUNGVUONG_EVENT -> HungVuongEventManager.gI().addBoss(this);
+                case TET_EVENT -> LunarNewYearEventManager.gI().addBoss(this);
+            }
         }
 
         this.bossAppearTogether = new Boss[this.data.length][];
@@ -170,6 +146,7 @@ public class Boss extends Player implements IBoss, IBossOutfit {
                     Boss boss = BossManager.gI().createBoss(this.data[i].getBossesAppearTogether()[j]);
                     if (boss != null) {
                         boss.parentBoss = this;
+                        boss.lv = j;
                         this.bossAppearTogether[i][j] = boss;
                     }
                 }
@@ -198,6 +175,12 @@ public class Boss extends Player implements IBoss, IBossOutfit {
         this.playerSkill.skills.clear();
         this.playerSkill.skillSelect = null;
         int[][] skillTemps = data[this.currentLevel].getSkillTemp();
+        if (skillTemps == null || skillTemps.length == 0) {
+            // Logger.warning("Boss " + this.name + " (id=" + this.id + ", level=" +
+            // this.currentLevel + ") không có skill từ DB → fallback theo gender\n");
+            // Fallback: gán skill theo chủng tộc (gender) khi DB chưa có dữ liệu
+            skillTemps = getDefaultSkillsByGender(this.gender);
+        }
         for (int[] skillTemp : skillTemps) {
             Skill skill = SkillUtil.createSkill(skillTemp[0], skillTemp[1]);
             if (skillTemp.length == 3) {
@@ -205,6 +188,26 @@ public class Boss extends Player implements IBoss, IBossOutfit {
             }
             this.playerSkill.skills.add(skill);
         }
+
+        // Nếu vẫn không có skill, ép học skill Đấm (ID 0) để không đứng yên
+        if (this.playerSkill.skills.isEmpty()) {
+            this.playerSkill.skills.add(SkillUtil.createSkill(0, 7));
+        }
+    }
+
+    /**
+     * Trả về bộ skill mặc định theo chủng tộc khi DB chưa có dữ liệu skill.
+     * Trái Đất(0): Dragon + Kamejoko + Kaioken
+     * Namek(1): Demon + Masenko + Makankosappo
+     * Xayda(2): Galick + Antomic + Lien Hoan
+     */
+    private int[][] getDefaultSkillsByGender(byte gender) {
+        return switch (gender) {
+            case 0 -> new int[][] { { Skill.DRAGON, 7 }, { Skill.KAMEJOKO, 7 }, { Skill.KAIOKEN, 7 } };
+            case 1 -> new int[][] { { Skill.DEMON, 7 }, { Skill.MASENKO, 7 }, { Skill.MAKANKOSAPPO, 7 } };
+            case 2 -> new int[][] { { Skill.GALICK, 7 }, { Skill.ANTOMIC, 7 }, { Skill.LIEN_HOAN, 7 } };
+            default -> new int[][] { { Skill.DRAGON, 7 }, { Skill.KAMEJOKO, 7 } };
+        };
     }
 
     protected void resetBase() {
@@ -439,12 +442,28 @@ public class Boss extends Player implements IBoss, IBossOutfit {
             return;
         }
         if (this.zone == null) {
-            if (this.parentBoss != null) {
+            if (this.parentBoss != null && this.parentBoss.zone != null) {
                 this.zone = parentBoss.zone;
-            } else if (this.lastZone == null) {
-                this.zone = getMapJoin();
-            } else {
-                this.zone = this.lastZone;
+            } else if (this.bossAppearTogether != null && this.bossAppearTogether[this.currentLevel] != null) {
+                // Nếu không có leader hoặc leader chưa vào map, tìm con đồng đội nào đã vào map
+                // rồi để bay theo
+                for (Boss b : this.bossAppearTogether[this.currentLevel]) {
+                    if (b != null && b.zone != null) {
+                        this.zone = b.zone;
+                        break;
+                    }
+                }
+            }
+
+            if (this.zone == null) {
+                if (this.parentBoss != null) {
+                    return; // Vẫn phải đợi nếu là boss đệ mà chưa ai vào map
+                }
+                if (this.lastZone == null) {
+                    this.zone = getMapJoin();
+                } else {
+                    this.zone = this.lastZone;
+                }
             }
         }
         if (this.zone == null) {
@@ -454,7 +473,7 @@ public class Boss extends Player implements IBoss, IBossOutfit {
             try {
                 if (this.currentLevel == 0) {
                     if (this.parentBoss == null) {
-                        int zoneid = 0;
+                        int zoneid = this.zone.zoneId;
                         // this.zone.map.mapId == 80 || this.zone.map.mapId == 103 ||
                         // this.zone.map.mapId == 97 || this.zone.map.mapId == 102
                         // Chỉ cho boss xuất hiện từ khu 2 trở lên ở map thường
@@ -486,8 +505,6 @@ public class Boss extends Player implements IBoss, IBossOutfit {
                             }
                             if (zoneid < this.zone.map.zones.size()) {
                                 this.zone = this.zone.map.zones.get(zoneid);
-                            } else {
-                                this.zone = this.zone.map.zones.get(0);
                             }
                         }
                         int x = this.zone.map.mapWidth > 100 ? Util.nextInt(100, this.zone.map.mapWidth - 100)
@@ -543,6 +560,8 @@ public class Boss extends Player implements IBoss, IBossOutfit {
                 || MapService.gI().isMapMaBu(this.zone.map.mapId)
                 || MapService.gI().isMapBlackBallWar(this.zone.map.mapId)
                 || MapService.gI().isMapOffline(this.zone.map.mapId)
+                || MapService.gI().isMapYardart(this.zone.map.mapId)
+                || MapService.gI().isMapDHVT23(this.zone.map.mapId)
                 || this.zone.map.mapId == 111 // || this.id != BossID.TAU_PAY_PAY_DONG_NAM_KARIN
         );
     }
@@ -613,6 +632,9 @@ public class Boss extends Player implements IBoss, IBossOutfit {
                 if (pl == null || pl.isDie()) {
                     return;
                 }
+                if (this.playerSkill.skills.isEmpty()) {
+                    return;
+                }
                 this.playerSkill.skillSelect = this.playerSkill.skills
                         .get(Util.nextInt(0, this.playerSkill.skills.size() - 1));
                 if (Util.getDistance(this, pl) <= this.getRangeCanAttackWithSkillSelect()) {
@@ -662,8 +684,8 @@ public class Boss extends Player implements IBoss, IBossOutfit {
             if (plKill instanceof LinhDanhThue) {
                 plKill = ((LinhDanhThue) plKill).master;
             }
-            if (plKill instanceof PhanThan) {
-                plKill = ((PhanThan) plKill).getPlayerAtt();
+            if (plKill.playerAtt != null) {
+                plKill = plKill.playerAtt;
             }
             reward(plKill);
             plKill.sosumenhplayer.addCountTask(2);
@@ -674,13 +696,106 @@ public class Boss extends Player implements IBoss, IBossOutfit {
 
     @Override
     public void reward(Player plKill) {
-        if (plKill instanceof PhanThan) {
-            plKill = ((PhanThan) plKill).getPlayerAtt();
+        if (config == null) {
+            defaultReward(plKill);
+            return;
         }
-        TaskService.gI().checkDoneTaskKillBoss(plKill, this);
-        plKill.event.addEventPointBHM(1);
+        java.util.Map<String, Object> rewardCfg = config.parseRewardConfig();
+        if (rewardCfg == null) {
+            defaultReward(plKill);
+            return;
+        }
 
-        Service.gI().sendThongBao(plKill, "Bạn đã Đã tiêu diệt được " + this.name + " và nhận 1 điểm Bà Hạt Mít");
+        // pointBossDay
+        if (rewardCfg.containsKey("pointBossDay")) {
+            plKill.pointbossday += ((Number) rewardCfg.get("pointBossDay")).intValue();
+        }
+
+        // mabuPoint
+        if (rewardCfg.containsKey("mabuPoint")) {
+            if (plKill.fightMabu != null) {
+                plKill.fightMabu.changePoint(((Number) rewardCfg.get("mabuPoint")).byteValue());
+            }
+        }
+
+        // goHome
+        if (rewardCfg.containsKey("goHome")) {
+            if (plKill.isPl()) {
+                plKill.goHome = true;
+                plKill.timeGohome = ((Number) rewardCfg.get("goHome")).intValue();
+            }
+        }
+
+        // Điểm sự kiện
+        if (plKill.event != null) {
+            if (rewardCfg.containsKey("pointBHM")) {
+                plKill.event.addEventPointBHM(((Number) rewardCfg.get("pointBHM")).intValue());
+            }
+            if (rewardCfg.containsKey("pointNHS")) {
+                plKill.event.addEventPointNHS(((Number) rewardCfg.get("pointNHS")).intValue());
+            }
+        }
+
+        // checkTask
+        if (rewardCfg.containsKey("checkTask") && (boolean) rewardCfg.get("checkTask")) {
+            services.TaskService.gI().checkDoneTaskKillBoss(plKill, this);
+        }
+
+        // drops - mảng các item drop [{"itemId": 16, "chance": 10, "count": [1, 1]}]
+        if (rewardCfg.containsKey("drops")) {
+            @SuppressWarnings("unchecked")
+            java.util.List<java.util.Map<String, Object>> drops = (java.util.List<java.util.Map<String, Object>>) rewardCfg
+                    .get("drops");
+            for (java.util.Map<String, Object> drop : drops) {
+                int itemId = ((Number) drop.get("itemId")).intValue();
+                int qty = drop.containsKey("qty") ? ((Number) drop.get("qty")).intValue() : 1;
+                int countMin = 1, countMax = 1;
+                if (drop.containsKey("count")) {
+                    @SuppressWarnings("unchecked")
+                    java.util.List<Number> countRange = (java.util.List<Number>) drop.get("count");
+                    countMin = countRange.get(0).intValue();
+                    countMax = countRange.size() > 1 ? countRange.get(1).intValue() : countMin;
+                }
+                int chance = drop.containsKey("chance") ? ((Number) drop.get("chance")).intValue() : 100;
+
+                if (utils.Util.isTrue(chance, 100)) {
+                    for (int i = 0; i < utils.Util.nextInt(countMin, countMax); i++) {
+                        map.ItemMap it = new map.ItemMap(this.zone, itemId, qty,
+                                this.location.x + utils.Util.nextInt(-20, 20),
+                                this.zone.map.yPhysicInTop(this.location.x, this.location.y - 24),
+                                plKill.id);
+                        services.Service.gI().dropItemMap(this.zone, it);
+                    }
+                }
+            }
+        }
+
+        // dropDoTL - drop đồ thời lượng random
+        if (rewardCfg.containsKey("dropDoTL")) {
+            @SuppressWarnings("unchecked")
+            java.util.Map<String, Object> doTL = (java.util.Map<String, Object>) rewardCfg.get("dropDoTL");
+            int chance = doTL.containsKey("chance") ? ((Number) doTL.get("chance")).intValue() : 20;
+            if (utils.Util.isTrue(chance, 100)) {
+                map.ItemMap it = services.ItemService.gI().randDoTL(this.zone, 1, this.location.x,
+                        this.zone.map.yPhysicInTop(this.location.x, this.location.y - 24), plKill.id);
+                services.Service.gI().dropItemMap(this.zone, it);
+            }
+        }
+
+        if (!rewardCfg.containsKey("skipBaseReward") || !(boolean) rewardCfg.get("skipBaseReward")) {
+            defaultReward(plKill);
+        }
+    }
+
+    private void defaultReward(Player plKill) {
+        if (plKill.playerAtt != null) {
+            plKill = plKill.playerAtt;
+        }
+        services.TaskService.gI().checkDoneTaskKillBoss(plKill, this);
+        if (plKill.event != null) {
+            plKill.event.addEventPointBHM(1);
+        }
+        services.Service.gI().sendThongBao(plKill, "Bạn đã tiêu diệt được " + this.name + " và nhận 1 điểm Bà Hạt Mít");
     }
 
     @Override
@@ -813,10 +928,15 @@ public class Boss extends Player implements IBoss, IBossOutfit {
 
     @Override
     public void wakeupAnotherBossWhenAppear() {
+        if (this.parentBoss != null) {
+            return; // Chỉ Leader mới được phép gọi đệ tử
+        }
         if (this.bossAppearTogether == null || this.bossAppearTogether[this.currentLevel] == null) {
             return;
         }
         for (Boss boss : this.bossAppearTogether[this.currentLevel]) {
+            if (boss == null || boss == this)
+                continue;
             int nextLevelBoss = boss.currentLevel + 1;
             if (nextLevelBoss >= boss.data.length) {
                 nextLevelBoss = 0;

@@ -1,9 +1,13 @@
 package server.ui;
+import boss.BossManager;
+import boss.BossID;
+import boss.BossData;
+import boss.BossConfig;
+
 
 import server.Client;
 import server.Maintenance;
 import server.Manager;
-import boss.BossManager;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -16,9 +20,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 // New Imports for Boss Logic
-import boss.BossID;
-import boss.BossData;
-import boss.BossesData;
 // Imports removed
 // import org.json.simple.JSONArray;
 // import org.json.simple.JSONValue;
@@ -825,186 +826,35 @@ public class DashboardPanel extends JPanel {
     private void prepareBossData() {
         cachedBossEntries.clear();
         try {
-            File file = new File(BOSS_MANAGER_PATH);
-            if (!file.exists()) {
-                log("Warning: Không tìm thấy file " + BOSS_MANAGER_PATH + ". Load fallback.");
-                prepareBossDataFallback();
-                return;
-            }
-
-            String content = Files.readString(file.toPath());
-
-            // 1. Parse Imports to map ClassName -> Package
-            Map<String, String> classPackageMap = new HashMap<>();
-            Pattern importPattern = Pattern.compile("import\\s+([a-zA-Z0-9_\\.]+)\\.([a-zA-Z0-9_]+);");
-            Matcher importMatcher = importPattern.matcher(content);
-            while (importMatcher.find()) {
-                classPackageMap.put(importMatcher.group(2), importMatcher.group(1));
-            }
-
-            // 2. Parse Association: BossID -> ClassName
-            // Supports: case BossID.NAME -> new ClassName();
-            Map<String, String> bossIdToClassMap = new HashMap<>();
-            Pattern casePattern = Pattern
-                    .compile("case\\s+BossID\\.([A-Z0-9_]+)\\s*->\\s*(?:[\\s\\n]*)new\\s+([a-zA-Z0-9_]+)\\(");
-            Matcher caseMatcher = casePattern.matcher(content);
-            while (caseMatcher.find()) {
-                bossIdToClassMap.put(caseMatcher.group(1), caseMatcher.group(2));
-            }
-
-            // Tìm method createBoss(int bossID) - chứa switch case tất cả boss
-            int startIndex = content.indexOf("public Boss createBoss(int bossID)");
-            if (startIndex == -1) {
-                // Try finding without strict signature or fallback
-                prepareBossDataFallback();
-                return;
-            }
-
-            int braceCount = 0;
-            int endIndex = -1;
-            boolean foundStartBrace = false;
-
-            for (int i = startIndex; i < content.length(); i++) {
-                if (content.charAt(i) == '{') {
-                    braceCount++;
-                    foundStartBrace = true;
-                } else if (content.charAt(i) == '}') {
-                    braceCount--;
-                    if (foundStartBrace && braceCount == 0) {
-                        endIndex = i;
-                        break;
-                    }
-                }
-            }
-
-            String methodBody = (endIndex != -1) ? content.substring(startIndex, endIndex) : content;
-
-            // Regex tìm case BossID.XXXX -> hoặc case XXXX -> (nếu import static)
-            // Tìm tất cả các case sử dụng BossID
-            Pattern pattern = Pattern.compile("case\\s+BossID\\.([A-Z0-9_]+)");
-            Matcher matcher = pattern.matcher(methodBody);
-
-            Set<String> foundBossKeys = new HashSet<>();
-            while (matcher.find()) {
-                foundBossKeys.add(matcher.group(1));
-            }
-
-            // Reflection lấy ID integer
-            Field[] idFields = BossID.class.getFields();
-            Map<String, Integer> idMap = new HashMap<>();
-            for (Field f : idFields) {
-                if (Modifier.isStatic(f.getModifiers()) && (f.getType() == int.class || f.getType() == byte.class)) {
-                    // getType could be byte or int depending on impl
-                    idMap.put(f.getName(), f.getInt(null));
-                }
-            }
-
-            // Reflection lấy Data (Tên, Outfit)
-            Map<String, BossData> dataMap = new HashMap<>();
-            Field[] dataFields = BossesData.class.getFields();
-            for (Field f : dataFields) {
-                if (f.getType() == BossData.class && Modifier.isStatic(f.getModifiers())) {
-                    dataMap.put(f.getName(), (BossData) f.get(null));
-                }
-            }
-
-            // Build list
-            for (String key : foundBossKeys) {
-                if (!idMap.containsKey(key))
-                    continue;
-
-                int bossId = idMap.get(key);
-                String displayName = key;
+            // Method: Load from Database via BossManager
+            List<BossConfig> configs = BossManager.gI().getAllBossConfigs();
+            for (BossConfig config : configs) {
+                int bossId = config.getBossId();
+                String displayName = config.getName();
                 int iconId = -1;
-
-                if (dataMap.containsKey(key)) {
-                    BossData d = dataMap.get(key);
-                    displayName = d.getName();
-                    if (d.getOutfit() != null && d.getOutfit().length > 0) {
-                        int headPart = d.getOutfit()[0];
+                
+                // Try to get icon from the first level's outfit
+                BossData[] dataArr = config.getData();
+                if (dataArr != null && dataArr.length > 0) {
+                    short[] outfit = dataArr[0].getOutfit();
+                    if (outfit != null && outfit.length > 0) {
+                        int headPart = outfit[0];
                         iconId = partIconMap.getOrDefault(headPart, headPart);
                     }
-                } else {
-                    // Method B: Parse from Class File
-                    String className = bossIdToClassMap.get(key);
-                    boolean foundInSource = false;
-
-                    if (className != null && classPackageMap.containsKey(className)) {
-                        String pkg = classPackageMap.get(className);
-                        // Path construction: src/pkg/ClassName.java
-                        String path = "src/" + pkg.replace(".", "/") + "/" + className + ".java";
-                        File classFile = new File(path);
-                        if (classFile.exists()) {
-                            try {
-                                String classContent = Files.readString(classFile.toPath());
-                                // Regex: new BossData("Name", ... new short[]{HEAD,
-                                Pattern nameP = Pattern.compile("new\\s+BossData\\s*\\(\\s*\"([^\"]+)\"");
-                                Matcher nameM = nameP.matcher(classContent);
-                                if (nameM.find()) {
-                                    displayName = nameM.group(1);
-                                    foundInSource = true;
-
-                                    // Look for outfit after name
-                                    Pattern outfitP = Pattern.compile("new\\s+short\\s*\\[\\s*\\]\\s*\\{\s*(\\d+)");
-                                    Matcher outfitM = outfitP.matcher(classContent);
-                                    if (outfitM.find(nameM.end())) {
-                                        int headPart = Integer.parseInt(outfitM.group(1));
-                                        iconId = partIconMap.getOrDefault(headPart, headPart);
-                                    }
-                                }
-                            } catch (Exception e) {
-                            }
-                        }
-                    }
-
-                    if (!foundInSource) {
-                        // Fallback: Prettify Enum Name if no BossData found
-                        displayName = key.replace("_", " ");
-                        if (displayName.length() > 1) {
-                            displayName = displayName.substring(0, 1).toUpperCase()
-                                    + displayName.substring(1).toLowerCase();
-                        }
-                    }
                 }
-
-                // Add to LIST
-                boolean isExcluded = key.contains("TAP_SU") || key.contains("TAN_BINH") || key.contains("CHIEN_BINH");
-                if (!isExcluded) {
-                    cachedBossEntries.add(new BossSummonEntry(key, bossId, displayName, iconId));
-                }
+                
+                String key = "ID_" + bossId; // Use ID as key if symbolic name is not available
+                cachedBossEntries.add(new BossSummonEntry(key, bossId, displayName, iconId));
             }
-
         } catch (Exception e) {
-            log("Error analyzing BossManager: " + e.getMessage());
-            prepareBossDataFallback();
+            log("Error loading boss data from database: " + e.getMessage());
         }
     }
 
     private void prepareBossDataFallback() {
-        try {
-            Field[] idFields = BossID.class.getFields();
-            Map<String, Integer> idMap = new HashMap<>();
-            for (Field f : idFields) {
-                if (Modifier.isStatic(f.getModifiers()) && f.getType() == int.class) {
-                    idMap.put(f.getName(), f.getInt(null));
-                }
-            }
-            Field[] dataFields = BossesData.class.getFields();
-            for (Field f : dataFields) {
-                if (f.getType() == BossData.class && idMap.containsKey(f.getName())) {
-                    BossData data = (BossData) f.get(null);
-                    int bossId = idMap.get(f.getName());
-                    int iconId = -1;
-                    if (data.getOutfit() != null && data.getOutfit().length > 0) {
-                        int headPart = data.getOutfit()[0];
-                        iconId = partIconMap.getOrDefault(headPart, headPart);
-                    }
-                    cachedBossEntries.add(new BossSummonEntry(f.getName(), bossId, data.getName(), iconId));
-                }
-            }
-        } catch (Exception e) {
-        }
+        // Fallback is no longer needed with DB system
     }
+
 
     private void showBossSummonDialog() {
         Window window = SwingUtilities.getWindowAncestor(this);

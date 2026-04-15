@@ -1,11 +1,12 @@
 package services.func;
+import boss.BossID;
+
 
 /*
  *
  *
  * @author EMTI
  */
-import boss.BossID;
 import consts.ConstMap;
 import consts.ConstNpc;
 import consts.ConstPlayer;

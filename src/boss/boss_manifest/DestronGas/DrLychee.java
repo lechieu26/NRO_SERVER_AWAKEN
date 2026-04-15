@@ -1,4 +1,6 @@
 package boss.boss_manifest.DestronGas;
+import boss.BossID;
+import boss.BossData;
 
 /*
  *

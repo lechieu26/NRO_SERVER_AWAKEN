@@ -1,20 +1,10 @@
 package boss.boss_manifest.The23rdMartialArtCongress;
 
-/*
- *
- *
- * @author EMTI
- */
+import boss.BossData;
+import boss.BossConfig;
 
-import boss.BossID;
-import boss.BossesData;
-import static boss.BossType.PHOBAN;
-import player.Player;
-
-public class LiuLiu extends The23rdMartialArtCongress {
-
-    public LiuLiu(Player player) throws Exception {
-        super(PHOBAN, BossID.LIU_LIU, BossesData.LIU_LIU);
-        this.playerAtt = player;
+public class LiuLiu extends DHVT23Boss {
+    public LiuLiu(BossConfig config, BossData[] data) throws Exception {
+        super(config, data);
     }
 }

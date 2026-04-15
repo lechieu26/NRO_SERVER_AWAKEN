@@ -9,11 +9,8 @@ package models.DeathOrAliveArena;
 import consts.ConstPlayer;
 import boss.Boss;
 import boss.BossStatus;
-import boss.boss_manifest.DeathOrAliveArena.BongBang;
-import boss.boss_manifest.DeathOrAliveArena.Dracula;
-import boss.boss_manifest.DeathOrAliveArena.NguoiVoHinh;
-import boss.boss_manifest.DeathOrAliveArena.ThoDauBac;
-import boss.boss_manifest.DeathOrAliveArena.VuaQuySaTang;
+import boss.BossID;
+import boss.BossManager;
 import java.util.ArrayList;
 import java.util.List;
 import player.Player;
@@ -131,17 +128,13 @@ public class DeathOrAliveArena {
         try {
             PlayerService.gI().changeAndSendTypePK(player, ConstPlayer.NON_PK);
             Boss bss;
+            int bossId = -1;
             switch (round) {
-                case 0 ->
-                    bss = new Dracula(player);
-                case 1 ->
-                    bss = new NguoiVoHinh(player);
-                case 2 ->
-                    bss = new BongBang(player);
-                case 3 ->
-                    bss = new VuaQuySaTang(player);
-                case 4 ->
-                    bss = new ThoDauBac(player);
+                case 0 -> bossId = BossID.DRACULA;
+                case 1 -> bossId = BossID.NGUOI_VO_HINH;
+                case 2 -> bossId = BossID.BONG_BANG;
+                case 3 -> bossId = BossID.VUA_QUY_SA_TANG;
+                case 4 -> bossId = BossID.THO_DAU_BAC;
                 case 5 -> {
                     champion();
                     return;
@@ -150,6 +143,7 @@ public class DeathOrAliveArena {
                     return;
                 }
             }
+            bss = BossManager.gI().createBoss(bossId);
             Service.gI().setPos(player, 401, 336);
             setTimeWait(5);
             setBoss(bss);

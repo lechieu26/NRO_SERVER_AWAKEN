@@ -1,4 +1,6 @@
 package services.func;
+import boss.BossManager;
+
 
 import consts.ConstItem;
 import models.Combine.CombineService;
@@ -31,7 +33,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 
-import boss.BossManager;
 import jdbc.daos.PlayerDAO;
 import map.ItemMap;
 import task.Badges.BadgesTaskService;

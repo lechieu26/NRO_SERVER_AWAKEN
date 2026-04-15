@@ -1,4 +1,5 @@
 package boss;
+import boss.BossID;
 
 /*
  *

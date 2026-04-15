@@ -1,4 +1,6 @@
 package boss.boss_manifest.SnakeWay;
+import boss.BossID;
+import boss.BossData;
 
 /*
  *

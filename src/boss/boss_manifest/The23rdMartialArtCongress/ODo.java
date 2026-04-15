@@ -1,20 +1,10 @@
 package boss.boss_manifest.The23rdMartialArtCongress;
 
-/*
- *
- *
- * @author EMTI
- */
+import boss.BossData;
+import boss.BossConfig;
 
-import boss.BossID;
-import boss.BossesData;
-import static boss.BossType.PHOBAN;
-import player.Player;
-
-public class ODo extends The23rdMartialArtCongress {
-
-    public ODo(Player player) throws Exception {
-        super(PHOBAN, BossID.O_DO, BossesData.O_DO);
-        this.playerAtt = player;
+public class ODo extends DHVT23Boss {
+    public ODo(BossConfig config, BossData[] data) throws Exception {
+        super(config, data);
     }
 }

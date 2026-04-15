@@ -1,6 +1,8 @@
 package npc;
-
+import boss.BossManager;
 import boss.BossID;
+
+
 import models.Consign.ConsignShopService;
 import services.ClanService;
 import services.Service;
@@ -13,7 +15,6 @@ import services.PetService;
 import services.PlayerService;
 import services.FriendAndEnemyService;
 import consts.ConstNpc;
-import boss.BossManager;
 import clan.Clan;
 
 import java.util.HashMap;

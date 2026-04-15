@@ -1,4 +1,6 @@
 package npc.npc_manifest;
+import boss.BossManager;
+
 
 /*
  *
@@ -6,7 +8,6 @@ package npc.npc_manifest;
  * @author EMTI
  */
 
-import boss.BossManager;
 import consts.ConstNpc;
 import npc.Npc;
 import player.Player;

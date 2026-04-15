@@ -1,4 +1,8 @@
 package boss.boss_manifest.DeathOrAliveArena;
+import boss.BossID;
+import boss.BossData;
+import boss.BossConfig;
+
 
 /*
  *
@@ -6,8 +10,6 @@ package boss.boss_manifest.DeathOrAliveArena;
  *
  */
 
-import boss.BossID;
-import boss.BossesData;
 import static boss.BossType.PHOBAN;
 import player.Player;
 import services.Service;
@@ -15,14 +17,15 @@ import utils.Util;
 
 public class NguoiVoHinh extends DeathOrAliveArena {
 
+    public NguoiVoHinh(BossConfig config, BossData[] data) throws Exception {
+        super(config, data);
+    }
+
+
     private long lastTimeTanHinh;
     private boolean goToPlayer;
 
-    public NguoiVoHinh(Player player) throws Exception {
-        super(PHOBAN, BossID.NGUOI_VO_HINH, BossesData.NGUOI_VO_HINH);
-        this.playerAtt = player;
-        lastTimeTanHinh = System.currentTimeMillis();
-    }
+    
 
     @Override
     public void tanHinh() {

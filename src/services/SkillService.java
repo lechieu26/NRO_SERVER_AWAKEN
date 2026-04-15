@@ -1,16 +1,14 @@
 package services;
+import boss.BossManager;
+import boss.BossID;
+import boss.BossData;
+
 
 import EMTI.Functions;
-import boss.BossData;
 import consts.ConstPlayer;
-import boss.BossID;
-import boss.BossManager;
-import boss.boss_manifest.Broly.Broly;
-import boss.boss_manifest.Broly.SuperBroly;
 import boss.boss_manifest.Commeson.NhanBan;
 import boss.boss_manifest.Commeson.PhanThan;
 import boss.boss_manifest.SuperRank.Rival;
-import boss.boss_manifest.Yardart.Yardart;
 import consts.ConstAchievement;
 import consts.cn;
 import intrinsic.Intrinsic;
@@ -1122,7 +1120,7 @@ public class SkillService {
                     if (damePST >= plAtt.nPoint.hp) {
                         damePST = plAtt.nPoint.hp - 1;
                     }
-                    if (plAtt.isBoss && !(plAtt instanceof Broly || plAtt instanceof SuperBroly)) {
+                    if (plAtt.isBoss && plAtt.id != BossID.BROLY && plAtt.id != BossID.SUPER_BROLY) {
                         if (damePST > plAtt.nPoint.hpMax / 100) {
                             long giamdame = 0;
                             if (plAtt.nPoint.hpMax / 200 > 1) {
@@ -1207,7 +1205,7 @@ public class SkillService {
                 : dameHit;
         phanSatThuong(plAtt, plInjure, miss ? 0 : damePST);
         hutHPMP(plAtt, dameHit, plInjure, null);
-        if (plInjure instanceof Yardart) { // Fix lỗi máu trắng boss Yardart
+        if (plInjure.isBoss && plInjure.id >= -339 && plInjure.id <= -322) { // Fix lỗi màu trắng boss Yardart
             if (plInjure.nPoint.hp < dameHit) {
                 dameHit = plInjure.nPoint.hp - 1;
                 if (dameHit == 0) {

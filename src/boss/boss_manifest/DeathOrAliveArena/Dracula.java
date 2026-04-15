@@ -1,4 +1,8 @@
 package boss.boss_manifest.DeathOrAliveArena;
+import boss.BossID;
+import boss.BossData;
+import boss.BossConfig;
+
 
 /*
  *
@@ -6,8 +10,6 @@ package boss.boss_manifest.DeathOrAliveArena;
  * 
  */
 
-import boss.BossID;
-import boss.BossesData;
 import static boss.BossType.PHOBAN;
 import player.Player;
 import services.PlayerService;
@@ -16,12 +18,14 @@ import utils.Util;
 
 public class Dracula extends DeathOrAliveArena {
 
+    public Dracula(BossConfig config, BossData[] data) throws Exception {
+        super(config, data);
+    }
+
+
     private long lastTimeHutMau = System.currentTimeMillis();
 
-    public Dracula(Player player) throws Exception {
-        super(PHOBAN, BossID.DRACULA, BossesData.DRACULA);
-        this.playerAtt = player;
-    }
+    
 
     @Override
     public void hutMau() {

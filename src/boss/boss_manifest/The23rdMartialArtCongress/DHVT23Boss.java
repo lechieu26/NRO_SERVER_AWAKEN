@@ -1,64 +1,37 @@
-package boss.boss_manifest.DeathOrAliveArena;
-import boss.BossConfig;
-import boss.BossData;
-import boss.BossManager;
-import boss.BossData;
-
-
-/*
- *
- *
- * 
- */
+package boss.boss_manifest.The23rdMartialArtCongress;
 
 import consts.ConstRatio;
 import boss.Boss;
+import boss.BossData;
+import boss.BossConfig;
 import boss.OtherBossManager;
 import boss.BossStatus;
 import boss.BossType;
 import player.Player;
-import services.EffectSkillService;
 import services.PlayerService;
 import services.SkillService;
 import services.func.ChangeMapService;
 import utils.SkillUtil;
 import utils.Util;
 
-public abstract class DeathOrAliveArena extends Boss {
-    public DeathOrAliveArena(BossConfig config, BossData[] data) throws Exception {
-        super(config, data);
-    }
-
+public class DHVT23Boss extends Boss {
 
     protected Player playerAtt;
     protected long timeJoinMap;
 
-    public DeathOrAliveArena(BossType bosstype, int id, BossData data) throws Exception {
-        super(bosstype, id, data);
+    public DHVT23Boss(BossConfig config, BossData[] data) throws Exception {
+        super(config, data);
         this.bossStatus = BossStatus.RESPAWN;
     }
 
-    @Override
-    public void checkPlayerDie(Player pl) {
-
-    }
-
-    public void hutMau() {
-
-    }
-
-    public void tanHinh() {
-
-    }
-
-    public void bayLungTung() {
-
+    public void setPlayerAtt(Player player) {
+        this.playerAtt = player;
     }
 
     @Override
     public void afk() {
-        if (!(playerAtt.location != null && playerAtt != null && playerAtt.zone != null && this.zone != null
-                && this.zone.equals(playerAtt.zone))) {
+        if (playerAtt == null || playerAtt.location == null || playerAtt.zone == null || this.zone == null
+                || !this.zone.equals(playerAtt.zone)) {
             this.leaveMap();
         }
     }
@@ -76,14 +49,11 @@ public abstract class DeathOrAliveArena extends Boss {
     @Override
     public void attack() {
         try {
-            if (playerAtt.location != null && playerAtt != null && playerAtt.zone != null && this.zone != null
+            if (playerAtt != null && playerAtt.location != null && playerAtt.zone != null && this.zone != null
                     && this.zone.equals(playerAtt.zone)) {
-                if (this.isDie()) {
+                if (this.isDie() || playerAtt.lostByDeath) {
                     return;
                 }
-                hutMau();
-                tanHinh();
-                bayLungTung();
                 this.playerSkill.skillSelect = this.playerSkill.skills
                         .get(Util.nextInt(0, this.playerSkill.skills.size() - 1));
                 if (Util.getDistance(this, playerAtt) <= this.getRangeCanAttackWithSkillSelect()) {
@@ -94,7 +64,6 @@ public abstract class DeathOrAliveArena extends Boss {
                                 false);
                     }
                     SkillService.gI().useSkill(this, playerAtt, null, -1, null);
-                    checkPlayerDie(playerAtt);
                 } else {
                     goToPlayer(playerAtt, false);
                 }
@@ -102,6 +71,7 @@ public abstract class DeathOrAliveArena extends Boss {
                 this.leaveMap();
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -111,11 +81,9 @@ public abstract class DeathOrAliveArena extends Boss {
 
     @Override
     public void joinMap() {
-        if (playerAtt.zone != null) {
+        if (playerAtt != null && playerAtt.zone != null) {
             this.zone = playerAtt.zone;
-            this.nPoint.hpMax = playerAtt.nPoint.hpMax / 100 * (100 + ((int) Math.abs(this.id) - 82));
-            this.nPoint.hp = this.nPoint.hpMax;
-            ChangeMapService.gI().changeMap(this, this.zone, 523, 336);
+            ChangeMapService.gI().changeMap(this, this.zone, 435, 264);
         }
     }
 
@@ -156,49 +124,8 @@ public abstract class DeathOrAliveArena extends Boss {
                     break;
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
-
-    @Override
-    public synchronized long injured(Player plAtt, long damage, boolean piercing, boolean isMobAttack) {
-        if (!this.isDie()) {
-            if (!piercing && Util.isTrue(100, 1000)) {
-                this.chat("Xí hụt");
-                return 0;
-            }
-
-            if (plAtt != null && plAtt.idNRNM != -1) {
-                return 1;
-            }
-
-            damage = this.nPoint.subDameInjureWithDeff(damage);
-
-            if (!piercing && effectSkill.isShielding) {
-                if (damage > nPoint.hpMax) {
-                    EffectSkillService.gI().breakShield(this);
-                }
-                damage = 1;
-            }
-
-            if (damage > this.nPoint.hpMax / 10) {
-                damage = this.nPoint.hpMax / 10;
-            }
-
-            this.nPoint.subHP(damage);
-
-            if (isDie()) {
-                this.setDie(plAtt);
-                die(plAtt);
-            }
-
-            return damage;
-        } else {
-            return 0;
-        }
-    }
-
-    protected void notifyPlayeKill(Player player) {
-
     }
 
     @Override
@@ -212,7 +139,6 @@ public abstract class DeathOrAliveArena extends Boss {
         this.lastZone = null;
         this.lastTimeRest = System.currentTimeMillis();
         this.changeStatus(BossStatus.REST);
-        OtherBossManager.gI().removeBoss(this);
         this.dispose();
     }
 }

@@ -1,11 +1,12 @@
 package event.event_manifest;
+import boss.BossID;
+
 
 /**
  *
  * @author EMTI
  */
 
-import boss.BossID;
 import event.Event;
 
 public class LunarNewYear extends Event {

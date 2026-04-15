@@ -1,4 +1,5 @@
 package server.ui;
+import boss.BossConfig;
 
 import server.ServerManager;
 // import firewall.ProxyManager;

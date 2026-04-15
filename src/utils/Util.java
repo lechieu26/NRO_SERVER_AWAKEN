@@ -1,11 +1,12 @@
 package utils;
+import boss.BossManager;
+
 
 /*
  *
  *
  * @author EMTI
  */
-import boss.BossManager;
 import consts.cn;
 import item.Item;
 import map.ItemMap;

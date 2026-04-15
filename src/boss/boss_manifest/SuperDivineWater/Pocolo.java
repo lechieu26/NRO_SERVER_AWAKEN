@@ -1,4 +1,6 @@
 package boss.boss_manifest.SuperDivineWater;
+import boss.BossID;
+import boss.BossData;
 
 /*
  *

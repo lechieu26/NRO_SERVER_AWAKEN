@@ -588,6 +588,10 @@ public class MapService {
         return mapId >= 210 && mapId <= 212;
     }
 
+    public boolean isMapDHVT23(int mapId) {
+        return mapId == 129;
+    }
+
     public void goToMap(Player player, Zone zoneJoin) {
         Zone oldZone = player.zone;
         if (oldZone != null) {

@@ -1,4 +1,6 @@
 package server;
+import boss.BossManager;
+
 
 /*
  *
@@ -7,22 +9,17 @@ package server;
  */
 import EMTI.FileRunner;
 import EMTI.Functions;
-import boss.AnTromManager;
-import boss.BrolyManager;
 import minigame.DecisionMaker.DecisionMaker;
 import minigame.LuckyNumber.LuckyNumber;
 import models.Consign.ConsignShopManager;
 import jdbc.daos.HistoryTransactionDAO;
-import boss.BossManager;
 import boss.BossGroupScheduler;
 import boss.OtherBossManager;
 import boss.TreasureUnderSeaManager;
 import boss.SnakeWayManager;
 import boss.RedRibbonHQManager;
 import boss.GasDestroyManager;
-import boss.YardartManager;
 import boss.ChristmasEventManager;
-import boss.FinalBossManager;
 import boss.HalloweenEventManager;
 import boss.HungVuongEventManager;
 import boss.LunarNewYearEventManager;
@@ -123,19 +120,11 @@ public class ServerManager {
                     "Core Boss",
                     new BossManager[] {
                             BossManager.gI(),
-                            YardartManager.gI(),
-                            FinalBossManager.gI(),
-                            BrolyManager.gI(),
-                            AnTromManager.gI(),
                             OtherBossManager.gI(),
                             SkillSummonedManager.gI()
                     },
                     new boolean[] {
                             false, // BossManager: không remove
-                            false, // YardartManager: không remove
-                            false, // FinalBossManager: không remove
-                            false, // BrolyManager: không remove
-                            false, // AnTromManager: không remove
                             true, // OtherBossManager: remove on error
                             true // SkillSummonedManager: remove on error
                     });

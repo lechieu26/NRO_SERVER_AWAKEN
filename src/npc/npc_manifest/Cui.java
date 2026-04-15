@@ -1,12 +1,13 @@
 package npc.npc_manifest;
+import boss.BossManager;
+import boss.BossID;
+
 
 /**
  * @author EMTI
  */
 
 import boss.Boss;
-import boss.BossID;
-import boss.BossManager;
 import consts.ConstNpc;
 import consts.ConstTask;
 import map.Zone;

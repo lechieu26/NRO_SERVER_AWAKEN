@@ -1,11 +1,12 @@
 package event;
+import boss.BossManager;
+
 
 /**
  *
  * @author EMTI
  */
 
-import boss.BossManager;
 import event.ievent.IEvent;
 import npc.NpcFactory;
 import services.MapService;

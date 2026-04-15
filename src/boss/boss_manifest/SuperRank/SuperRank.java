@@ -1,8 +1,12 @@
 package boss.boss_manifest.SuperRank;
+import boss.BossConfig;
+import boss.BossData;
+import boss.BossManager;
+import boss.BossData;
+
 
 import consts.ConstRatio;
 import boss.Boss;
-import boss.BossData;
 import boss.OtherBossManager;
 import boss.BossStatus;
 import boss.BossType;
@@ -19,6 +23,10 @@ import utils.Util;
 import skill.Skill;
 
 public abstract class SuperRank extends Boss {
+    public SuperRank(BossConfig config, BossData[] data) throws Exception {
+        super(config, data);
+    }
+
 
     protected Player playerAtt;
     protected Player player;

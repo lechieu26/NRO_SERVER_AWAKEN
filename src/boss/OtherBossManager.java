@@ -1,4 +1,5 @@
 package boss;
+import boss.BossManager;
 
 import EMTI.Functions;
 import server.Maintenance;

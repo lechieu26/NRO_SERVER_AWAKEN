@@ -1,20 +1,10 @@
 package boss.boss_manifest.The23rdMartialArtCongress;
 
-/*
- *
- *
- * @author EMTI
- */
+import boss.BossData;
+import boss.BossConfig;
 
-import boss.BossID;
-import boss.BossesData;
-import static boss.BossType.PHOBAN;
-import player.Player;
-
-public class JackyChun extends The23rdMartialArtCongress {
-
-    public JackyChun(Player player) throws Exception {
-        super(PHOBAN, BossID.JACKY_CHUN, BossesData.JACKY_CHUN);
-        this.playerAtt = player;
+public class JackyChun extends DHVT23Boss {
+    public JackyChun(BossConfig config, BossData[] data) throws Exception {
+        super(config, data);
     }
 }

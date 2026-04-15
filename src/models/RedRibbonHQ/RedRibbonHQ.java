@@ -1,4 +1,7 @@
 package models.RedRibbonHQ;
+import boss.BossManager;
+import boss.BossID;
+
 
 /*
  *
@@ -151,69 +154,78 @@ public class RedRibbonHQ implements Runnable {
 
             if (zone.map.mapId == 59) {
                 try {
-                    long bossDamage = Util.maxIntValue(dame);
-                    long bossMaxHealth = Util.maxIntValue(hp);
-                    bosses.add(new TrungUyTrang(
-                            zone,
-                            bossDamage,
-                            bossMaxHealth
-                    ));
+                    Boss boss = BossManager.gI().createBoss(BossID.TRUNG_UY_TRANG);
+                    if (boss != null) {
+                        boss.zone = zone;
+                        boss.nPoint.dameg = dame;
+                        boss.nPoint.hpg = hp;
+                        boss.nPoint.hp = hp;
+                        boss.nPoint.calPoint();
+                        bosses.add(boss);
+                    }
                 } catch (Exception e) {
                 }
             }
             if (zone.map.mapId == 62) {
                 try {
-                    long bossDamage = Util.maxIntValue((dame * 1.1));
-                    long bossMaxHealth = Util.maxIntValue((hp * 1.1));
-                    bosses.add(new TrungUyXanhLo(
-                            zone,
-                            bossDamage,
-                            bossMaxHealth
-                    ));
+                    Boss boss = BossManager.gI().createBoss(BossID.TRUNG_UY_XANH_LO);
+                    if (boss != null) {
+                        boss.zone = zone;
+                        boss.nPoint.dameg = (long) (dame * 1.1);
+                        boss.nPoint.hpg = (long) (hp * 1.1);
+                        boss.nPoint.hp = boss.nPoint.hpg;
+                        boss.nPoint.calPoint();
+                        bosses.add(boss);
+                    }
                 } catch (Exception e) {
                 }
             }
             if (zone.map.mapId == 55) {
                 try {
-                    long bossDamage = Util.maxIntValue((dame * 1.15));
-                    long bossMaxHealth = Util.maxIntValue((hp * 1.15));
-                    bosses.add(new TrungUyThep(
-                            zone,
-                            bossDamage,
-                            bossMaxHealth
-                    ));
+                    Boss boss = BossManager.gI().createBoss(BossID.TRUNG_UY_THEP);
+                    if (boss != null) {
+                        boss.zone = zone;
+                        boss.nPoint.dameg = (long) (dame * 1.15);
+                        boss.nPoint.hpg = (long) (hp * 1.15);
+                        boss.nPoint.hp = boss.nPoint.hpg;
+                        boss.nPoint.calPoint();
+                        bosses.add(boss);
+                    }
                 } catch (Exception e) {
                 }
             }
             if (zone.map.mapId == 54) {
                 try {
-                    long bossDamage = Util.maxIntValue((dame * 1.2));
-                    long bossMaxHealth = Util.maxIntValue((hp * 1.2));
-                    bosses.add(new NinjaAoTim(
-                            zone,
-                            clan,
-                            bossDamage,
-                            bossMaxHealth
-                    ));
+                    Boss boss = BossManager.gI().createBoss(BossID.NINJA_AO_TIM);
+                    if (boss != null) {
+                        boss.zone = zone;
+                        boss.nPoint.dameg = (long) (dame * 1.2);
+                        boss.nPoint.hpg = (long) (hp * 1.2);
+                        boss.nPoint.hp = boss.nPoint.hpg;
+                        boss.nPoint.calPoint();
+                        bosses.add(boss);
+                    }
                 } catch (Exception e) {
                 }
             }
 
             if (zone.map.mapId == 57) {
                 try {
-                    long bossDamage = Util.maxIntValue((dame * 1.3));
-                    long bossMaxHealth = Util.maxIntValue((hp * 1.3));
                     for (int i = 0; i < 4; i++) {
-                        bosses.add(new RobotVeSi(
-                                zone,
-                                i,
-                                bossDamage,
-                                bossMaxHealth
-                        ));
+                        Boss boss = BossManager.gI().createBoss(BossID.ROBOT_VE_SI);
+                        if (boss != null) {
+                            boss.zone = zone;
+                            boss.nPoint.dameg = (long) (dame * 1.3);
+                            boss.nPoint.hpg = (long) (hp * 1.3);
+                            boss.nPoint.hp = boss.nPoint.hpg;
+                            boss.nPoint.calPoint();
+                            bosses.add(boss);
+                        }
                     }
                 } catch (Exception e) {
                 }
             }
+
         }
         new Thread(this, "Doanh Trại: " + this.clan.name).start();
     }

@@ -1,4 +1,6 @@
 package services;
+import boss.BossID;
+
 
 /*
  *
@@ -12,7 +14,6 @@ import models.Training.TrainingService;
 import player.Player;
 import consts.ConstTask;
 import boss.Boss;
-import boss.BossID;
 import clan.ClanMember;
 import consts.ConstAchievement;
 import consts.ConstTaskBadges;

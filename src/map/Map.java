@@ -1,11 +1,12 @@
 package map;
+import boss.BossManager;
+import boss.BossID;
+
 
 import EMTI.Functions;
 import consts.ConstMap;
 import models.Template;
 import boss.Boss;
-import boss.BossID;
-import boss.BossManager;
 import consts.ConstMob;
 import consts.ConstNpc;
 import java.io.DataInputStream;
@@ -334,8 +335,10 @@ public class Map implements Runnable {
             }
             if (bossId != -1) {
                 Boss boss = BossManager.gI().createBoss(bossId);
-                boss.zoneFinal = zone;
-                boss.joinMapByZone(zone);
+                if (boss != null) {
+                    boss.zoneFinal = zone;
+                    boss.joinMapByZone(zone);
+                }
             }
         }
     }
@@ -459,7 +462,7 @@ public class Map implements Runnable {
         return false;
     }
 
-    public final void readTileMap(int mapId) {
+    public void readTileMap(int mapId) {
         try {
             try (DataInputStream dis = new DataInputStream(new FileInputStream("data/map/tile_map_data/" + mapId))) {
                 dis.readByte();
@@ -476,4 +479,8 @@ public class Map implements Runnable {
         } catch (IOException e) {
         }
     }
-}
+
+    public boolean isMapDHVT23() {
+        return this.mapId == 129;
+    }
+}

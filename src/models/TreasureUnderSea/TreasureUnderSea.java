@@ -1,4 +1,7 @@
 package models.TreasureUnderSea;
+import boss.BossManager;
+import boss.BossID;
+
 
 /*
  *
@@ -188,12 +191,16 @@ public class TreasureUnderSea implements Runnable {
                 try {
                     long bossDamage = Util.maxIntValue(200000 * level);
                     long bossMaxHealth = Util.maxIntValue(200000000 * level);                   
-                    boss = new TrungUyXanhLo(
-                            zone,
-                            level,
-                            bossDamage,
-                             bossMaxHealth
-                    );
+                    Boss b = BossManager.gI().createBoss(BossID.TRUNG_UY_XANH_LO);
+                    if (b != null) {
+                        b.zone = zone;
+                        b.nPoint.dameg = bossDamage;
+                        b.nPoint.hpg = bossMaxHealth;
+                        b.nPoint.hp = bossMaxHealth;
+                        b.nPoint.calPoint();
+                        boss = b;
+                    }
+
                 } catch (Exception exception) {
                 }
             }

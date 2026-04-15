@@ -1,4 +1,7 @@
 package models.Training;
+import boss.BossManager;
+import boss.BossID;
+
 
 /*
  *
@@ -7,8 +10,6 @@ package models.Training;
  */
 
 import boss.Boss;
-import boss.BossID;
-import boss.boss_manifest.Training.*;
 import consts.ConstNpc;
 import map.Zone;
 import player.Player;
@@ -72,36 +73,20 @@ public class TrainingService {
             if (getNpc(bossID) != -1) {
                 Service.gI().sendHideNpc(pl, getNpc(bossID), true);
             }
-            switch (bossID) {
-                case BossID.KARIN -> {
-                    return new Karin(pl);
+            Boss boss = BossManager.gI().createBoss(bossID);
+            if (boss != null) {
+                if (boss != null) {
+                    boss.playerAtt = pl;
                 }
-                case BossID.TAUPAYPAY -> {
-                    return new TauPayPay(pl);
-                }
-                case BossID.YAJIRO -> {
-                    return new Yajiro(pl);
-                }
-                case BossID.MRPOPO -> {
-                    return new MrPoPo(pl);
-                }
-                case BossID.THUONG_DE -> {
+                
+                // Handle special case for map change
+                if (bossID == BossID.THUONG_DE) {
                     ChangeMapService.gI().changeMap(pl, MapService.gI().getMapCanJoin(pl, 49, 0), 362, 408);
-                    return new ThuongDe(pl);
                 }
-                case BossID.KHI_BUBBLES -> {
-                    return new KhiBubbles(pl);
-                }
-                case BossID.THAN_VU_TRU -> {
-                    return new ThanVuTru(pl);
-                }
-                case BossID.TO_SU_KAIO -> {
-                    return new ToSuKaio(pl);
-                }
-                case BossID.WHIS -> {
-                    return new Whis(pl);
-                }
+                
+                return boss;
             }
+
         } catch (Exception e) {
             Logger.logException(TrainingService.class, e);
         }
