@@ -1999,8 +1999,20 @@ public class UseItem {
                     break;
                 }
             }
-            player.nPoint.setHp(Util.maxIntValue(player.nPoint.hp + hpKiHoiPhuc));
-            player.nPoint.setMp(Util.maxIntValue(player.nPoint.mp + hpKiHoiPhuc));
+            
+            long hpHoiPhuc = hpKiHoiPhuc;
+            long mpHoiPhuc = hpKiHoiPhuc;
+            if (lvPea == 10) {
+                if (player.nPoint.hpMax > hpKiHoiPhuc) {
+                    hpHoiPhuc += player.nPoint.hpMax * 20 / 100;
+                }
+                if (player.nPoint.mpMax > hpKiHoiPhuc) {
+                    mpHoiPhuc += player.nPoint.mpMax * 20 / 100;
+                }
+            }
+            player.nPoint.setHp(Util.maxIntValue(player.nPoint.hp + hpHoiPhuc));
+            player.nPoint.setMp(Util.maxIntValue(player.nPoint.mp + mpHoiPhuc));
+            
             PlayerService.gI().sendInfoHpMp(player);
             Service.gI().sendInfoPlayerEatPea(player);
             if (player.pet != null && player.zone.equals(player.pet.zone) && !player.pet.isDie()) {
@@ -2009,8 +2021,20 @@ public class UseItem {
                 if (player.pet.nPoint.stamina > player.pet.nPoint.maxStamina) {
                     player.pet.nPoint.stamina = player.pet.nPoint.maxStamina;
                 }
-                player.pet.nPoint.setHp(Util.maxIntValue(player.pet.nPoint.hp + hpKiHoiPhuc));
-                player.pet.nPoint.setMp(Util.maxIntValue(player.pet.nPoint.mp + hpKiHoiPhuc));
+                
+                long hpHoiPhucPet = hpKiHoiPhuc;
+                long mpHoiPhucPet = hpKiHoiPhuc;
+                if (lvPea == 10) {
+                    if (player.pet.nPoint.hpMax > hpKiHoiPhuc) {
+                        hpHoiPhucPet += player.pet.nPoint.hpMax * 20 / 100;
+                    }
+                    if (player.pet.nPoint.mpMax > hpKiHoiPhuc) {
+                        mpHoiPhucPet += player.pet.nPoint.mpMax * 20 / 100;
+                    }
+                }
+                player.pet.nPoint.setHp(Util.maxIntValue(player.pet.nPoint.hp + hpHoiPhucPet));
+                player.pet.nPoint.setMp(Util.maxIntValue(player.pet.nPoint.mp + mpHoiPhucPet));
+                
                 Service.gI().sendInfoPlayerEatPea(player.pet);
                 Service.gI().chatJustForMe(player, player.pet, "Cám ơn sư phụ");
             }

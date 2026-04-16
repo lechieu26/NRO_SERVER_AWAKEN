@@ -162,10 +162,20 @@ public class Mob {
                 this.temporaryEnemies.clear();
                 if (plAtt != null) {
                     this.sendMobDieAffterAttacked(plAtt, (int) damage);
-                    TaskService.gI().checkDoneTaskKillMob(plAtt, this);
-                    TaskService.gI().checkDoneSideTaskKillMob(plAtt, this);
-                    TaskService.gI().checkDoneClanTaskKillMob(plAtt, this);
-                    AchievementService.gI().checkDoneTaskKillMob(plAtt, this);
+                    Player plCheck = plAtt;
+                    if (plCheck instanceof Pet) {
+                        plCheck = ((Pet) plCheck).master;
+                    } else if (plCheck instanceof PlayerClone) {
+                        plCheck = ((PlayerClone) plCheck).master;
+                    } else if (plCheck instanceof LinhDanhThue) {
+                        plCheck = ((LinhDanhThue) plCheck).master;
+                    }
+                    if (plCheck != null) {
+                        TaskService.gI().checkDoneTaskKillMob(plCheck, this);
+                        TaskService.gI().checkDoneSideTaskKillMob(plCheck, this);
+                        TaskService.gI().checkDoneClanTaskKillMob(plCheck, this);
+                        AchievementService.gI().checkDoneTaskKillMob(plCheck, this);
+                    }
                 }
                 if (this.id == 13) {
                     this.zone.isbulon1Alive = false;

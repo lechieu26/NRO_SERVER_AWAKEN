@@ -681,7 +681,11 @@ public class Boss extends Player implements IBoss, IBossOutfit {
     @Override
     public void die(Player plKill) {
         if (plKill != null) {
-            if (plKill instanceof LinhDanhThue) {
+            if (plKill instanceof Pet) {
+                plKill = ((Pet) plKill).master;
+            } else if (plKill instanceof PlayerClone) {
+                plKill = ((PlayerClone) plKill).master;
+            } else if (plKill instanceof LinhDanhThue) {
                 plKill = ((LinhDanhThue) plKill).master;
             }
             if (plKill.playerAtt != null) {
