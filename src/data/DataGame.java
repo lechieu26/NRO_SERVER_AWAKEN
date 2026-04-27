@@ -512,6 +512,9 @@ public class DataGame {
                 msg.cleanup();
             }
 
+            // Gửi crop template info TRƯỚC để client có mapping crop ID <-> filename
+            sendCropTemplateInfo(session);
+
             // Gửi farm assets nếu thư mục tồn tại
             sendFarmResources(session);
 
@@ -596,7 +599,7 @@ public class DataGame {
                 System.err.println("Farm asset not found: " + assetPath);
                 return;
             }
-            msg = new Message(-33); // Sử dụng message type cho farm assets
+            msg = new Message(-58); // Sử dụng message type cho farm assets
             msg.writer().writeByte(10); // Sub-type farm asset
             msg.writer().writeShort(assetId);
             msg.writer().writeInt(assetData.length);
@@ -623,7 +626,7 @@ public class DataGame {
                 System.err.println("Crop asset not found: " + assetPath);
                 return;
             }
-            Message msg = new Message(-33);
+            Message msg = new Message(-58);
             msg.writer().writeByte(11); // Sub-type crop stage asset
             msg.writer().writeByte(cropType);
             msg.writer().writeByte(stage);
@@ -651,7 +654,7 @@ public class DataGame {
                 System.err.println("Farm icon not found: " + assetPath);
                 return;
             }
-            Message msg = new Message(-33);
+            Message msg = new Message(-58);
             msg.writer().writeByte(12); // Sub-type farm icon
             msg.writer().writeShort(iconId);
             msg.writer().writeUTF(iconName);
@@ -687,7 +690,7 @@ public class DataGame {
             String assetPath = consts.ConstFarm.getAssetPath(session.zoomLevel) + "thu_hoach.png";
             final byte[] assetData = FileIO.readFile(assetPath);
             if (assetData != null) {
-                Message msg = new Message(-33);
+                Message msg = new Message(-58);
                 msg.writer().writeByte(12); // Sub-type farm icon
                 msg.writer().writeShort(consts.ConstFarm.ICON_HARVEST);
                 msg.writer().writeUTF("harvest"); // Client key is still "harvest" to keep client logic simple or
@@ -713,7 +716,7 @@ public class DataGame {
             String assetPath = consts.ConstFarm.getAssetPath(session.zoomLevel) + "khung_raucu.png";
             final byte[] assetData = FileIO.readFile(assetPath);
             if (assetData != null) {
-                Message msg = new Message(-33);
+                Message msg = new Message(-58);
                 msg.writer().writeByte(12); // Sub-type farm icon
                 msg.writer().writeShort(consts.ConstFarm.ICON_KHUNG_RAUCU);
                 msg.writer().writeUTF("khung_raucu"); // Client key
@@ -735,7 +738,7 @@ public class DataGame {
                 String assetPath = consts.ConstFarm.getAssetPath(session.zoomLevel) + lockIcon + ".png";
                 final byte[] assetData = FileIO.readFile(assetPath);
                 if (assetData != null) {
-                    Message msg = new Message(-33);
+                    Message msg = new Message(-58);
                     msg.writer().writeByte(12); // Sub-type farm icon
                     msg.writer().writeShort(0); // Icon ID không quan trọng vì dùng tên
                     msg.writer().writeUTF(lockIcon); // Client key: "khoa_0" hoặc "khoa_1"
@@ -765,7 +768,7 @@ public class DataGame {
                 String assetPath = "data/icon/x" + session.zoomLevel + "/" + iconId + ".png";
                 final byte[] assetData = FileIO.readFile(assetPath);
                 if (assetData != null) {
-                    Message msg = new Message(-33);
+                    Message msg = new Message(-58);
                     msg.writer().writeByte(12); // Sub-type farm icon
                     msg.writer().writeShort(seedId);
                     msg.writer().writeUTF(String.valueOf(seedId)); // Client key
@@ -794,7 +797,7 @@ public class DataGame {
      */
     public static void sendCropTemplateInfo(MySession session) {
         try {
-            Message msg = new Message(-33);
+            Message msg = new Message(-58);
             msg.writer().writeByte(13); // Sub-type: 13 (CROP_TEMPLATE_INFO)
             msg.writer().writeByte(CropTemplate.CROP_TEMPLATES.size());
             for (CropTemplate crop : CropTemplate.CROP_TEMPLATES) {

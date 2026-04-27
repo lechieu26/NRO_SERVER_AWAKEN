@@ -102,25 +102,7 @@ public class BossID {
     public static final int BOJACK = -320;
     public static final int SUPER_BOJACK = -321;
 
-    // ========================YARDART========================
-    public static final int TAP_SU_0 = -322;
-    public static final int TAP_SU_1 = -323;
-    public static final int TAP_SU_2 = -324;
-    public static final int TAP_SU_3 = -325;
-    public static final int TAP_SU_4 = -326;
-    public static final int TAN_BINH_5 = -327;
-    public static final int TAN_BINH_0 = -328;
-    public static final int TAN_BINH_1 = -329;
-    public static final int TAN_BINH_2 = -330;
-    public static final int TAN_BINH_3 = -331;
-    public static final int TAN_BINH_4 = -332;
-    public static final int CHIEN_BINH_5 = -333;
-    public static final int CHIEN_BINH_0 = -334;
-    public static final int CHIEN_BINH_1 = -335;
-    public static final int CHIEN_BINH_2 = -336;
-    public static final int CHIEN_BINH_3 = -337;
-    public static final int CHIEN_BINH_4 = -338;
-    public static final int DOI_TRUONG_5 = -339;
+
 
     // ========================SIEU THANH THUY========================
     public static final int POCOLO = -340;

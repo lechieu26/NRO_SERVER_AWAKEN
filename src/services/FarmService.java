@@ -991,7 +991,9 @@ public class FarmService {
             msg.writer().writeByte(1); // Update full garden
             msg.writer().writeInt(player.cloudGarden.getUnlockedPlots());
 
-            for (FarmPlot plot : player.cloudGarden.getPlots()) {
+            List<FarmPlot> plots = player.cloudGarden.getPlots();
+            for (int i = 0; i < ConstFarm.MAX_PLOTS; i++) {
+                FarmPlot plot = (i < plots.size()) ? plots.get(i) : new FarmPlot(i, false);
                 msg.writer().writeInt(plot.getPlotId());
                 msg.writer().writeBoolean(plot.isUnlocked());
                 msg.writer().writeByte(plot.getCurrentStage());
@@ -1004,7 +1006,9 @@ public class FarmService {
 
             player.sendMessage(msg);
             msg.cleanup();
+            System.out.println("[Farm] Sent garden update to " + player.name + " (" + plots.size() + " plots, " + player.cloudGarden.getUnlockedPlots() + " unlocked)");
         } catch (Exception e) {
+            System.err.println("[Farm] Error sending garden update: " + e.getMessage());
             e.printStackTrace();
         }
     }

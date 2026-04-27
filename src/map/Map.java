@@ -1,7 +1,7 @@
 package map;
+
 import boss.BossManager;
 import boss.BossID;
-
 
 import EMTI.Functions;
 import consts.ConstMap;
@@ -176,7 +176,8 @@ public class Map implements Runnable {
                         Logger.logException(Map.class, e, "Lỗi update zone");
                     }
                 }
-                // Tối ưu cực hạn: Map trống hoàn toàn (ko người, ko boss, ko item rơi) sleep 10s
+                // Tối ưu cực hạn: Map trống hoàn toàn (ko người, ko boss, ko item rơi) sleep
+                // 10s
                 // Map có hoạt động (isZoneActive) hoặc map đặc biệt giữ 1s.
                 // Cơ chế hasAnyActivity từ Zone.isZoneActive đã bao gồm grace period 60s.
                 int sleepTime = (hasAnyActivity || this.type != ConstMap.MAP_NORMAL) ? 1000 : 10000;
@@ -326,12 +327,7 @@ public class Map implements Runnable {
                     bossId = BossID.MABU;
                 case 128 ->
                     bossId = BossID.SUPERBU;
-                case 131 ->
-                    bossId = BossID.TAN_BINH_5;
-                case 132 ->
-                    bossId = BossID.CHIEN_BINH_5;
-                case 133 ->
-                    bossId = BossID.DOI_TRUONG_5;
+
             }
             if (bossId != -1) {
                 Boss boss = BossManager.gI().createBoss(bossId);
@@ -483,4 +479,4 @@ public class Map implements Runnable {
     public boolean isMapDHVT23() {
         return this.mapId == 129;
     }
-}
+}

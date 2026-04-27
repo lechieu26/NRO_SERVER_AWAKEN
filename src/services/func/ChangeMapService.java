@@ -615,16 +615,31 @@ public class ChangeMapService {
                 player.mabuEgg.sendMabuEgg();
             }
         }
-
         // Farm Assets & Data (khi vào map Cloud Garden)
         if (services.FarmService.gI().isInCloudGardenMap(player)) {
-            data.DataGame.sendAllFarmAssets(player.getSession());
-            // Init garden if null
-            if (player.cloudGarden == null) {
-                services.FarmService.gI().initCloudGarden(player);
+            try {
+                // Init garden if null
+                if (player.cloudGarden == null) {
+                    services.FarmService.gI().initCloudGarden(player);
+                }
+                // Cập nhật mapId cho garden để lấy đúng vị trí ô đất theo map
+                int actualMapId = player.zone.map.mapId;
+                if (player.cloudGarden.getCurrentMapId() != actualMapId) {
+                    player.cloudGarden.setCurrentMapId(actualMapId);
+                    player.cloudGarden.updatePlotPositions(); // Cập nhật tọa độ ô
+                }
+                services.FarmService.gI().updateGarden(player);
+                // Gửi data vườn (ô đất, trạng thái cây trồng)
+                // Farm image assets đã được gửi 1 lần duy nhất qua sendRes() khi login
+                services.FarmService.gI().sendGardenUpdate(player);
+                // Gửi crop template info (dữ liệu nhẹ, cần cho IsSeedItem trên client)
+                if (player.getSession() != null) {
+                    data.DataGame.sendCropTemplateInfo(player.getSession());
+                }
+            } catch (Exception e) {
+                System.err.println("[Farm] Error initializing farm for player " + player.name + ": " + e.getMessage());
+                e.printStackTrace();
             }
-            services.FarmService.gI().updateGarden(player);
-            services.FarmService.gI().sendGardenUpdate(player);
         }
     }
 

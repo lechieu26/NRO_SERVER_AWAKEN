@@ -19,25 +19,55 @@ public class CloudGarden {
     private long lastUpdateTime; // Thời điểm cập nhật gần nhất
     private boolean loaded; // Đã load từ database chưa
 
-    // Vị trí các ô ruộng theo từng map - 10 ô nằm trên cùng một đường thẳng
-    // Key: MapID, Value: int[][] positions {X, Y}
-    // Map 39 (Trái Đất), 40 (Namếc), 41 (Xayda) - tạm thời config giống nhau
+    // Vị trí các ô ruộng theo từng map - sử dụng tọa độ world-space
+    // Tọa độ này giống hệ tọa độ NPC/Mob (24px per tile)
+    // Map 39 (Trái Đất), 40 (Namếc), 41 (Xayda)
+    // Layout: 2 hàng, mỗi hàng 5 ô, spacing đều để không bị chồng lấn trên mobile
+    private static final int PLOT_SPACING_X = 80; // Khoảng cách ngang giữa các ô
+    private static final int ROW1_START_X = 100;   // X bắt đầu hàng 1
+    private static final int ROW2_START_X = 60;    // X bắt đầu hàng 2 (offset nửa ô tạo zic-zac)
+    private static final int ROW1_Y = 350;         // Y hàng 1 (ô mở khóa)
+    private static final int ROW2_Y = 380;         // Y hàng 2 (ô khóa)
+
     private static final int[][][] MAP_PLOT_POSITIONS = {
-            // Map 39 (TD) - 10 ô: 5 mở + 5 khóa, nằm trên 1 đường thẳng
-            // Điều chỉnh: đặt thấp hơn (Y=450) và giãn cách rộng hơn (spacing 70px)
+            // Map 39 (TD) - 10 ô: 5 mở (hàng 1) + 5 khóa (hàng 2)
             {
-                    { 120, 415 }, { 190, 415 }, { 260, 415 }, { 330, 415 }, { 400, 415 }, // 5 ô mở
-                    { 85, 435 }, { 155, 435 }, { 225, 435 }, { 295, 435 }, { 365, 435 } // 5 ô khóa
+                    { ROW1_START_X, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X * 2, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X * 3, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X * 4, ROW1_Y },
+                    { ROW2_START_X, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X * 2, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X * 3, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X * 4, ROW2_Y }
             },
             // Map 40 (NM) - config giống Map 39
             {
-                    { 120, 415 }, { 190, 415 }, { 260, 415 }, { 330, 415 }, { 400, 415 }, // 5 ô mở
-                    { 85, 435 }, { 155, 435 }, { 225, 435 }, { 295, 435 }, { 365, 435 } // 5 ô khóa
+                    { ROW1_START_X, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X * 2, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X * 3, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X * 4, ROW1_Y },
+                    { ROW2_START_X, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X * 2, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X * 3, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X * 4, ROW2_Y }
             },
             // Map 41 (XD) - config giống Map 39
             {
-                    { 120, 415 }, { 190, 415 }, { 260, 415 }, { 330, 415 }, { 400, 415 }, // 5 ô mở
-                    { 85, 435 }, { 155, 435 }, { 225, 435 }, { 295, 435 }, { 365, 435 } // 5 ô khóa
+                    { ROW1_START_X, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X * 2, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X * 3, ROW1_Y },
+                    { ROW1_START_X + PLOT_SPACING_X * 4, ROW1_Y },
+                    { ROW2_START_X, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X * 2, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X * 3, ROW2_Y },
+                    { ROW2_START_X + PLOT_SPACING_X * 4, ROW2_Y }
             }
     };
 
@@ -128,6 +158,18 @@ public class CloudGarden {
                 plot.setPosY(positions[i][1]);
             }
             plots.add(plot);
+        }
+    }
+
+    /**
+     * Cập nhật vị trí các ô ruộng theo map hiện tại
+     * CHỈ thay đổi vị trí, KHÔNG reset trạng thái cây trồng
+     */
+    public void updatePlotPositions() {
+        int[][] positions = getPlotPositions(currentMapId);
+        for (int i = 0; i < plots.size() && i < positions.length; i++) {
+            plots.get(i).setPosX(positions[i][0]);
+            plots.get(i).setPosY(positions[i][1]);
         }
     }
 
