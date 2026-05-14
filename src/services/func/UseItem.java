@@ -270,6 +270,7 @@ public class UseItem {
                         break;
                     case 23: // thú cưỡi mới
                     case 24: // thú cưỡi cũ
+                    case 80: // Spine
                         InventoryService.gI().itemBagToBody(pl, indexBag);
                         break;
                     case 11: // item bag

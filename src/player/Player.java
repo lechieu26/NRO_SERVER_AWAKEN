@@ -207,6 +207,9 @@ public class Player implements Runnable {
     public int ySend;
     public boolean isFly;
     public long lastTimeDietQuy;
+    // spine skin
+    public boolean useSpine;
+    public int spineId;
     // shenron event
     public long lastTimeShenronAppeared;
     public boolean isShenronAppear;

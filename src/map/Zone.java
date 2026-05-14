@@ -29,6 +29,7 @@ import services.PlayerService;
 import services.Service;
 import services.TaskService;
 import services.InventoryService;
+import services.SpineService;
 import utils.FileIO;
 import utils.Logger;
 import utils.Util;
@@ -759,6 +760,9 @@ public class Zone {
             e.printStackTrace();
         }
         Service.gI().sendFlagPlayerToMe(plReceive, plInfo);
+        if (plInfo.useSpine) {
+            SpineService.gI().sendSpineInitData(plReceive, plInfo, plInfo.spineId);
+        }
         try {
             if (plInfo.isPl()) {
                 if (plInfo.effectSkill != null && plInfo.effectSkill.isChibi) {

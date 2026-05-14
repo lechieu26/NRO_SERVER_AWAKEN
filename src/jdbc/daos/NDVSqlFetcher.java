@@ -441,6 +441,14 @@ public class NDVSqlFetcher {
                 }
                 player.inventory.itemsBody.add(item);
             }
+            // Initialize Spine state from itemsBody
+            for (Item item : player.inventory.itemsBody) {
+                if (item.isNotNullItem() && item.template.type == 80) {
+                    player.useSpine = true;
+                    player.spineId = item.template.head;
+                    break;
+                }
+            }
             int itemBodySize = player.inventory.itemsBody.size();
             while (itemBodySize < 15) {
                 player.inventory.itemsBody.add(ItemService.gI().createItemNull());

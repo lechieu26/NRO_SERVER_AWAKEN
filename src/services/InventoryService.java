@@ -293,6 +293,7 @@ public class InventoryService {
             case 75:
             case 21:
             case 72:
+            case 80:
                 break;
             default:
                 Service.gI().sendThongBaoOK(player.isPet ? ((Pet) player).master : player, "Trang bị không phù hợp!");
@@ -345,14 +346,20 @@ public class InventoryService {
             case 75: //  vị trí ô 12: type: Huy hiệu
                 index = 12;
                 break;
+            case 80: //  vị trí ô 13: type: Spine
+                index = 13;
+                break;
             default:
                 break;
         }
         sItem = player.inventory.itemsBody.get(index);
-        if (index == 8 || index == 11 || index == 12) {
+        if (index == 8 || index == 11 || index == 12 || index == 13) {
             if (sItem.isNotNullItem()) {
                 if (sItem.template.type == 72) {
                     Service.gI().sendchienlinh(player, (short) 0);
+                } else if (sItem.template.type == 80) {
+                    player.useSpine = false;
+                    SpineService.gI().sendSpineToggle(player, false, 0);
                 } else {
                     Service.gI().removeTitle(player, sItem.template.part);
                     Service.gI().removeEffPlayer(player, sItem.template.part);
@@ -373,6 +380,10 @@ public class InventoryService {
             player.inventory.itemsBag.set(index, putItemBody(player, item));
             if (item.template.type == 72) {
                 Service.gI().sendchienlinh(player, (short) (item.template.iconID - 1));
+            } else if (item.template.type == 80) {
+                player.useSpine = true;
+                player.spineId = item.template.head;
+                SpineService.gI().sendSpineToggle(player, true, player.spineId);
             } else if (item.template.type == 75) {
                 Service.gI().sendTitle(player, item.template.part);
             }

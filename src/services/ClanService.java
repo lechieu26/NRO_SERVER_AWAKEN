@@ -162,7 +162,11 @@ public class ClanService {
                     askForPea(player);
                     break;
                 case ASK_FOR_JOIN_CLAN:
-                    askForJoinClan(player, msg.reader().readInt());
+                    if (player.clan != null) {
+                        leaveClan(player);
+                    } else {
+                        askForJoinClan(player, msg.reader().readInt());
+                    }
                     break;
             }
         } catch (Exception e) {
