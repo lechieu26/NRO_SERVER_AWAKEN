@@ -115,6 +115,23 @@ public class InventoryService {
             itemThrow = player.inventory.itemsBody.get(index);
             removeItemBody(player, index);
             sendItemBody(player);
+            if (index == 8 || index == 10 || index == 11 || index == 12 || index == 13) {
+                if (itemThrow != null && itemThrow.isNotNullItem()) {
+                    if (itemThrow.template.type == 80) {
+                        player.useSpine = false;
+                        SpineService.gI().sendSpineToggle(player, false, 0);
+                    } else {
+                        Service.gI().removeTitle(player, itemThrow.template.part);
+                        Service.gI().removeEffPlayer(player, itemThrow.template.part);
+                        if (itemThrow.template.type == 75) {
+                            player.partDanhHieu = -1;
+                        }
+                        if (itemThrow.template.type == 72) {
+                            Service.gI().sendchienlinh(player, (short) 0);
+                        }
+                    }
+                }
+            }
             Service.gI().Send_Caitrang(player);
         } else if (where == 1) {
             itemThrow = player.inventory.itemsBag.get(index);
@@ -412,16 +429,21 @@ public class InventoryService {
             player.inventory.itemsBody.set(index, putItemBag(player, item));
             sendItemBag(player);
             sendItemBody(player);
-            if (index == 8 || index == 10 || index == 11 || index == 12) {
+            if (index == 8 || index == 10 || index == 11 || index == 12 || index == 13) {
                 if (item.isNotNullItem()) {
-                    Service.gI().removeTitle(player, item.template.part);
-                    Service.gI().removeEffPlayer(player, item.template.part);
-                    if (item.template.type == 75) {
-                        player.partDanhHieu = -1;
-                    }
-                    //  tháo linh thú
-                    if (item.template.type == 72) {
-                        Service.gI().sendchienlinh(player, (short) 0);
+                    if (item.template.type == 80) {
+                        player.useSpine = false;
+                        SpineService.gI().sendSpineToggle(player, false, 0);
+                    } else {
+                        Service.gI().removeTitle(player, item.template.part);
+                        Service.gI().removeEffPlayer(player, item.template.part);
+                        if (item.template.type == 75) {
+                            player.partDanhHieu = -1;
+                        }
+                        //  tháo linh thú
+                        if (item.template.type == 72) {
+                            Service.gI().sendchienlinh(player, (short) 0);
+                        }
                     }
 
                 }
@@ -440,6 +462,15 @@ public class InventoryService {
                     player.inventory.itemsBag.set(index, itemSwap);
                     sendItemBag(player);
                     sendItemBody(player);
+                    if (item.template.type == 72) {
+                        Service.gI().sendchienlinh(player.pet, (short) (item.template.iconID - 1));
+                    } else if (item.template.type == 80) {
+                        player.pet.useSpine = true;
+                        player.pet.spineId = item.template.head;
+                        SpineService.gI().sendSpineToggle(player.pet, true, player.pet.spineId);
+                    } else if (item.template.type == 75) {
+                        Service.gI().sendTitle(player.pet, item.template.part);
+                    }
                     if (!itemSwap.equals(item)) {
                         Service.gI().point(player);
                         Service.gI().showInfoPet(player);
@@ -461,6 +492,21 @@ public class InventoryService {
             player.pet.inventory.itemsBody.set(index, putItemBag(player, item));
             sendItemBag(player);
             sendItemBody(player);
+            if (index == 8 || index == 10 || index == 11 || index == 12 || index == 13) {
+                if (item.template.type == 80) {
+                    player.pet.useSpine = false;
+                    SpineService.gI().sendSpineToggle(player.pet, false, 0);
+                } else {
+                    Service.gI().removeTitle(player.pet, item.template.part);
+                    Service.gI().removeEffPlayer(player.pet, item.template.part);
+                    if (item.template.type == 75) {
+                        player.pet.partDanhHieu = -1;
+                    }
+                    if (item.template.type == 72) {
+                        Service.gI().sendchienlinh(player.pet, (short) 0);
+                    }
+                }
+            }
             Service.gI().point(player);
             Service.gI().Send_Caitrang(player.pet);
             Service.gI().Send_Caitrang(player);
@@ -543,6 +589,21 @@ public class InventoryService {
             sortItems(player.inventory.itemsBag);
             sendItemBody(player);
             sendItemBox(player);
+            if (index == 8 || index == 10 || index == 11 || index == 12 || index == 13) {
+                if (item.template.type == 80) {
+                    player.useSpine = false;
+                    SpineService.gI().sendSpineToggle(player, false, 0);
+                } else {
+                    Service.gI().removeTitle(player, item.template.part);
+                    Service.gI().removeEffPlayer(player, item.template.part);
+                    if (item.template.type == 75) {
+                        player.partDanhHieu = -1;
+                    }
+                    if (item.template.type == 72) {
+                        Service.gI().sendchienlinh(player, (short) 0);
+                    }
+                }
+            }
             Service.gI().point(player);
             Service.gI().Send_Caitrang(player);
         }

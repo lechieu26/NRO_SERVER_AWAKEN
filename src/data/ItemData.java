@@ -77,7 +77,7 @@ public class ItemData {
                 msg.writer().writeByte(itemTemplate.level);
                 msg.writer().writeInt(itemTemplate.strRequire);
                 msg.writer().writeShort(itemTemplate.iconID);
-                msg.writer().writeShort(itemTemplate.part);
+                msg.writer().writeShort(itemTemplate.type == 80 ? (short) itemTemplate.head : itemTemplate.part);
                 msg.writer().writeBoolean(itemTemplate.isUpToUp);
             }
             session.doSendMessage(msg);
@@ -108,7 +108,7 @@ public class ItemData {
                 msg.writer().writeByte(itemTemplate.level);
                 msg.writer().writeInt(itemTemplate.strRequire);
                 msg.writer().writeShort(itemTemplate.iconID);
-                msg.writer().writeShort(itemTemplate.part);
+                msg.writer().writeShort(itemTemplate.type == 80 ? (short) itemTemplate.head : itemTemplate.part);
                 msg.writer().writeBoolean(itemTemplate.isUpToUp);
             }
             session.doSendMessage(msg);
