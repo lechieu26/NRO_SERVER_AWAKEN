@@ -16,6 +16,7 @@ import utils.Util;
 public class PetService {
 
     private static PetService instance;
+    private static final int MAX_ITEMS = 14;
 
     public static PetService gI() {
         if (instance == null) {
@@ -374,7 +375,7 @@ public class PetService {
                 pet.nPoint.dameg = Util.nextInt(200, 300);
                 pet.nPoint.defg = Util.nextInt(10, 30);
                 pet.nPoint.critg = 5;
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < MAX_ITEMS; i++) {
                     pet.inventory.itemsBody.add(ItemService.gI().createItemNull());
                 }
                 int skillId[] = { 9, 4, 17 };
@@ -426,7 +427,7 @@ public class PetService {
                 pet.nPoint.dameg = Util.nextInt(200, 300);
                 pet.nPoint.defg = Util.nextInt(25, 50);
                 pet.nPoint.critg = 5;
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < MAX_ITEMS; i++) {
                     pet.inventory.itemsBody.add(ItemService.gI().createItemNull());
                 }
                 int skillId[] = { 9, 4, 17 };
@@ -478,7 +479,7 @@ public class PetService {
                 pet.nPoint.dameg = Util.nextInt(200, 300);
                 pet.nPoint.defg = Util.nextInt(50, 100);
                 pet.nPoint.critg = 15;
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < MAX_ITEMS; i++) {
                     pet.inventory.itemsBody.add(ItemService.gI().createItemNull());
                 }
                 int skillId[] = { 9, 4, 17 };
@@ -530,7 +531,7 @@ public class PetService {
                 pet.nPoint.dameg = Util.nextInt(200, 300);
                 pet.nPoint.defg = Util.nextInt(50, 100);
                 pet.nPoint.critg = 15;
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < MAX_ITEMS; i++) {
                     pet.inventory.itemsBody.add(ItemService.gI().createItemNull());
                 }
                 int skillId[] = { 9, 4, 17 };
@@ -582,7 +583,7 @@ public class PetService {
                 pet.nPoint.dameg = Util.nextInt(200, 300);
                 pet.nPoint.defg = Util.nextInt(50, 100);
                 pet.nPoint.critg = 15;
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < MAX_ITEMS; i++) {
                     pet.inventory.itemsBody.add(ItemService.gI().createItemNull());
                 }
                 int skillId[] = { 9, 4, 17 };
@@ -634,7 +635,7 @@ public class PetService {
                 pet.nPoint.dameg = Util.nextInt(200, 300);
                 pet.nPoint.defg = Util.nextInt(50, 100);
                 pet.nPoint.critg = 15;
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < MAX_ITEMS; i++) {
                     pet.inventory.itemsBody.add(ItemService.gI().createItemNull());
                 }
                 int skillId[] = { 9, 4, 17 };
@@ -674,7 +675,7 @@ public class PetService {
         pet.nPoint.dameg = data[2];
         pet.nPoint.defg = data[3];
         pet.nPoint.critg = data[4];
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < MAX_ITEMS; i++) {
             pet.inventory.itemsBody.add(ItemService.gI().createItemNull());
         }
         int skillId[] = { 9, 4, 17 };
@@ -736,7 +737,7 @@ public class PetService {
         pet.nPoint.dameg = data[2];
         pet.nPoint.defg = data[3];
         pet.nPoint.critg = data[4];
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < MAX_ITEMS; i++) {
             pet.inventory.itemsBody.add(ItemService.gI().createItemNull());
         }
         int skillId[] = { 9, 4, 17 };
@@ -771,7 +772,7 @@ public class PetService {
         pet.nPoint.dameg = data[2];
         pet.nPoint.defg = data[3];
         pet.nPoint.critg = data[4];
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < MAX_ITEMS; i++) {
             pet.inventory.itemsBody.add(ItemService.gI().createItemNull());
         }
         int skillId[] = { 9, 4, 17 };
