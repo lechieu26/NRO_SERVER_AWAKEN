@@ -1017,6 +1017,14 @@ public class NDVSqlFetcher {
                 }
                 pet.nPoint.hp = hp;
                 pet.nPoint.mp = mp;
+                // Initialize Spine state for pet from itemsBody
+                for (Item item : pet.inventory.itemsBody) {
+                    if (item.isNotNullItem() && item.template.type == 80) {
+                        pet.useSpine = true;
+                        pet.spineId = item.template.head;
+                        break;
+                    }
+                }
                 player.pet = pet;
             }
 
