@@ -27,7 +27,7 @@ public class Velra extends Npc {
                 switch (select) {
                     case 0: // Khi người chơi chọn "Cửa hàng"
                         // "Hạt giống" phải khớp với tag_name trong database
-                        ShopService.gI().opendShop(player, "Linh thú", false);
+                        ShopService.gI().opendShop(player, "SHOP_VELRA", false);
                         break;
                     default:
                         break;
