@@ -172,6 +172,7 @@ public class ConstNpc {
         public static final byte CHOPPER = 86;
         public static final byte NONG_DAN = 87;
         public static final byte VELRA = 88;
+        public static final byte FIDE_DEN = 93;
         public static final byte SO_SU_MENH = 95;
         public static final byte HOA_HONG = 104;
         public static final byte BULMA_THO = 109;

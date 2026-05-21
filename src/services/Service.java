@@ -127,7 +127,21 @@ public class Service {
         if (!linhThu.isNotNullItem()) {
             return;
         }
-        short smallId = (short) (linhThu.template.iconID - 1);
+        short smallId = 0;
+        if (linhThu.template.type == 72) {
+            smallId = (short) (linhThu.template.iconID - 1);
+        } else if (linhThu.template.type == 95) {
+            try {
+                if (linhThu.template.spineId != null && !linhThu.template.spineId.isEmpty()) {
+                    int spineIdVal = Integer.parseInt(linhThu.template.spineId);
+                    smallId = (short) -(spineIdVal + 100);
+                } else {
+                    smallId = -100;
+                }
+            } catch (Exception e) {
+                smallId = -100;
+            }
+        }
         sendchienlinh(pl, smallId);
     }
 
@@ -193,7 +207,21 @@ public class Service {
         if (!linhThu.isNotNullItem()) {
             return;
         }
-        short smallId = (short) (linhThu.template.iconID - 1);
+        short smallId = 0;
+        if (linhThu.template.type == 72) {
+            smallId = (short) (linhThu.template.iconID - 1);
+        } else if (linhThu.template.type == 95) {
+            try {
+                if (linhThu.template.spineId != null && !linhThu.template.spineId.isEmpty()) {
+                    int spineIdVal = Integer.parseInt(linhThu.template.spineId);
+                    smallId = (short) -(spineIdVal + 100);
+                } else {
+                    smallId = -100;
+                }
+            } catch (Exception e) {
+                smallId = -100;
+            }
+        }
         try {
             Message msg = createPetFollowMessage(pl.id, smallId, LINH_THU_FRAMES, LINH_THU_SIZE, LINH_THU_SIZE);
             me.sendMessage(msg);

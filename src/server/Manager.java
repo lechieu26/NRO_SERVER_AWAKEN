@@ -734,6 +734,18 @@ public final class Manager {
             }
             Logger.success("Successfully loaded achievement (" + ACHIEVEMENT_TEMPLATE.size() + ")\n");
 
+            // Tự động thêm cột spine_id nếu chưa có
+            try {
+                try (PreparedStatement psAlter = con.prepareStatement("ALTER TABLE item_template ADD COLUMN spine_id VARCHAR(10) DEFAULT NULL")) {
+                    psAlter.executeUpdate();
+                    Logger.warning("Successfully added column 'spine_id' to 'item_template' table.\n");
+                }
+            } catch (SQLException e) {
+                if (e.getErrorCode() != 1060) { // 1060: Duplicate column name
+                    Logger.error("Failed to alter table item_template: " + e.getMessage() + "\n");
+                }
+            }
+
             // load item template - PHẢI ORDER BY id để đảm bảo thứ tự đúng
             ps = con.prepareStatement("select * from item_template ORDER BY id ASC");
             rs = ps.executeQuery();
@@ -754,6 +766,7 @@ public final class Manager {
                 itemTemp.head = rs.getInt("head");
                 itemTemp.body = rs.getInt("body");
                 itemTemp.leg = rs.getInt("leg");
+                itemTemp.spineId = rs.getString("spine_id");
                 ITEM_TEMPLATES.add(itemTemp);
                 ITEM_TEMPLATE_MAP.put(itemTemp.id, itemTemp); // Thêm vào map để truy cập theo ID
             }

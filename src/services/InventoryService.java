@@ -311,6 +311,7 @@ public class InventoryService {
             case 21:
             case 72:
             case 80:
+            case 95:
                 break;
             default:
                 Service.gI().sendThongBaoOK(player.isPet ? ((Pet) player).master : player, "Trang bị không phù hợp!");
@@ -358,6 +359,7 @@ public class InventoryService {
                 index = 10;
                 break;
             case 72: //  vị trí ô 11: type: Linh thú
+            case 95: //  vị trí ô 11: type: Tàu bay Spine đi theo (loại mới)
                 index = 11;
                 break;
             case 75: //  vị trí ô 12: type: Huy hiệu
@@ -372,7 +374,7 @@ public class InventoryService {
         sItem = player.inventory.itemsBody.get(index);
         if (index == 8 || index == 11 || index == 12 || index == 13) {
             if (sItem.isNotNullItem()) {
-                if (sItem.template.type == 72) {
+                if (sItem.template.type == 72 || sItem.template.type == 95) {
                     Service.gI().sendchienlinh(player, (short) 0);
                 } else if (sItem.template.type == 80) {
                     player.useSpine = false;
@@ -397,6 +399,15 @@ public class InventoryService {
             player.inventory.itemsBag.set(index, putItemBody(player, item));
             if (item.template.type == 72) {
                 Service.gI().sendchienlinh(player, (short) (item.template.iconID - 1));
+            } else if (item.template.type == 95) {
+                short smallId = -100;
+                try {
+                    if (item.template.spineId != null && !item.template.spineId.isEmpty()) {
+                        int spineIdVal = Integer.parseInt(item.template.spineId);
+                        smallId = (short) -(spineIdVal + 100);
+                    }
+                } catch (Exception e) {}
+                Service.gI().sendchienlinh(player, smallId);
             } else if (item.template.type == 80) {
                 player.useSpine = true;
                 player.spineId = item.template.head;
@@ -441,7 +452,7 @@ public class InventoryService {
                             player.partDanhHieu = -1;
                         }
                         //  tháo linh thú
-                        if (item.template.type == 72) {
+                        if (item.template.type == 72 || item.template.type == 95) {
                             Service.gI().sendchienlinh(player, (short) 0);
                         }
                     }

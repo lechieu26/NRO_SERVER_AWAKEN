@@ -60,6 +60,8 @@ public class Template {
 
         public int leg;
 
+        public String spineId;
+
         public ItemTemplate() {
         }
 

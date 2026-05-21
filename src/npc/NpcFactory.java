@@ -1,7 +1,7 @@
 package npc;
+
 import boss.BossManager;
 import boss.BossID;
-
 
 import models.Consign.ConsignShopService;
 import services.ClanService;
@@ -211,6 +211,8 @@ public class NpcFactory {
                     new NongDan(mapId, status, cx, cy, tempId, avatar);
                 case ConstNpc.VELRA ->
                     new Velra(mapId, status, cx, cy, tempId, avatar);
+                case ConstNpc.FIDE_DEN ->
+                    new FideDen(mapId, status, cx, cy, tempId, avatar);
                 case ConstNpc.NANG_DE ->
                     new NangDe(mapId, status, cx, cy, tempId, avatar);
                 case ConstNpc.BARD_DOCK ->
