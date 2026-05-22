@@ -141,6 +141,17 @@ public class Service {
             } catch (Exception e) {
                 smallId = -100;
             }
+        } else if (linhThu.template.type == 96) {
+            try {
+                if (linhThu.template.spineId != null && !linhThu.template.spineId.isEmpty()) {
+                    int spineIdVal = Integer.parseInt(linhThu.template.spineId);
+                    smallId = (short) -(spineIdVal + 1000);
+                } else {
+                    smallId = -1000;
+                }
+            } catch (Exception e) {
+                smallId = -1000;
+            }
         }
         sendchienlinh(pl, smallId);
     }
@@ -220,6 +231,17 @@ public class Service {
                 }
             } catch (Exception e) {
                 smallId = -100;
+            }
+        } else if (linhThu.template.type == 96) {
+            try {
+                if (linhThu.template.spineId != null && !linhThu.template.spineId.isEmpty()) {
+                    int spineIdVal = Integer.parseInt(linhThu.template.spineId);
+                    smallId = (short) -(spineIdVal + 1000);
+                } else {
+                    smallId = -1000;
+                }
+            } catch (Exception e) {
+                smallId = -1000;
             }
         }
         try {

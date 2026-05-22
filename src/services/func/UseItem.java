@@ -298,6 +298,18 @@ public class UseItem {
                         Service.gI().sendPetFollow(pl, smallId);
                         break;
                     }
+                    case 96: {
+                        InventoryService.gI().itemBagToBody(pl, indexBag);
+                        short smallId = -1000;
+                        try {
+                            if (item.template.spineId != null && !item.template.spineId.isEmpty()) {
+                                int spineIdVal = Integer.parseInt(item.template.spineId);
+                                smallId = (short) -(spineIdVal + 1000);
+                            }
+                        } catch (Exception e) {}
+                        Service.gI().sendPetFollow(pl, smallId);
+                        break;
+                    }
                     case 68: { // chân mệnh
                         InventoryService.gI().itemBagToBody(pl, indexBag);
                         Service.gI().createEffectTitle(pl, item.template.part, item.template.type);
