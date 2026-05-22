@@ -1507,13 +1507,13 @@ public class NPoint {
             }
             return;
         }
-        // Tính toán giới hạn hpMax
-        long hpMax = Util.maxIntValue(this.hpg + this.hpAdd);
-
-        // Áp dụng các yếu tố ảnh hưởng đến hpMax
+        // Tính toán hpMax: % chỉ áp dụng lên gốc, flat cộng sau
+        long baseHp = Util.maxIntValue(this.hpg);
+        long hpMax = baseHp;
         for (Integer tl : this.tlHp) {
-            hpMax += (hpMax * tl / 100L);
+            hpMax += (baseHp * tl / 100L);
         }
+        hpMax += this.hpAdd;
 
         // Xử lý set nappa
         if (this.player.setClothes.nappa == 5) {
@@ -1737,13 +1737,13 @@ public class NPoint {
             }
             return;
         }
-        // Tính toán giới hạn mpMax
-        long mpMax = Util.maxIntValue(this.mpg + this.mpAdd);
-
-        // Áp dụng các yếu tố ảnh hưởng đến mpMax
+        // Tính toán mpMax: % chỉ áp dụng lên gốc, flat cộng sau
+        long baseMp = Util.maxIntValue(this.mpg);
+        long mpMax = baseMp;
         for (Integer tl : this.tlMp) {
-            mpMax += (mpMax * tl / 100L);
+            mpMax += (baseMp * tl / 100L);
         }
+        mpMax += this.mpAdd;
 
         // Xử lý set picolo
         if (this.player.setClothes.ocTieu == 5) {
@@ -1941,13 +1941,13 @@ public class NPoint {
             }
             return;
         }
-        // Tính toán giới hạn dame
-        long dame = Util.maxIntValue(this.dameg + this.dameAdd);
-
-        // Áp dụng các yếu tố ảnh hưởng đến dame
+        // Tính toán dame: % chỉ áp dụng lên gốc, flat cộng sau
+        long baseDame = Util.maxIntValue(this.dameg);
+        long dame = baseDame;
         for (Integer tl : this.tlDame) {
-            dame += (dame * tl / 100L);
+            dame += (baseDame * tl / 100L);
         }
+        dame += this.dameAdd;
         // thuốc mỡ
         if (this.player.itemTime != null && this.player.itemTime.isEatMeal3
                 && this.player.itemTime.iconMeal3 == 20605) {
@@ -2235,11 +2235,12 @@ public class NPoint {
     }
 
     private void setDef() {
-        this.def = this.defg * 4;
-        this.def += this.defAdd;
+        int baseDef = this.defg * 4;
+        this.def = baseDef;
         if (this.tlGiap > 0) {
-            this.def += (int) (this.def * this.tlGiap / 100L);
+            this.def += (int) (baseDef * this.tlGiap / 100L);
         }
+        this.def += this.defAdd;
         // Xử lý thức ăn 3
         if (this.player.itemTime != null && this.player.itemTime.isEatMeal3 && this.player.itemTime.iconMeal3 == 8246) {
             this.def += (this.def * 10 / 100L);
