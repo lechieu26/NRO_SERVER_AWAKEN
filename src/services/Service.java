@@ -695,6 +695,18 @@ public class Service {
                 msg.writer().writeShort(100);
                 msg.writer().writeShort(player.nPoint.defg);
                 msg.writer().writeByte(player.nPoint.critg);
+                // Gửi thêm chỉ số buff cho client
+                msg.writer().writeInt(player.nPoint.tlGiap);
+                msg.writer().writeInt(player.nPoint.tlPST);
+                msg.writer().writeInt(player.nPoint.tlNeDon);
+                msg.writer().writeInt(player.nPoint.tlHutHp);
+                msg.writer().writeInt(player.nPoint.tlHutMp);
+                msg.writer().writeInt(0); // tileGiamTDHS
+                msg.writer().writeInt(0); // timeGiamTDHS
+                msg.writer().writeBoolean(player.nPoint.khangTDHS);
+                msg.writer().writeBoolean(player.nPoint.isKhongLanh);
+                msg.writer().writeBoolean(player.nPoint.wearingVoHinh);
+                msg.writer().writeBoolean(player.nPoint.teleport);
                 player.sendMessage(msg);
                 msg.cleanup();
             } catch (Exception e) {

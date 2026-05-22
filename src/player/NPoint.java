@@ -2237,6 +2237,9 @@ public class NPoint {
     private void setDef() {
         this.def = this.defg * 4;
         this.def += this.defAdd;
+        if (this.tlGiap > 0) {
+            this.def += (int) (this.def * this.tlGiap / 100L);
+        }
         // Xử lý thức ăn 3
         if (this.player.itemTime != null && this.player.itemTime.isEatMeal3 && this.player.itemTime.iconMeal3 == 8246) {
             this.def += (this.def * 10 / 100L);
