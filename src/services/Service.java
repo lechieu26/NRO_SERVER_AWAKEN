@@ -117,7 +117,9 @@ public class Service {
     }
 
     /**
-     * Gửi linh thú từ slot 11 của player cho tất cả player trong map
+     * Gửi linh thú từ slot 11 của player cho tất cả player trong map.
+     * Chỉ xử lý type 72 (linh thú thường) và type 96 (Linh thú Spine Character).
+     * Tàu bay Spine (type 95) ở slot 8 được xử lý riêng qua {@link #sendShipSpine(Player)}.
      */
     public void sendchienlinh(Player pl) {
         if (pl.inventory.itemsBody.size() <= 11) {
@@ -130,17 +132,6 @@ public class Service {
         short smallId = 0;
         if (linhThu.template.type == 72) {
             smallId = (short) (linhThu.template.iconID - 1);
-        } else if (linhThu.template.type == 95) {
-            try {
-                if (linhThu.template.spineId != null && !linhThu.template.spineId.isEmpty()) {
-                    int spineIdVal = Integer.parseInt(linhThu.template.spineId);
-                    smallId = (short) -(spineIdVal + 100);
-                } else {
-                    smallId = -100;
-                }
-            } catch (Exception e) {
-                smallId = -100;
-            }
         } else if (linhThu.template.type == 96) {
             try {
                 if (linhThu.template.spineId != null && !linhThu.template.spineId.isEmpty()) {
@@ -154,6 +145,84 @@ public class Service {
             }
         }
         sendchienlinh(pl, smallId);
+    }
+
+    // ==================== TÀU BAY SPINE (Slot 8 - Type 95) ====================
+
+    /**
+     * Gửi packet tàu bay Spine (slot 8 - type 95) cho tất cả player trong map.
+     * Đây là kênh hiển thị Spine ĐỘC LẬP với linh thú slot 11 (cmd 31), nhằm cho phép
+     * trang bị 95 và 96 hiển thị đồng thời, không ảnh hưởng lẫn nhau.
+     *
+     * @param player chủ sở hữu
+     * @param spineId id Spine tàu bay (>= 0 để bật, < 0 để tắt)
+     */
+    public void sendShipSpine(Player player, short spineId) {
+        if (player == null) return;
+        Message msg = null;
+        try {
+            msg = new Message(34);
+            msg.writer().writeInt((int) player.id);
+            msg.writer().writeShort(spineId);
+            sendMessAllPlayerInMap(player, msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (msg != null) {
+                msg.cleanup();
+            }
+        }
+    }
+
+    /**
+     * Đọc tàu bay Spine từ slot 8 của player và gửi cho cả map.
+     * Nếu slot 8 trống hoặc không phải type 95 thì gửi packet tắt.
+     */
+    public void sendShipSpine(Player pl) {
+        if (pl == null) return;
+        short spineId = readShipSpineIdFromBody(pl);
+        sendShipSpine(pl, spineId);
+    }
+
+    /**
+     * Gửi tàu bay Spine của player pl chỉ cho riêng player me (dùng khi me vừa vào map).
+     */
+    public void sendShipSpineToMe(Player me, Player pl) {
+        if (me == null || pl == null) return;
+        short spineId = readShipSpineIdFromBody(pl);
+        if (spineId < 0) {
+            return;
+        }
+        Message msg = null;
+        try {
+            msg = new Message(34);
+            msg.writer().writeInt((int) pl.id);
+            msg.writer().writeShort(spineId);
+            me.sendMessage(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (msg != null) {
+                msg.cleanup();
+            }
+        }
+    }
+
+    private short readShipSpineIdFromBody(Player pl) {
+        if (pl.inventory == null || pl.inventory.itemsBody.size() <= 8) {
+            return -1;
+        }
+        Item ship = pl.inventory.itemsBody.get(8);
+        if (ship == null || !ship.isNotNullItem() || ship.template.type != 95) {
+            return -1;
+        }
+        try {
+            if (ship.template.spineId != null && !ship.template.spineId.isEmpty()) {
+                return Short.parseShort(ship.template.spineId);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
     }
 
     public void sendTitle(Player player) {
@@ -208,7 +277,9 @@ public class Service {
     }
 
     /**
-     * Gửi linh thú của player pl cho riêng player me
+     * Gửi linh thú của player pl cho riêng player me.
+     * Chỉ xử lý type 72 và type 96 (slot 11). Tàu bay Spine (type 95) ở slot 8
+     * được gửi riêng qua {@link #sendShipSpineToMe(Player, Player)}.
      */
     public void sendPetFollowToMe(Player me, Player pl) {
         if (pl.inventory.itemsBody.size() <= 11) {
@@ -221,17 +292,6 @@ public class Service {
         short smallId = 0;
         if (linhThu.template.type == 72) {
             smallId = (short) (linhThu.template.iconID - 1);
-        } else if (linhThu.template.type == 95) {
-            try {
-                if (linhThu.template.spineId != null && !linhThu.template.spineId.isEmpty()) {
-                    int spineIdVal = Integer.parseInt(linhThu.template.spineId);
-                    smallId = (short) -(spineIdVal + 100);
-                } else {
-                    smallId = -100;
-                }
-            } catch (Exception e) {
-                smallId = -100;
-            }
         } else if (linhThu.template.type == 96) {
             try {
                 if (linhThu.template.spineId != null && !linhThu.template.spineId.isEmpty()) {
