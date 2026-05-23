@@ -1185,6 +1185,7 @@ public class Controller implements IMessageHandler {
                                 sendThongBaoServer(player);
                             }
                             Service.gI().sendChibi(player);
+                            Service.gI().sendShipSpine(player);
                             player.zone.mapInfo(player);
                             if (player.getSession().version >= 231) {
 
