@@ -2786,7 +2786,7 @@ public class NPoint {
                 if (Util.isTrue(30, 100) && this.isBrolyTraiDat) {
                     dameqckk *= 150 / 100;
                 }
-                dameqckk = dameqckk * (this.quackkop) / 100;
+                dameqckk = dameqckk * (100 + this.quackkop) / 100;
                 dameqckk = dameqckk + (Util.nextInt(-5, 5) * dameqckk / 100);
                 // if (dameqckk > 2_000_000_000) {
                 // dameqckk = 2_000_000_000;
