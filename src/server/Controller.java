@@ -1369,8 +1369,16 @@ public class Controller implements IMessageHandler {
             }
             if (player.inventory.itemsBody.size() > 11) {
                 item.Item itemCL = player.inventory.itemsBody.get(11);
-                if (itemCL.isNotNullItem() && itemCL.template.type == 72) {
+                if (itemCL.isNotNullItem() && (itemCL.template.type == 72 || itemCL.template.type == 96)) {
                     Service.gI().sendchienlinh(player);
+                }
+            }
+            // Khởi tạo Tàu bay Spine (slot 8 - type 95) trên kênh độc lập (cmd 34)
+            // để hiển thị đồng thời với linh thú slot 11 ngay sau khi vào game.
+            if (player.inventory.itemsBody.size() > 8) {
+                item.Item shipItem = player.inventory.itemsBody.get(8);
+                if (shipItem.isNotNullItem() && shipItem.template.type == 95) {
+                    Service.gI().sendShipSpine(player);
                 }
             }
             // send can auto play

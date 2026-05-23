@@ -288,14 +288,10 @@ public class UseItem {
                     }
                     case 95: {
                         InventoryService.gI().itemBagToBody(pl, indexBag);
-                        short smallId = -100;
-                        try {
-                            if (item.template.spineId != null && !item.template.spineId.isEmpty()) {
-                                int spineIdVal = Integer.parseInt(item.template.spineId);
-                                smallId = (short) -(spineIdVal + 100);
-                            }
-                        } catch (Exception e) {}
-                        Service.gI().sendPetFollow(pl, smallId);
+                        // Tàu bay Spine (slot 8) - dùng kênh ship riêng (cmd 34) để
+                        // hiển thị đồng thời với linh thú slot 11, không ảnh hưởng lẫn nhau.
+                        // itemBagToBody đã gọi sendShipSpine; không gọi lại sendPetFollow ở đây
+                        // để tránh đè lên kênh slot 11.
                         break;
                     }
                     case 96: {

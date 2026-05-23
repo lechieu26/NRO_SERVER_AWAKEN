@@ -770,6 +770,9 @@ public class Zone {
                 } else {
                     Service.gI().sendPetFollowToMe(plReceive, plInfo);
                 }
+                // Gửi thêm Tàu bay Spine (slot 8 - type 95) qua kênh độc lập để hiển thị
+                // đồng thời với linh thú slot 11.
+                Service.gI().sendShipSpineToMe(plReceive, plInfo);
             }
         } catch (Exception e) {
         }

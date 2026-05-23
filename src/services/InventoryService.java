@@ -120,13 +120,16 @@ public class InventoryService {
                     if (itemThrow.template.type == 80) {
                         player.useSpine = false;
                         SpineService.gI().sendSpineToggle(player, false, 0);
+                    } else if (itemThrow.template.type == 95) {
+                        // Tàu bay Spine ở slot 8: tắt qua kênh ship riêng (cmd 34)
+                        Service.gI().sendShipSpine(player, (short) -1);
                     } else {
                         Service.gI().removeTitle(player, itemThrow.template.part);
                         Service.gI().removeEffPlayer(player, itemThrow.template.part);
                         if (itemThrow.template.type == 75) {
                             player.partDanhHieu = -1;
                         }
-                        if (itemThrow.template.type == 72) {
+                        if (itemThrow.template.type == 72 || itemThrow.template.type == 96) {
                             Service.gI().sendchienlinh(player, (short) 0);
                         }
                     }
@@ -352,6 +355,9 @@ public class InventoryService {
             case 11: //  type: cánh, đeo lưng
                 index = 8;
                 break;
+            case 95: //  vị trí ô 8: type: Tàu bay Spine đi theo (loại mới, slot riêng để hiển thị đồng thời với linh thú)
+                index = 8;
+                break;
             case 23: //  type: thú cưỡi
             case 24: //  type: thú cưỡi VIP
                 index = 9;
@@ -360,7 +366,6 @@ public class InventoryService {
                 index = 10;
                 break;
             case 72: //  vị trí ô 11: type: Linh thú
-            case 95: //  vị trí ô 11: type: Tàu bay Spine đi theo (loại mới)
             case 96: //  vị trí ô 11: type: Linh thú Spine Character (loại mới)
                 index = 11;
                 break;
@@ -376,7 +381,10 @@ public class InventoryService {
         sItem = player.inventory.itemsBody.get(index);
         if (index == 8 || index == 11 || index == 12 || index == 13) {
             if (sItem.isNotNullItem()) {
-                if (sItem.template.type == 72 || sItem.template.type == 95 || sItem.template.type == 96) {
+                if (sItem.template.type == 95) {
+                    // Tàu bay Spine ở slot 8 dùng kênh hiển thị riêng (cmd 34)
+                    Service.gI().sendShipSpine(player, (short) -1);
+                } else if (sItem.template.type == 72 || sItem.template.type == 96) {
                     Service.gI().sendchienlinh(player, (short) 0);
                 } else if (sItem.template.type == 80) {
                     player.useSpine = false;
@@ -402,14 +410,14 @@ public class InventoryService {
             if (item.template.type == 72) {
                 Service.gI().sendchienlinh(player, (short) (item.template.iconID - 1));
             } else if (item.template.type == 95) {
-                short smallId = -100;
+                // Tàu bay Spine: gửi qua kênh ship riêng (cmd 34) để hiển thị độc lập với linh thú slot 11
+                short shipSpineId = 0;
                 try {
                     if (item.template.spineId != null && !item.template.spineId.isEmpty()) {
-                        int spineIdVal = Integer.parseInt(item.template.spineId);
-                        smallId = (short) -(spineIdVal + 100);
+                        shipSpineId = Short.parseShort(item.template.spineId);
                     }
                 } catch (Exception e) {}
-                Service.gI().sendchienlinh(player, smallId);
+                Service.gI().sendShipSpine(player, shipSpineId);
             } else if (item.template.type == 96) {
                 short smallId = -1000;
                 try {
@@ -456,6 +464,9 @@ public class InventoryService {
                     if (item.template.type == 80) {
                         player.useSpine = false;
                         SpineService.gI().sendSpineToggle(player, false, 0);
+                    } else if (item.template.type == 95) {
+                        // Tàu bay Spine ở slot 8: tắt qua kênh ship riêng (cmd 34)
+                        Service.gI().sendShipSpine(player, (short) -1);
                     } else {
                         Service.gI().removeTitle(player, item.template.part);
                         Service.gI().removeEffPlayer(player, item.template.part);
@@ -463,7 +474,7 @@ public class InventoryService {
                             player.partDanhHieu = -1;
                         }
                         //  tháo linh thú
-                        if (item.template.type == 72 || item.template.type == 95 || item.template.type == 96) {
+                        if (item.template.type == 72 || item.template.type == 96) {
                             Service.gI().sendchienlinh(player, (short) 0);
                         }
                     }
@@ -615,13 +626,16 @@ public class InventoryService {
                 if (item.template.type == 80) {
                     player.useSpine = false;
                     SpineService.gI().sendSpineToggle(player, false, 0);
+                } else if (item.template.type == 95) {
+                    // Tàu bay Spine ở slot 8: tắt qua kênh ship riêng (cmd 34)
+                    Service.gI().sendShipSpine(player, (short) -1);
                 } else {
                     Service.gI().removeTitle(player, item.template.part);
                     Service.gI().removeEffPlayer(player, item.template.part);
                     if (item.template.type == 75) {
                         player.partDanhHieu = -1;
                     }
-                    if (item.template.type == 72) {
+                    if (item.template.type == 72 || item.template.type == 96) {
                         Service.gI().sendchienlinh(player, (short) 0);
                     }
                 }
