@@ -486,6 +486,39 @@ public class NDVSqlFetcher {
             }
             dataArray.clear();
 
+            // Migration: Tàu bay Spine (type 95) trước đây dùng chung slot 11 với
+            // linh thú (type 72/96). Sau khi tách kênh hiển thị Spine, slot 11 chỉ
+            // dành cho 72/96 còn type 95 chuyển sang slot 8. Tự động di chuyển dữ liệu
+            // legacy để ship hiển thị lại sau khi update server.
+            if (player.inventory.itemsBody.size() > 11) {
+                Item legacyShip = player.inventory.itemsBody.get(11);
+                if (legacyShip.isNotNullItem() && legacyShip.template.type == 95) {
+                    Item slot8Item = player.inventory.itemsBody.get(8);
+                    if (!slot8Item.isNotNullItem()) {
+                        // Slot 8 trống → di chuyển trực tiếp
+                        player.inventory.itemsBody.set(8, legacyShip);
+                        player.inventory.itemsBody.set(11, ItemService.gI().createItemNull());
+                    } else if (slot8Item.template.type != 95) {
+                        // Slot 8 đang có item khác (thường là cánh type 11):
+                        // đẩy nó vào ô túi trống đầu tiên rồi đặt tàu bay vào slot 8.
+                        int emptyBagIdx = -1;
+                        for (int i = 0; i < player.inventory.itemsBag.size(); i++) {
+                            if (!player.inventory.itemsBag.get(i).isNotNullItem()) {
+                                emptyBagIdx = i;
+                                break;
+                            }
+                        }
+                        if (emptyBagIdx >= 0) {
+                            player.inventory.itemsBag.set(emptyBagIdx, slot8Item);
+                            player.inventory.itemsBody.set(8, legacyShip);
+                            player.inventory.itemsBody.set(11, ItemService.gI().createItemNull());
+                        }
+                        // Nếu túi đầy → giữ nguyên (ship vẫn ở slot 11) để tránh mất dữ liệu;
+                        // fallback trong Controller.sendInfo sẽ vẫn hiển thị Spine cho ship.
+                    }
+                }
+            }
+
             // data box
             dataArray = (JSONArray) JSONValue.parse(rs.getString("items_box"));
             for (int i = 0; i < dataArray.size(); i++) {

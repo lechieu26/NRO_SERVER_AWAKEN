@@ -209,11 +209,26 @@ public class Service {
     }
 
     private short readShipSpineIdFromBody(Player pl) {
-        if (pl.inventory == null || pl.inventory.itemsBody.size() <= 8) {
+        if (pl.inventory == null) {
             return -1;
         }
-        Item ship = pl.inventory.itemsBody.get(8);
-        if (ship == null || !ship.isNotNullItem() || ship.template.type != 95) {
+        Item ship = null;
+        if (pl.inventory.itemsBody.size() > 8) {
+            Item s8 = pl.inventory.itemsBody.get(8);
+            if (s8 != null && s8.isNotNullItem() && s8.template.type == 95) {
+                ship = s8;
+            }
+        }
+        // Fallback dữ liệu legacy: type 95 nằm ở slot 11 (chung với 72/96 thời xưa).
+        // Migration trong DAO sẽ tự động chuyển sang slot 8 khi có chỗ, nhưng nếu túi
+        // đầy thì ship vẫn ở slot 11; ở đây ta vẫn lấy ra để hiển thị qua kênh ship.
+        if (ship == null && pl.inventory.itemsBody.size() > 11) {
+            Item s11 = pl.inventory.itemsBody.get(11);
+            if (s11 != null && s11.isNotNullItem() && s11.template.type == 95) {
+                ship = s11;
+            }
+        }
+        if (ship == null) {
             return -1;
         }
         try {

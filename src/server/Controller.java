@@ -1373,13 +1373,25 @@ public class Controller implements IMessageHandler {
                     Service.gI().sendchienlinh(player);
                 }
             }
-            // Khởi tạo Tàu bay Spine (slot 8 - type 95) trên kênh độc lập (cmd 34)
-            // để hiển thị đồng thời với linh thú slot 11 ngay sau khi vào game.
+            // Khởi tạo Tàu bay Spine (type 95) trên kênh độc lập (cmd 34) để hiển thị
+            // đồng thời với linh thú slot 11 ngay sau khi vào game. Kiểm tra cả slot 8
+            // (mới) và slot 11 (legacy) để tương thích dữ liệu cũ — sendShipSpine sẽ
+            // tự đọc đúng spineId từ slot hợp lệ qua readShipSpineIdFromBody.
+            boolean hasShipSpine = false;
             if (player.inventory.itemsBody.size() > 8) {
-                item.Item shipItem = player.inventory.itemsBody.get(8);
-                if (shipItem.isNotNullItem() && shipItem.template.type == 95) {
-                    Service.gI().sendShipSpine(player);
+                item.Item s8 = player.inventory.itemsBody.get(8);
+                if (s8.isNotNullItem() && s8.template.type == 95) {
+                    hasShipSpine = true;
                 }
+            }
+            if (!hasShipSpine && player.inventory.itemsBody.size() > 11) {
+                item.Item s11 = player.inventory.itemsBody.get(11);
+                if (s11.isNotNullItem() && s11.template.type == 95) {
+                    hasShipSpine = true;
+                }
+            }
+            if (hasShipSpine) {
+                Service.gI().sendShipSpine(player);
             }
             // send can auto play
             ItemTimeService.gI().sendCanAutoPlay(player);
