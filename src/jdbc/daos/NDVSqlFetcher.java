@@ -865,17 +865,19 @@ public class NDVSqlFetcher {
                 } else {
                     skill = SkillUtil.createSkillLevel0(tempId);
                 }
-                skill.lastTimeUseThisSkill = Long.parseLong(String.valueOf(dataSkill.get(2)));
-                if (dataSkill.size() > 3) {
-                    skill.currLevel = Short.parseShort(String.valueOf(dataSkill.get(3)));
+                if (skill != null) {
+                    skill.lastTimeUseThisSkill = Long.parseLong(String.valueOf(dataSkill.get(2)));
+                    if (dataSkill.size() > 3) {
+                        skill.currLevel = Short.parseShort(String.valueOf(dataSkill.get(3)));
+                    }
+                    if (skill.lastTimeUseThisSkill > System.currentTimeMillis() + 100000) {
+                        skill.lastTimeUseThisSkill = 0;
+                    }
+                    if (skill.lastTimeUseThisSkill > System.currentTimeMillis() + 100000) {
+                        skill.lastTimeUseThisSkill = 0;
+                    }
+                    player.playerSkill.skills.add(skill);
                 }
-                if (skill.lastTimeUseThisSkill > System.currentTimeMillis() + 100000) {
-                    skill.lastTimeUseThisSkill = 0;
-                }
-                if (skill.lastTimeUseThisSkill > System.currentTimeMillis() + 100000) {
-                    skill.lastTimeUseThisSkill = 0;
-                }
-                player.playerSkill.skills.add(skill);
             }
             dataArray.clear();
 
@@ -1000,20 +1002,22 @@ public class NDVSqlFetcher {
                     } else {
                         skill = SkillUtil.createSkillLevel0(tempId);
                     }
-                    if (skillTemp.size() > 3) {
-                        skill.lastTimeUseThisSkill = Long.parseLong(String.valueOf(skillTemp.get(2)));
+                    if (skill != null) {
+                        if (skillTemp.size() > 3) {
+                            skill.lastTimeUseThisSkill = Long.parseLong(String.valueOf(skillTemp.get(2)));
+                        }
+                        if (skillTemp.size() > 3) {
+                            skill.currLevel = Short.parseShort(String.valueOf(skillTemp.get(3)));
+                        }
+                        if (skill.lastTimeUseThisSkill > System.currentTimeMillis() + 100000) {
+                            skill.lastTimeUseThisSkill = 0;
+                        }
+                        switch (skill.template.id) {
+                            case Skill.KAMEJOKO, Skill.MASENKO, Skill.ANTOMIC ->
+                                skill.coolDown = 1000;
+                        }
+                        pet.playerSkill.skills.add(skill);
                     }
-                    if (skillTemp.size() > 3) {
-                        skill.currLevel = Short.parseShort(String.valueOf(skillTemp.get(3)));
-                    }
-                    if (skill.lastTimeUseThisSkill > System.currentTimeMillis() + 100000) {
-                        skill.lastTimeUseThisSkill = 0;
-                    }
-                    switch (skill.template.id) {
-                        case Skill.KAMEJOKO, Skill.MASENKO, Skill.ANTOMIC ->
-                            skill.coolDown = 1000;
-                    }
-                    pet.playerSkill.skills.add(skill);
                 }
                 pet.nPoint.hp = hp;
                 pet.nPoint.mp = mp;

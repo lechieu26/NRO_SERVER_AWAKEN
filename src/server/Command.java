@@ -1,6 +1,6 @@
 package server;
-import boss.BossManager;
 
+import boss.BossManager;
 
 /**
  * @author EMTI
@@ -131,6 +131,11 @@ public class Command {
                 }
             } else if (text.equals("skilldacbiet")) {
                 System.out.println("skilldacbiet");
+
+                SkillService.gI().learSkillSpecial(player, Skill.BIEN_HINH_SUPER, 5);
+                SkillService.gI().learSkillSpecial(player, Skill.PHAN_THAN, 6);
+                SkillService.gI().learSkillSpecial(player, Skill.TANG_HINH, 7);
+
                 try {
                     switch (player.gender) {
                         case 0 -> {
@@ -147,27 +152,6 @@ public class Command {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-            } else if (text.equals("phanthan")) {
-                System.out.println("phanthan");
-                switch (player.gender) {
-                    case 0 -> {
-                        SkillService.gI().learSkillSpecial(player, Skill.PHAN_THAN, 6);
-                    }
-                    case 2 -> {
-                        SkillService.gI().learSkillSpecial(player, Skill.PHAN_THAN, 6);
-                    }
-                    default -> {
-                        SkillService.gI().learSkillSpecial(player, Skill.PHAN_THAN, 6);
-                    }
-                }
-                return true;
-            } else if (text.equals("tanghinh")) {
-                // System.out.println("[TANG_HINH_DEBUG] Learning skill Tang Hinh for " +
-                // player.name);
-                SkillService.gI().learSkillSpecial(player, Skill.TANG_HINH, 7);
-                Service.gI().sendThongBao(player, "Đã học skill Tàng Hình!");
-                return true;
             } else if (text.equals("dragon")) {
                 ShenronEvent shenron = new ShenronEvent();
                 shenron.setPlayer(player);
@@ -326,7 +310,9 @@ public class Command {
                 return true;
             }
         }
-        if (text.startsWith("ten con la ")) {
+        if (text.startsWith("ten con la "))
+
+        {
             PetService.gI().changeNamePet(player, text.replaceAll("ten con la ", ""));
         } /*
            * else if (text.equals("rsp")) { // hồi all skill, Ki
