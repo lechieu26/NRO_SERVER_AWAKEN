@@ -267,7 +267,7 @@ public class Command {
                 if (parts.length >= 3) {
                     short id = Short.parseShort(parts[1]);
                     int quantity = Integer.parseInt(parts[2]);
-                    if (id < 0 || id >= Manager.ITEM_TEMPLATES.size()) {
+                    if (id < 0 || ItemService.gI().getTemplate(id) == null) {
                         Service.gI().sendThongBao(player, "Mã vật phẩm không hợp lệ");
                         return true;
                     }

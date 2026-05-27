@@ -466,16 +466,23 @@ public final class Manager {
                 Part part = new Part();
                 part.id = rs.getShort("id");
                 part.type = rs.getByte("type");
-                dataArray = (JSONArray) JSONValue.parse(rs.getString("data").replaceAll("\\\"", ""));
-                for (int j = 0; j < dataArray.size(); j++) {
-                    JSONArray pd = (JSONArray) JSONValue.parse(String.valueOf(dataArray.get(j)));
-                    part.partDetails.add(new PartDetail(Short.parseShort(String.valueOf(pd.get(0))),
-                            (byte) Integer.parseInt(String.valueOf(pd.get(1))),
-                            (byte) Integer.parseInt(String.valueOf(pd.get(2)))));
-                    pd.clear();
+                String dataStr = rs.getString("data");
+                if (dataStr != null) {
+                    dataArray = (JSONArray) JSONValue.parse(dataStr.replaceAll("\\\"", ""));
+                    if (dataArray != null) {
+                        for (int j = 0; j < dataArray.size(); j++) {
+                            JSONArray pd = (JSONArray) JSONValue.parse(String.valueOf(dataArray.get(j)));
+                            if (pd != null) {
+                                part.partDetails.add(new PartDetail(Short.parseShort(String.valueOf(pd.get(0))),
+                                        (byte) Integer.parseInt(String.valueOf(pd.get(1))),
+                                        (byte) Integer.parseInt(String.valueOf(pd.get(2)))));
+                                pd.clear();
+                            }
+                        }
+                        dataArray.clear();
+                    }
                 }
                 parts.add(part);
-                dataArray.clear();
             }
             DataOutputStream dos = new DataOutputStream(new FileOutputStream("data/update_data/part"));
             dos.writeShort(parts.size());
@@ -509,9 +516,15 @@ public final class Manager {
             rs = ps.executeQuery();
             while (rs.next()) {
                 ArrHead2Frames arrHead2Frames = new ArrHead2Frames();
-                dataArray = (JSONArray) JSONValue.parse(rs.getString("data"));
-                for (int i = 0; i < dataArray.size(); i++) {
-                    arrHead2Frames.frames.add(Integer.valueOf(dataArray.get(i).toString()));
+                String dataStr = rs.getString("data");
+                if (dataStr != null) {
+                    dataArray = (JSONArray) JSONValue.parse(dataStr);
+                    if (dataArray != null) {
+                        for (int i = 0; i < dataArray.size(); i++) {
+                            arrHead2Frames.frames.add(Integer.valueOf(dataArray.get(i).toString()));
+                        }
+                        dataArray.clear();
+                    }
                 }
                 ARR_HEAD_2_FRAMES.add(arrHead2Frames);
             }
