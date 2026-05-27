@@ -134,6 +134,24 @@ public class Template {
         }
     }
 
+    public static class Map7VNRTemplate {
+        public int id;
+        public String name;
+        public byte planetId;
+        public byte zones;
+        public byte maxPlayerPerZone;
+        public int mapWidth;
+        public int mapHeight;
+        public String mapConfigJson;
+        public List<WayPoint> wayPoints;
+        public List<EffectMap> effectMaps;
+
+        public Map7VNRTemplate() {
+            this.wayPoints = new ArrayList<>();
+            this.effectMaps = new ArrayList<>();
+        }
+    }
+
     public static class SkillTemplate {
 
         public byte id;

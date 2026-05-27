@@ -22,6 +22,7 @@ public class ConstMap {
     public static final byte MAP_TAY_KARIN = 8;
     public static final byte MAP_MABU_14H = 9;
     public static final byte MAP_CLOUD_GARDEN = 10; // Khu vườn trên mây
+    public static final byte MAP_7VNR = 20; // Map kiểu 7VNR (freeform, không dùng tile grid)
 
     // type change map
     public static final int CHANGE_CAPSULE = 500;

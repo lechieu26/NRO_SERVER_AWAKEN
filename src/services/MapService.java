@@ -603,4 +603,17 @@ public class MapService {
         player.zone = zoneJoin;
         player.zone.addPlayer(player);
     }
+
+    public boolean isMap7VNR(int mapId) {
+        for (map.Map m : Manager.MAPS) {
+            if (m.mapId == mapId) {
+                return m.type == ConstMap.MAP_7VNR;
+            }
+        }
+        return false;
+    }
+
+    public boolean isMap7VNR(map.Map m) {
+        return m != null && m.type == ConstMap.MAP_7VNR;
+    }
 }
