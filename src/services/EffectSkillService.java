@@ -21,6 +21,10 @@ import server.Manager;
 
 public class EffectSkillService {
 
+    public static final int TIME_TRANSFORM_BIEN_HINH = 4000;
+    public static final String BIEN_HINH_SPINE_PATH = "Skills/Skill_1/Hero_1";
+    public static final String BIEN_HINH_SPINE_ANIM = "Skill";
+
     public static final byte TURN_ON_EFFECT = 1;
     public static final byte TURN_OFF_EFFECT = 0;
     public static final byte TURN_OFF_ALL_EFFECT = 2;
@@ -754,6 +758,48 @@ public class EffectSkillService {
         }
     }
 
+    public void startUseSkillBienHinh(Player player) {
+        // sendEffectbienhinh(player); // Tắt hiệu ứng biến khỉ cũ để không đè lên Spine
+        SpineService.gI().sendSpineSkillEffect(player, BIEN_HINH_SPINE_PATH, BIEN_HINH_SPINE_ANIM,
+                TIME_TRANSFORM_BIEN_HINH);
+        if (player.isBoss) {
+            finishUseSkillBienHinh(player);
+            return;
+        }
+        Service.gI().sendSpeedPlayer(player, 0);
+        player.effectSkill.isUseSkillBienHinh = true;
+        player.effectSkill.timeUseSkillBienHinh = TIME_TRANSFORM_BIEN_HINH;
+        player.effectSkill.lastTimeUseSkillBienHinh = System.currentTimeMillis();
+    }
+
+    public void finishUseSkillBienHinh(Player player) {
+        if (player.effectSkill == null || !player.effectSkill.isUseSkillBienHinh) {
+            return;
+        }
+        player.effectSkill.isUseSkillBienHinh = false;
+        Service.gI().sendSpeedPlayer(player, -1);
+        if (player.isDie() || player.effectSkill.isBienHinh) {
+            return;
+        }
+        setBienHinh(player);
+        // sendEffectbienhinh(player);
+        player.nPoint.setBasePoint();
+        Service.gI().Send_Caitrang(player);
+        Service.gI().point(player);
+        player.nPoint.setFullHpMp();
+        PlayerService.gI().sendInfoHpMp(player);
+        Service.gI().RadarSetAura(player);
+        ItemTimeService.gI().sendItemTimeBienHinh(player, player.effectSkill.levelBienHinh);
+        Service.gI().Send_Info_NV(player);
+    }
+
+    public void cancelUseSkillBienHinh(Player player) {
+        if (player.effectSkill != null && player.effectSkill.isUseSkillBienHinh) {
+            player.effectSkill.isUseSkillBienHinh = false;
+            Service.gI().sendSpeedPlayer(player, -1);
+        }
+    }
+
     public void setBienHinh(Player player) {
         Skill template = Manager.NCLASS.get(player.gender)
                 .getSkillTemplate(player.playerSkill.skillSelect.template.id).skillss.stream()
@@ -834,7 +880,7 @@ public class EffectSkillService {
         }
         sendEffectEndCharge(player);
 
-        sendEffectbienhinh(player);
+        // sendEffectbienhinh(player);
         Service.gI().RadarSetAura(player);
         Service.gI().setNotMonkey(player);
         Service.gI().Send_Caitrang(player);

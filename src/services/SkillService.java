@@ -919,17 +919,8 @@ public class SkillService {
                 affterUseSkill(player, player.playerSkill.skillSelect.template.id);
                 break;
             case Skill.BIEN_HINH_SUPER:
-                if (!player.effectSkill.isBienHinh) {
-                    EffectSkillService.gI().sendEffectbienhinh(player);
-                    EffectSkillService.gI().setBienHinh(player);
-                    EffectSkillService.gI().sendEffectbienhinh(player);
-                    player.nPoint.setBasePoint();
-                    Service.gI().Send_Caitrang(player);
-                    Service.gI().point(player);
-                    player.nPoint.setFullHpMp();
-                    PlayerService.gI().sendInfoHpMp(player);
-                    Service.gI().RadarSetAura(player);
-                    ItemTimeService.gI().sendItemTimeBienHinh(player, player.effectSkill.levelBienHinh);
+                if (!player.effectSkill.isBienHinh && !player.effectSkill.isUseSkillBienHinh) {
+                    EffectSkillService.gI().startUseSkillBienHinh(player);
                     affterUseSkill(player, player.playerSkill.skillSelect.template.id);
                 }
                 break;

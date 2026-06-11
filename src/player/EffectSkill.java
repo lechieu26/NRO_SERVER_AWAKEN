@@ -140,6 +140,9 @@ public class EffectSkill {
     public long lastTimeBienHinh;
     public int timeBienHinh;
     public int levelBienHinh = 0;
+    public boolean isUseSkillBienHinh;
+    public long lastTimeUseSkillBienHinh;
+    public int timeUseSkillBienHinh;
 
     // Intrinsic
     public boolean isIntrinsic;
@@ -172,6 +175,9 @@ public class EffectSkill {
 
         if (isUseSkillMonkey) {
             EffectSkillService.gI().finishUseMonkey(player);
+        }
+        if (isUseSkillBienHinh) {
+            EffectSkillService.gI().cancelUseSkillBienHinh(player);
         }
         if (isBinh) {
             EffectSkillService.gI().BinhDown(player);
@@ -275,6 +281,9 @@ public class EffectSkill {
         if (isUseSkillMonkey && Util.canDoWithTime(lastTimeUseSkillMonkey, timeUseSkillMonkey)) {
             EffectSkillService.gI().finishUseMonkey(player);
         }
+        if (isUseSkillBienHinh && Util.canDoWithTime(lastTimeUseSkillBienHinh, timeUseSkillBienHinh)) {
+            EffectSkillService.gI().finishUseSkillBienHinh(player);
+        }
         if (isIntrinsic && Util.canDoWithTime(lastTimeUseSkill, cooldown)) {
             EffectSkillService.gI().releaseCooldownSkillByIntrinsic(player);
         }
@@ -287,7 +296,8 @@ public class EffectSkill {
     }
 
     public boolean isHaveEffectSkill() {
-        return (isStun || isBlindDCTT || anTroi || isThoiMien || isStone || isMabuHold || isUseSkillMonkey)
+        return (isStun || isBlindDCTT || anTroi || isThoiMien || isStone || isMabuHold || isUseSkillMonkey
+                || isUseSkillBienHinh)
                 && !player.isDie();
     }
 

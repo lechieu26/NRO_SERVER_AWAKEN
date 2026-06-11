@@ -68,6 +68,31 @@ public class SpineService {
     }
 
     /**
+     * Gửi hiệu ứng Spine skill (animation biến hình, v.v.)
+     */
+    public void sendSpineSkillEffect(Player player, String skeletonPath, String animation, int durationMs) {
+        if (player == null) {
+            return;
+        }
+        Message msg = null;
+        try {
+            msg = new Message(-48);
+            msg.writer().writeByte(9); // SPINE_SKILL_EFFECT
+            msg.writer().writeInt((int) player.id);
+            msg.writer().writeUTF(skeletonPath);
+            msg.writer().writeUTF(animation);
+            msg.writer().writeShort((short) durationMs);
+            Service.gI().sendMessAllPlayerInMap(player, msg);
+        } catch (Exception e) {
+            Logger.logException(SpineService.class, e);
+        } finally {
+            if (msg != null) {
+                msg.cleanup();
+            }
+        }
+    }
+
+    /**
      * Gửi packet bật/tắt Spine Skin
      */
     public void sendSpineToggle(Player player, boolean useSpine, int skinId) {
