@@ -759,9 +759,12 @@ public class EffectSkillService {
     }
 
     public void startUseSkillBienHinh(Player player) {
-        // sendEffectbienhinh(player); // Tắt hiệu ứng biến khỉ cũ để không đè lên Spine
-        SpineService.gI().sendSpineSkillEffect(player, BIEN_HINH_SPINE_PATH, BIEN_HINH_SPINE_ANIM,
-                TIME_TRANSFORM_BIEN_HINH);
+        if (player.isEquipItem(5, 2079, 2144, 2143)) {
+            SpineService.gI().sendSpineSkillEffect(player, BIEN_HINH_SPINE_PATH, BIEN_HINH_SPINE_ANIM,
+                    TIME_TRANSFORM_BIEN_HINH);
+        } else {
+            sendEffectbienhinh(player);
+        }
         if (player.isBoss) {
             finishUseSkillBienHinh(player);
             return;
@@ -782,7 +785,9 @@ public class EffectSkillService {
             return;
         }
         setBienHinh(player);
-        // sendEffectbienhinh(player);
+        if (!player.isEquipItem(5, 2079, 2144, 2143)) {
+            sendEffectbienhinh(player);
+        }
         player.nPoint.setBasePoint();
         Service.gI().Send_Caitrang(player);
         Service.gI().point(player);
@@ -880,7 +885,9 @@ public class EffectSkillService {
         }
         sendEffectEndCharge(player);
 
-        // sendEffectbienhinh(player);
+        if (!player.isEquipItem(5, 2079, 2144, 2143)) {
+            sendEffectbienhinh(player);
+        }
         Service.gI().RadarSetAura(player);
         Service.gI().setNotMonkey(player);
         Service.gI().Send_Caitrang(player);

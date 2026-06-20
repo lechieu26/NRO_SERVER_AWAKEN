@@ -1,7 +1,7 @@
 package player;
+
 import boss.BossManager;
 import boss.BossID;
-
 
 import EMTI.Functions;
 import boss.boss_manifest.Commeson.PhanThan;
@@ -900,6 +900,8 @@ public class Player implements Runnable {
                     return 51;
                 case 1896:
                     return 52;
+                case 2145:
+                    return 67;
                 case 1891, 1892, 1894:
                     return 53;
                 case 1119:
@@ -1085,6 +1087,39 @@ public class Player implements Runnable {
         return -1;
     }
 
+    private short getPorataPart(int partType) {
+        if (this.fusion != null && this.pet != null && this.inventory != null && this.pet.inventory != null
+                && this.inventory.itemsBody.size() > 5 && this.pet.inventory.itemsBody.size() > 5
+                && ((this.isPl() && this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA)
+                        || this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2)) {
+            Item item = inventory.itemsBody.get(5);
+            Item petItem = pet.inventory.itemsBody.get(5);
+
+            boolean hasItem1 = item.isNotNullItem() && (item.template.id == 1693 || item.template.id == 1553);
+            boolean hasItem2 = petItem.isNotNullItem() && (petItem.template.id == 1693 || petItem.template.id == 1553);
+            boolean sameItem = item.isNotNullItem() && petItem.isNotNullItem()
+                    && item.template.id == petItem.template.id;
+            if (hasItem1 && hasItem2 && !sameItem) {
+                return (short) (partType == 0 ? 1578 : (partType == 1 ? 1580 : 1582));
+            }
+            boolean hasItem3 = item.isNotNullItem() && (item.template.id == 1780 || item.template.id == 1782);
+            boolean hasItem4 = petItem.isNotNullItem() && (petItem.template.id == 1782 || petItem.template.id == 1780);
+            boolean sameItem1 = item.isNotNullItem() && petItem.isNotNullItem()
+                    && item.template.id == petItem.template.id;
+            if (hasItem3 && hasItem4 && !sameItem1) {
+                return (short) (partType == 0 ? 1592 : (partType == 1 ? 1593 : 1594));
+            }
+            boolean hasItem5 = item.isNotNullItem() && (item.template.id == 1764 || item.template.id == 1765);
+            boolean hasItem6 = petItem.isNotNullItem() && (petItem.template.id == 1765 || petItem.template.id == 1764);
+            boolean sameItem2 = item.isNotNullItem() && petItem.isNotNullItem()
+                    && item.template.id == petItem.template.id;
+            if (hasItem5 && hasItem6 && !sameItem2) {
+                return (short) (partType == 0 ? 1819 : (partType == 1 ? 1820 : 1821));
+            }
+        }
+        return -1;
+    }
+
     public short getHeadSuper() {
         Skill skill = playerSkill.getSkillbyId(Skill.BIEN_HINH_SUPER);
         if (skill != null) {
@@ -1139,39 +1174,28 @@ public class Player implements Runnable {
         return -1;
     }
 
+    public boolean isEquipItem(int index, int... itemIds) {
+        if (this.inventory != null && this.inventory.itemsBody.size() > index
+                && this.inventory.itemsBody.get(index).isNotNullItem()) {
+            int id = this.inventory.itemsBody.get(index).template.id;
+            for (int itemId : itemIds) {
+                if (id == itemId)
+                    return true;
+            }
+        }
+        return false;
+    }
+
     public short getHead() {
-        if (this.fusion != null && this.pet != null && this.inventory != null && this.pet.inventory != null
-                && this.inventory.itemsBody.size() > 5 && this.pet.inventory.itemsBody.size() > 5
-                && ((this.isPl() && this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA)
-                        || this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2)) {
-            Item item = inventory.itemsBody.get(5);
-            Item petItem = pet.inventory.itemsBody.get(5);
-
-            boolean hasItem1 = item.isNotNullItem() && (item.template.id == 1693 || item.template.id == 1553);
-            boolean hasItem2 = petItem.isNotNullItem() && (petItem.template.id == 1693 || petItem.template.id == 1553);
-            boolean sameItem = item.isNotNullItem() && petItem.isNotNullItem()
-                    && item.template.id == petItem.template.id;
-            if (hasItem1 && hasItem2 && !sameItem) {
-                return 1578;
-            }
-            boolean hasItem3 = item.isNotNullItem() && (item.template.id == 1780 || item.template.id == 1782);
-            boolean hasItem4 = petItem.isNotNullItem() && (petItem.template.id == 1782 || petItem.template.id == 1780);
-            boolean sameItem1 = item.isNotNullItem() && petItem.isNotNullItem()
-                    && item.template.id == petItem.template.id;
-            if (hasItem3 && hasItem4 && !sameItem1) {
-                return 1592;
-            }
-            boolean hasItem5 = item.isNotNullItem() && (item.template.id == 1764 || item.template.id == 1765);
-            boolean hasItem6 = petItem.isNotNullItem() && (petItem.template.id == 1765 || petItem.template.id == 1764);
-            boolean sameItem2 = item.isNotNullItem() && petItem.isNotNullItem()
-                    && item.template.id == petItem.template.id;
-            if (hasItem5 && hasItem6 && !sameItem2) {
-                return 1819;
-            }
-
+        short porataPart = getPorataPart(0);
+        if (porataPart != -1) {
+            return porataPart;
         }
 
         if (effectSkill != null && effectSkill.isBienHinh) {
+            if (this.isEquipItem(5, 2079, 2144, 2143)) {
+                return 2325;
+            }
             return (short) ConstPlayer.HEADBIENHINH[this.gender][effectSkill.levelBienHinh - 1];
         }
         if (effectSkill != null && effectSkill.isSuper) {
@@ -1217,36 +1241,15 @@ public class Player implements Runnable {
     }
 
     public short getBody() {
-        if (this.fusion != null && this.pet != null && this.inventory != null && this.pet.inventory != null
-                && this.inventory.itemsBody.size() > 5 && this.pet.inventory.itemsBody.size() > 5
-                && ((this.isPl() && this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA)
-                        || this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2)) {
-            Item item = inventory.itemsBody.get(5);
-            Item petItem = pet.inventory.itemsBody.get(5);
-
-            boolean hasItem1 = item.isNotNullItem() && (item.template.id == 1693 || item.template.id == 1553);
-            boolean hasItem2 = petItem.isNotNullItem() && (petItem.template.id == 1693 || petItem.template.id == 1553);
-            boolean sameItem = item.isNotNullItem() && petItem.isNotNullItem()
-                    && item.template.id == petItem.template.id;
-            if (hasItem1 && hasItem2 && !sameItem) {
-                return 1581;
-            }
-            boolean hasItem3 = item.isNotNullItem() && (item.template.id == 1780 || item.template.id == 1782);
-            boolean hasItem4 = petItem.isNotNullItem() && (petItem.template.id == 1782 || petItem.template.id == 1780);
-            boolean sameItem1 = item.isNotNullItem() && petItem.isNotNullItem()
-                    && item.template.id == petItem.template.id;
-            if (hasItem3 && hasItem4 && !sameItem1) {
-                return 1593;
-            }
-            boolean hasItem5 = item.isNotNullItem() && (item.template.id == 1764 || item.template.id == 1765);
-            boolean hasItem6 = petItem.isNotNullItem() && (petItem.template.id == 1765 || petItem.template.id == 1764);
-            boolean sameItem2 = item.isNotNullItem() && petItem.isNotNullItem()
-                    && item.template.id == petItem.template.id;
-            if (hasItem5 && hasItem6 && !sameItem2) {
-                return 1820;
-            }
+        short porataPart = getPorataPart(1);
+        if (porataPart != -1) {
+            return porataPart;
         }
+
         if (effectSkill != null && effectSkill.isBienHinh) {
+            if (this.isEquipItem(5, 2079, 2144, 2143)) {
+                return 2327;
+            }
             return (short) ConstPlayer.BODYBIENHINH[this.gender];
         }
         if (effectSkill != null && effectSkill.isSuper) {
@@ -1290,36 +1293,14 @@ public class Player implements Runnable {
     }
 
     public short getLeg() {
-        if (this.fusion != null && this.pet != null && this.inventory != null && this.pet.inventory != null
-                && this.inventory.itemsBody.size() > 5 && this.pet.inventory.itemsBody.size() > 5
-                && ((this.isPl() && this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA)
-                        || this.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2)) {
-            Item item = inventory.itemsBody.get(5);
-            Item petItem = pet.inventory.itemsBody.get(5);
-
-            boolean hasItem1 = item.isNotNullItem() && (item.template.id == 1693 || item.template.id == 1553);
-            boolean hasItem2 = petItem.isNotNullItem() && (petItem.template.id == 1693 || petItem.template.id == 1553);
-            boolean sameItem = item.isNotNullItem() && petItem.isNotNullItem()
-                    && item.template.id == petItem.template.id;
-            if (hasItem1 && hasItem2 && !sameItem) {
-                return 1582;
-            }
-            boolean hasItem3 = item.isNotNullItem() && (item.template.id == 1780 || item.template.id == 1782);
-            boolean hasItem4 = petItem.isNotNullItem() && (petItem.template.id == 1782 || petItem.template.id == 1780);
-            boolean sameItem1 = item.isNotNullItem() && petItem.isNotNullItem()
-                    && item.template.id == petItem.template.id;
-            if (hasItem3 && hasItem4 && !sameItem1) {
-                return 1594;
-            }
-            boolean hasItem5 = item.isNotNullItem() && (item.template.id == 1764 || item.template.id == 1765);
-            boolean hasItem6 = petItem.isNotNullItem() && (petItem.template.id == 1765 || petItem.template.id == 1764);
-            boolean sameItem2 = item.isNotNullItem() && petItem.isNotNullItem()
-                    && item.template.id == petItem.template.id;
-            if (hasItem5 && hasItem6 && !sameItem2) {
-                return 1821;
-            }
+        short porataPart = getPorataPart(2);
+        if (porataPart != -1) {
+            return porataPart;
         }
         if (effectSkill != null && effectSkill.isBienHinh) {
+            if (this.isEquipItem(5, 2079, 2144, 2143)) {
+                return 2328;
+            }
             return (short) ConstPlayer.LEGBIENHINH[this.gender];
         }
         if (effectSkill != null && effectSkill.isSuper) {
