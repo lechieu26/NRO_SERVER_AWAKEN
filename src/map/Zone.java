@@ -916,6 +916,13 @@ public class Zone {
             msg.writer().writeByte(this.map.bgType);
             msg.writer().writeByte(pl.iDMark.getIdSpaceShip());
             msg.writer().writeByte(this.map.mapId == 148 ? 1 : 0);
+
+            // Map 7VNR: gửi thêm mapConfigJson để client render freeform map
+            if (this.map.type == ConstMap.MAP_7VNR && this.map instanceof Map7VNR) {
+                Map7VNR map7vnr = (Map7VNR) this.map;
+                msg.writer().writeUTF(map7vnr.mapConfigJson != null ? map7vnr.mapConfigJson : "{}");
+            }
+
             pl.sendMessage(msg);
 
             msg.cleanup();

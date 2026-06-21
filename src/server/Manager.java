@@ -64,6 +64,8 @@ import java.util.OptionalInt;
 import java.util.Properties;
 import java.util.stream.IntStream;
 import map.EffectMap;
+import map.Map7VNR;
+import models.Template.Map7VNRTemplate;
 
 import matches.TOP;
 import utils.Util;
@@ -93,6 +95,7 @@ public final class Manager {
     public static boolean DAO_AUTO_UPDATER = false;
 
     public static MapTemplate[] MAP_TEMPLATES;
+    public static Map7VNRTemplate[] MAP_7VNR_TEMPLATES;
     public static final List<map.Map> MAPS = new ArrayList<>();
     public static final List<ItemOptionTemplate> ITEM_OPTION_TEMPLATES = new ArrayList<>();
     public static final List<ArrHead2Frames> ARR_HEAD_2_FRAMES = new ArrayList<>();
@@ -305,8 +308,35 @@ public final class Manager {
         int cx;
         int cy;
 
+        initMap7VNR();
+
         new NonInteractiveNPC().initNonInteractiveNPC();
         Logger.success("Initialize map successfully!\n");
+    }
+
+    /**
+     * Load và khởi tạo map kiểu 7VNR từ bảng map_7vnr_template.
+     * Map 7VNR dùng freeform collision thay vì tile grid.
+     */
+    private void initMap7VNR() {
+        if (MAP_7VNR_TEMPLATES == null || MAP_7VNR_TEMPLATES.length == 0) {
+            Logger.success("No 7VNR maps to initialize.\n");
+            return;
+        }
+        for (Map7VNRTemplate temp : MAP_7VNR_TEMPLATES) {
+            Map7VNR map = new Map7VNR(
+                    temp.id, temp.name, temp.planetId,
+                    temp.mapWidth, temp.mapHeight,
+                    temp.zones, temp.maxPlayerPerZone,
+                    temp.wayPoints, temp.effectMaps,
+                    temp.mapConfigJson);
+            map.parseMapConfig(temp.mapConfigJson);
+            // Không initMob/initNpc — map 7VNR sẽ có hệ thống riêng
+            map.npcs = new java.util.ArrayList<>();
+            MAPS.add(map);
+            utils.ServerPool.MAP_UPDATE_POOL.submit(map);
+        }
+        Logger.success("Initialize 7VNR maps: " + MAP_7VNR_TEMPLATES.length + " maps loaded.\n");
     }
 
     private void loadDatabase() {
@@ -1018,6 +1048,60 @@ public final class Manager {
                     MAP_TEMPLATES[i++] = mapTemplate;
                 }
                 Logger.success("Successfully loaded map template (" + MAP_TEMPLATES.length + ")\n");
+            }
+
+            // load map 7VNR template
+            try {
+                ps = con.prepareStatement("select count(id) from map_7vnr_template");
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    int count7VNR = rs.getInt(1);
+                    MAP_7VNR_TEMPLATES = new Map7VNRTemplate[count7VNR];
+                    ps = con.prepareStatement("select * from map_7vnr_template");
+                    rs = ps.executeQuery();
+                    int idx = 0;
+                    while (rs.next()) {
+                        Map7VNRTemplate t = new Map7VNRTemplate();
+                        t.id = rs.getInt("id");
+                        t.name = rs.getString("name");
+                        t.planetId = rs.getByte("planet_id");
+                        t.zones = rs.getByte("zones");
+                        t.maxPlayerPerZone = rs.getByte("max_player");
+                        t.mapWidth = rs.getInt("map_width");
+                        t.mapHeight = rs.getInt("map_height");
+                        t.mapConfigJson = rs.getString("map_config");
+                        // load waypoints
+                        String wpStr = rs.getString("waypoints");
+                        if (wpStr != null && !wpStr.isEmpty()) {
+                            dataArray = (JSONArray) JSONValue.parse(wpStr
+                                    .replaceAll("\\[\"\\[", "[[")
+                                    .replaceAll("\\]\"\\]", "]]")
+                                    .replaceAll("\",\"", ","));
+                            if (dataArray != null) {
+                                for (int j = 0; j < dataArray.size(); j++) {
+                                    map.WayPoint wp = new map.WayPoint();
+                                    JSONArray dtwp = (JSONArray) JSONValue.parse(String.valueOf(dataArray.get(j)));
+                                    wp.name = String.valueOf(dtwp.get(0));
+                                    wp.minX = Short.parseShort(String.valueOf(dtwp.get(1)));
+                                    wp.minY = Short.parseShort(String.valueOf(dtwp.get(2)));
+                                    wp.maxX = Short.parseShort(String.valueOf(dtwp.get(3)));
+                                    wp.maxY = Short.parseShort(String.valueOf(dtwp.get(4)));
+                                    wp.isEnter = Byte.parseByte(String.valueOf(dtwp.get(5))) == 1;
+                                    wp.isOffline = Byte.parseByte(String.valueOf(dtwp.get(6))) == 1;
+                                    wp.goMap = Short.parseShort(String.valueOf(dtwp.get(7)));
+                                    wp.goX = Short.parseShort(String.valueOf(dtwp.get(8)));
+                                    wp.goY = Short.parseShort(String.valueOf(dtwp.get(9)));
+                                    t.wayPoints.add(wp);
+                                }
+                            }
+                        }
+                        MAP_7VNR_TEMPLATES[idx++] = t;
+                    }
+                    Logger.success("Successfully loaded 7VNR map template (" + MAP_7VNR_TEMPLATES.length + ")\n");
+                }
+            } catch (Exception e7vnr) {
+                MAP_7VNR_TEMPLATES = new Map7VNRTemplate[0];
+                Logger.logException(Manager.class, e7vnr, "No map_7vnr_template table or error loading — skipping");
             }
 
             ps = con.prepareStatement("select * from radar");
